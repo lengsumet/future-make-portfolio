@@ -1,0 +1,82 @@
+// Dev: SQLite (file:./dev.db)
+// Prod: switch provider to "postgresql" and update DATABASE_URL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  category         String
+  shortDescription String?
+  longDescription  String?
+  price            Float
+  currency         String   @default("THB")
+  status           String   @default("active")
+  thumbnail        String?
+  images           String   @default("[]") // JSON
+  techStack        String   @default("[]") // JSON
+  features         String   @default("[]") // JSON
+  deliverables     String   @default("[]") // JSON
+  demoUrl          String?
+  featured         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  orders OrderItem[]
+}
+
+model Order {
+  id            String     @id @default(cuid())
+  orderNumber   String     @unique
+  buyerEmail    String
+  buyerName     String
+  buyerPhone    String?
+  status        String     @default("pending")
+  totalAmount   Float
+  currency      String     @default("THB")
+  paymentMethod String?
+  paymentRef    String?
+  notes         String?
+  paidAt        DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  title     String
+  price     Float
+  quantity  Int     @default(1)
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model PageEvent {
+  id        Int      @id @default(autoincrement())
+  sessionId String
+  eventType String
+  page      String
+  element   String?
+  metadata  String   @default("{}")
+  ipHash    String?
+  userAgent String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([sessionId])
+}

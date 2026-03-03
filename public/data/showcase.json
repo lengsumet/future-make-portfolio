@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "title": "Insurance & Fintech Platform",
+    "description": "Enterprise insurance workflow engine with real-time API integrations and policy management.",
+    "longDescription": "A comprehensive insurance platform built with .NET Core microservices and React. Features a high-concurrency workflow engine for financial transaction lifecycle management, real-time third-party API integrations, policy management system, admin monitoring dashboard with real-time metrics, and granular access control (whitelist) system. Designed for scale with distributed systems architecture and Docker containerization.",
+    "image": "/images/showcase/insurance.jpg",
+    "gallery": ["/images/showcase/insurance-1.jpg", "/images/showcase/insurance-2.jpg", "/images/showcase/insurance-3.jpg"],
+    "tags": [".NET Core", "C#", "React", "PostgreSQL", "Docker"],
+    "price": 2499,
+    "livePreview": "#"
+  },
+  {
+    "id": 2,
+    "title": "SaaS Admin Dashboard",
+    "description": "Full-featured admin panel with real-time analytics, user management, and role-based access control.",
+    "longDescription": "A production-ready admin dashboard template built with Next.js 15 and TypeScript. Features real-time analytics charts, user management with RBAC, data tables with sorting/filtering, product and order management, JWT authentication, dark mode, and fully responsive design. Backed by PostgreSQL with Prisma ORM and Redis for caching.",
+    "image": "/images/showcase/admin.jpg",
+    "gallery": ["/images/showcase/admin-1.jpg", "/images/showcase/admin-2.jpg"],
+    "tags": ["Next.js", "TypeScript", "PostgreSQL", "Recharts", "Redis"],
+    "price": 1299,
+    "livePreview": "#"
+  },
+  {
+    "id": 3,
+    "title": "E-Commerce Management Suite",
+    "description": "Complete e-commerce solution with dynamic products, orders, payments, and analytics.",
+    "longDescription": "A full-stack e-commerce platform built with Next.js 15 and Prisma. Features dynamic product catalog with custom JSONB metadata per category, order lifecycle management, PromptPay QR payment integration, Stripe support, usage analytics with conversion funnel tracking, and comprehensive admin dashboard with charts and export.",
+    "image": "/images/showcase/ecommerce.jpg",
+    "gallery": ["/images/showcase/ecommerce-1.jpg", "/images/showcase/ecommerce-2.jpg", "/images/showcase/ecommerce-3.jpg"],
+    "tags": ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Stripe"],
+    "price": 999,
+    "livePreview": "#"
+  },
+  {
+    "id": 4,
+    "title": "Portfolio Website Template",
+    "description": "Animated personal portfolio with dark celestial theme, showcase, shop, and admin dashboard.",
+    "longDescription": "A modern, animated portfolio website built with Next.js 15, Framer Motion, and Tailwind CSS v4. Features cinematic entrance animations, dark celestial sidebar, about page with grouped skill bars and experience timeline, project showcase with animated modals, integrated shop for selling templates/services, full admin dashboard with analytics, and API proxy layer for third-party integrations.",
+    "image": "/images/showcase/portfolio.jpg",
+    "gallery": ["/images/showcase/portfolio-1.jpg", "/images/showcase/portfolio-2.jpg"],
+    "tags": ["Next.js", "Framer Motion", "Tailwind CSS", "TypeScript"],
+    "price": 299,
+    "livePreview": "#"
+  },
+  {
+    "id": 5,
+    "title": "Enterprise WMS (Warehouse Management)",
+    "description": "Full-featured warehouse management system with real-time inventory, inbound/outbound, picking, packing, and bilingual TH/EN support.",
+    "longDescription": "A comprehensive enterprise-grade Warehouse Management System built with Next.js 16, TypeScript, Prisma, and PostgreSQL. Features 28+ pages covering the complete warehouse workflow: inbound receiving, putaway, inventory management, space & zone management, picking, packing, stock counting, returns processing, and user/role management. Includes a modern indigo enterprise theme, bilingual support (Thai/English) with instant switching, real-time dashboard with KPI cards and analytics charts, advanced data tables with sorting/filtering/pagination, audit logging, and role-based access control. Built for production use with clean architecture and full type safety.",
+    "image": "/images/showcase/wms-dashboard.svg",
+    "gallery": ["/images/showcase/wms-dashboard.svg", "/images/showcase/wms-inbound.svg", "/images/showcase/wms-space.svg"],
+    "tags": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "Real-time", "i18n TH/EN"],
+    "price": 1999,
+    "livePreview": "http://localhost:3001"
+  },
+  {
+    "id": 6,
+    "title": "POS (Point of Sale) System",
+    "description": "Complete retail POS system with product management, cart, payments, inventory, reports, and bilingual TH/EN support.",
+    "longDescription": "A comprehensive Point of Sale system built with Next.js 16, TypeScript, Prisma, and PostgreSQL. Features a full-width POS terminal with product grid, barcode scanning, cart management, and multiple payment methods (Cash/Card/PromptPay/Transfer). Includes product & category management, customer loyalty tracking, inventory management with stock adjustments, sales analytics with charts, end-of-day cash reconciliation, and complete settings management. Built with an emerald/teal enterprise theme, bilingual support (Thai/English), and role-based access control (Admin/Manager/Cashier).",
+    "image": "/images/showcase/pos-terminal.svg",
+    "gallery": ["/images/showcase/pos-terminal.svg", "/images/showcase/pos-dashboard.svg", "/images/showcase/pos-reports.svg"],
+    "tags": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "Real-time", "i18n TH/EN"],
+    "price": 1499,
+    "livePreview": "http://localhost:3002"
+  },
+  {
+    "id": 7,
+    "title": "CRM (Customer Relationship Management)",
+    "description": "Complete CRM system for managing contacts, companies, deals pipeline, activities, and sales analytics with bilingual TH/EN support.",
+    "longDescription": "A comprehensive Customer Relationship Management system built with Next.js 16, TypeScript, Prisma, and PostgreSQL. Features contact and company management with detailed profiles, deals pipeline with customizable kanban board stages, activity tracking (calls, emails, meetings, tasks), sales dashboard with KPI cards and analytics charts, pipeline reports with conversion metrics, team performance tracking, and full user/role management with audit logging. Includes bilingual support (Thai/English) with instant language switching, tags and advanced filtering, data export capabilities, and role-based access control (Admin/Manager/Sales Rep). Built with an amber/orange enterprise theme and real-time statistics.",
+    "image": "/images/showcase/crm-dashboard.svg",
+    "gallery": ["/images/showcase/crm-dashboard.svg", "/images/showcase/crm-pipeline.svg", "/images/showcase/crm-contacts.svg"],
+    "tags": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "Real-time", "i18n TH/EN"],
+    "price": 1799,
+    "livePreview": "http://localhost:3003"
+  }
+]

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" rx="12" fill="#0f172a"/>
+  <!-- Sidebar -->
+  <rect width="200" height="600" rx="12" fill="url(#sideGrad2)"/>
+  <defs>
+    <linearGradient id="sideGrad2" x1="0" y1="0" x2="0" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+  </defs>
+  <!-- Logo -->
+  <rect x="20" y="20" width="40" height="40" rx="10" fill="#f59e0b" opacity="0.3"/>
+  <rect x="68" y="28" width="100" height="12" rx="3" fill="#fef3c7" opacity="0.8"/>
+  <rect x="68" y="44" width="60" height="8" rx="2" fill="#fde68a" opacity="0.4"/>
+  <!-- Sidebar items -->
+  <rect x="28" y="92" width="80" height="10" rx="2" fill="#fde68a" opacity="0.5"/>
+  <rect x="28" y="120" width="70" height="10" rx="2" fill="#fde68a" opacity="0.5"/>
+  <rect x="12" y="143" width="176" height="36" rx="8" fill="#f59e0b" opacity="0.2"/>
+  <rect x="28" y="155" width="90" height="10" rx="2" fill="#fef3c7"/>
+  <rect x="28" y="192" width="60" height="10" rx="2" fill="#fde68a" opacity="0.5"/>
+  <rect x="28" y="220" width="80" height="10" rx="2" fill="#fde68a" opacity="0.5"/>
+  <rect x="28" y="248" width="75" height="10" rx="2" fill="#fde68a" opacity="0.5"/>
+  <!-- Header -->
+  <rect x="216" y="16" width="160" height="16" rx="4" fill="#e2e8f0"/>
+  <rect x="216" y="38" width="100" height="10" rx="3" fill="#64748b"/>
+  <!-- Pipeline summary bar -->
+  <rect x="520" y="16" width="264" height="36" rx="8" fill="#1e293b"/>
+  <rect x="532" y="24" width="50" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="532" y="36" width="30" height="8" rx="2" fill="#f59e0b"/>
+  <rect x="600" y="24" width="50" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="600" y="36" width="40" height="8" rx="2" fill="#3b82f6"/>
+  <rect x="668" y="24" width="50" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="668" y="36" width="60" height="8" rx="2" fill="#10b981"/>
+  <!-- Kanban columns -->
+  <!-- Column 1: Qualification -->
+  <rect x="216" y="64" width="138" height="520" rx="8" fill="#1e293b"/>
+  <rect x="226" y="74" width="80" height="10" rx="2" fill="#f59e0b"/>
+  <rect x="226" y="90" width="40" height="8" rx="2" fill="#64748b"/>
+  <!-- Cards -->
+  <rect x="224" y="108" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="234" y="118" width="90" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="234" y="132" width="70" height="6" rx="2" fill="#64748b"/>
+  <rect x="234" y="148" width="50" height="14" rx="3" fill="#f59e0b" opacity="0.2"/>
+  <rect x="240" y="152" width="38" height="6" rx="2" fill="#fbbf24"/>
+  <rect x="234" y="170" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="224" y="198" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="234" y="208" width="80" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="234" y="222" width="60" height="6" rx="2" fill="#64748b"/>
+  <rect x="234" y="238" width="50" height="14" rx="3" fill="#f59e0b" opacity="0.2"/>
+  <rect x="240" y="242" width="38" height="6" rx="2" fill="#fbbf24"/>
+  <rect x="234" y="260" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="224" y="288" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="234" y="298" width="95" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="234" y="312" width="55" height="6" rx="2" fill="#64748b"/>
+  <rect x="234" y="328" width="50" height="14" rx="3" fill="#f59e0b" opacity="0.2"/>
+  <rect x="240" y="332" width="38" height="6" rx="2" fill="#fbbf24"/>
+  <rect x="234" y="350" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <!-- Column 2: Proposal -->
+  <rect x="362" y="64" width="138" height="520" rx="8" fill="#1e293b"/>
+  <rect x="372" y="74" width="70" height="10" rx="2" fill="#3b82f6"/>
+  <rect x="372" y="90" width="40" height="8" rx="2" fill="#64748b"/>
+  <!-- Cards -->
+  <rect x="370" y="108" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="380" y="118" width="85" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="380" y="132" width="65" height="6" rx="2" fill="#64748b"/>
+  <rect x="380" y="148" width="50" height="14" rx="3" fill="#3b82f6" opacity="0.2"/>
+  <rect x="386" y="152" width="38" height="6" rx="2" fill="#60a5fa"/>
+  <rect x="380" y="170" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="370" y="198" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="380" y="208" width="95" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="380" y="222" width="50" height="6" rx="2" fill="#64748b"/>
+  <rect x="380" y="238" width="50" height="14" rx="3" fill="#3b82f6" opacity="0.2"/>
+  <rect x="386" y="242" width="38" height="6" rx="2" fill="#60a5fa"/>
+  <rect x="380" y="260" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <!-- Column 3: Negotiation -->
+  <rect x="508" y="64" width="138" height="520" rx="8" fill="#1e293b"/>
+  <rect x="518" y="74" width="85" height="10" rx="2" fill="#8b5cf6"/>
+  <rect x="518" y="90" width="40" height="8" rx="2" fill="#64748b"/>
+  <!-- Cards -->
+  <rect x="516" y="108" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="526" y="118" width="75" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="526" y="132" width="60" height="6" rx="2" fill="#64748b"/>
+  <rect x="526" y="148" width="50" height="14" rx="3" fill="#8b5cf6" opacity="0.2"/>
+  <rect x="532" y="152" width="38" height="6" rx="2" fill="#a78bfa"/>
+  <rect x="526" y="170" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="516" y="198" width="122" height="80" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <rect x="526" y="208" width="90" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="526" y="222" width="55" height="6" rx="2" fill="#64748b"/>
+  <rect x="526" y="238" width="50" height="14" rx="3" fill="#8b5cf6" opacity="0.2"/>
+  <rect x="532" y="242" width="38" height="6" rx="2" fill="#a78bfa"/>
+  <rect x="526" y="260" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <!-- Column 4: Won -->
+  <rect x="654" y="64" width="130" height="520" rx="8" fill="#1e293b"/>
+  <rect x="664" y="74" width="40" height="10" rx="2" fill="#10b981"/>
+  <rect x="664" y="90" width="40" height="8" rx="2" fill="#64748b"/>
+  <!-- Cards -->
+  <rect x="662" y="108" width="114" height="80" rx="6" fill="#0f172a" stroke="#065f46" stroke-width="1"/>
+  <rect x="672" y="118" width="80" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="672" y="132" width="55" height="6" rx="2" fill="#64748b"/>
+  <rect x="672" y="148" width="50" height="14" rx="3" fill="#10b981" opacity="0.2"/>
+  <rect x="678" y="152" width="38" height="6" rx="2" fill="#6ee7b7"/>
+  <rect x="672" y="170" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="662" y="198" width="114" height="80" rx="6" fill="#0f172a" stroke="#065f46" stroke-width="1"/>
+  <rect x="672" y="208" width="70" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="672" y="222" width="50" height="6" rx="2" fill="#64748b"/>
+  <rect x="672" y="238" width="50" height="14" rx="3" fill="#10b981" opacity="0.2"/>
+  <rect x="678" y="242" width="38" height="6" rx="2" fill="#6ee7b7"/>
+  <rect x="672" y="260" width="24" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="662" y="288" width="114" height="80" rx="6" fill="#0f172a" stroke="#065f46" stroke-width="1"/>
+  <rect x="672" y="298" width="85" height="8" rx="2" fill="#e2e8f0" opacity="0.8"/>
+  <rect x="672" y="312" width="45" height="6" rx="2" fill="#64748b"/>
+  <rect x="672" y="328" width="50" height="14" rx="3" fill="#10b981" opacity="0.2"/>
+  <rect x="678" y="332" width="38" height="6" rx="2" fill="#6ee7b7"/>
+  <rect x="672" y="350" width="24" height="8" rx="2" fill="#94a3b8"/>
+</svg>

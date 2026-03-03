@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="12" fill="#0f172a"/>
+  <!-- Sidebar -->
+  <rect width="200" height="500" rx="12" fill="url(#sideGrad)"/>
+  <defs>
+    <linearGradient id="sideGrad" x1="0" y1="0" x2="0" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="20" width="40" height="40" rx="10" fill="#10b981" opacity="0.3"/>
+  <rect x="68" y="28" width="100" height="12" rx="3" fill="#d1fae5" opacity="0.8"/>
+  <rect x="68" y="44" width="60" height="8" rx="2" fill="#a7f3d0" opacity="0.4"/>
+  <!-- Sidebar items -->
+  <rect x="12" y="80" width="176" height="36" rx="8" fill="#10b981" opacity="0.2"/>
+  <rect x="28" y="92" width="80" height="10" rx="2" fill="#d1fae5"/>
+  <rect x="28" y="130" width="70" height="10" rx="2" fill="#a7f3d0" opacity="0.5"/>
+  <rect x="28" y="158" width="90" height="10" rx="2" fill="#a7f3d0" opacity="0.5"/>
+  <rect x="28" y="186" width="60" height="10" rx="2" fill="#a7f3d0" opacity="0.5"/>
+  <rect x="28" y="214" width="80" height="10" rx="2" fill="#a7f3d0" opacity="0.5"/>
+  <rect x="28" y="242" width="75" height="10" rx="2" fill="#a7f3d0" opacity="0.5"/>
+  <rect x="28" y="270" width="70" height="10" rx="2" fill="#a7f3d0" opacity="0.5"/>
+  <!-- Header -->
+  <rect x="216" y="16" width="200" height="16" rx="4" fill="#e2e8f0"/>
+  <rect x="216" y="38" width="140" height="10" rx="3" fill="#64748b"/>
+  <!-- KPI Cards -->
+  <rect x="216" y="64" width="136" height="80" rx="10" fill="#064e3b" opacity="0.3"/>
+  <rect x="232" y="80" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="232" y="96" width="90" height="16" rx="3" fill="#10b981"/>
+  <rect x="232" y="120" width="40" height="8" rx="2" fill="#6ee7b7" opacity="0.6"/>
+  <rect x="362" y="64" width="136" height="80" rx="10" fill="#78350f" opacity="0.15"/>
+  <rect x="378" y="80" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="378" y="96" width="50" height="16" rx="3" fill="#f59e0b"/>
+  <rect x="508" y="64" width="136" height="80" rx="10" fill="#4c1d95" opacity="0.15"/>
+  <rect x="524" y="80" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="524" y="96" width="80" height="16" rx="3" fill="#8b5cf6"/>
+  <rect x="654" y="64" width="130" height="80" rx="10" fill="#881337" opacity="0.15"/>
+  <rect x="670" y="80" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="670" y="96" width="70" height="16" rx="3" fill="#f43f5e"/>
+  <!-- Sales Chart -->
+  <rect x="216" y="160" width="380" height="200" rx="10" fill="#1e293b"/>
+  <rect x="232" y="176" width="100" height="12" rx="3" fill="#e2e8f0"/>
+  <!-- Chart bars -->
+  <rect x="250" y="300" width="30" height="40" rx="4" fill="#10b981" opacity="0.6"/>
+  <rect x="290" y="270" width="30" height="70" rx="4" fill="#10b981" opacity="0.7"/>
+  <rect x="330" y="250" width="30" height="90" rx="4" fill="#10b981" opacity="0.8"/>
+  <rect x="370" y="220" width="30" height="120" rx="4" fill="#10b981"/>
+  <rect x="410" y="260" width="30" height="80" rx="4" fill="#10b981" opacity="0.7"/>
+  <rect x="450" y="280" width="30" height="60" rx="4" fill="#10b981" opacity="0.6"/>
+  <rect x="490" y="240" width="30" height="100" rx="4" fill="#10b981" opacity="0.9"/>
+  <rect x="530" y="290" width="30" height="50" rx="4" fill="#10b981" opacity="0.5"/>
+  <!-- Top Products -->
+  <rect x="608" y="160" width="176" height="200" rx="10" fill="#1e293b"/>
+  <rect x="624" y="176" width="80" height="12" rx="3" fill="#e2e8f0"/>
+  <rect x="624" y="200" width="144" height="28" rx="4" fill="#0f172a"/>
+  <rect x="624" y="236" width="144" height="28" rx="4" fill="#0f172a"/>
+  <rect x="624" y="272" width="144" height="28" rx="4" fill="#0f172a"/>
+  <rect x="624" y="308" width="144" height="28" rx="4" fill="#0f172a"/>
+  <!-- Recent Transactions -->
+  <rect x="216" y="376" width="568" height="108" rx="10" fill="#1e293b"/>
+  <rect x="232" y="392" width="120" height="12" rx="3" fill="#e2e8f0"/>
+  <rect x="232" y="416" width="536" height="1" fill="#334155"/>
+  <rect x="232" y="428" width="536" height="20" rx="3" fill="#0f172a"/>
+  <rect x="232" y="456" width="536" height="20" rx="3" fill="#0f172a"/>
+</svg>

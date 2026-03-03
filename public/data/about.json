@@ -1,0 +1,47 @@
+{
+  "introduction": {
+    "name": "Sumet Buarod",
+    "title": "Software Engineer — Distributed Systems & Cloud-Native Architecture",
+    "bio": "Software Engineer specializing in high-performance distributed systems and cloud-native architecture. Expert in building scalable backends with C#, .NET Core, Python, and Golang, and modern frontend ecosystems (React/Next.js). Proficient in visualizing complex logic through Swimlane Diagrams to bridge the gap between business requirements and technical implementation. Strong advocate for Feature-driven development (FDD) and Agile methodologies, with deep hands-on experience in AWS Cloud Infrastructure and Containerization.",
+    "profileImage": "/images/profile/profile.jpg"
+  },
+  "experience": [
+    {
+      "company": "Ngernturbo Public Company Limited",
+      "role": "Software Engineer",
+      "period": "Mar 2022 – Present",
+      "description": "Architectural design & stakeholder alignment using Swimlane diagrams and flowcharting. Engineered a comprehensive insurance platform with complex business logic and real-time third-party API integrations. Developed a high-concurrency Workflow Engine for financial transaction lifecycle management ensuring atomic operations across distributed services. Built full-stack Policy Management System with real-time Monitoring Dashboard. Designed Granular Access Control (Whitelist) system and internal HR enterprise solutions. Cross-platform mobile development with Kotlin."
+    }
+  ],
+  "education": [
+    {
+      "institution": "Panyapiwat Institute of Management",
+      "degree": "Bachelor of Engineering in Computer Engineering",
+      "period": "2018 – 2021",
+      "description": "GPA: 3.60. Studied computer engineering with focus on software systems, distributed computing, algorithms, and system design. Military Status: Exempted."
+    }
+  ],
+  "skills": [
+    { "name": "React / Next.js", "level": 90, "category": "Frontend" },
+    { "name": "Vue.js", "level": 75, "category": "Frontend" },
+    { "name": "TypeScript", "level": 88, "category": "Frontend" },
+    { "name": "Tailwind CSS / Material UI", "level": 92, "category": "Frontend" },
+    { "name": "C# / .NET Core (Web API, Microservices)", "level": 95, "category": "Backend" },
+    { "name": "Python (FastAPI / Flask)", "level": 85, "category": "Backend" },
+    { "name": "Golang (Concurrency / Goroutines)", "level": 78, "category": "Backend" },
+    { "name": "SQL / PostgreSQL (Performance Tuning)", "level": 90, "category": "Backend" },
+    { "name": "GraphQL", "level": 75, "category": "Backend" },
+    { "name": "Kotlin (Android)", "level": 70, "category": "Backend" },
+    { "name": "AWS (S3, ECS, Lambda, API Gateway, CloudWatch)", "level": 85, "category": "Cloud & DevOps" },
+    { "name": "Docker / Containerization", "level": 88, "category": "Cloud & DevOps" },
+    { "name": "Distributed Systems / System Design", "level": 87, "category": "Engineering Concepts" },
+    { "name": "SOLID Principles / OOP", "level": 90, "category": "Engineering Concepts" },
+    { "name": "Agile / Feature-Driven Development (FDD)", "level": 88, "category": "Engineering Concepts" }
+  ],
+  "hobbies": [
+    { "name": "System Design", "icon": "mountain" },
+    { "name": "Gaming", "icon": "gamepad" },
+    { "name": "Photography", "icon": "camera" },
+    { "name": "Cooking", "icon": "utensils" }
+  ]
+}

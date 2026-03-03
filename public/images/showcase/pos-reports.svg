@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="12" fill="#0f172a"/>
+  <!-- Sidebar -->
+  <rect width="200" height="500" rx="12" fill="url(#sideGrad2)"/>
+  <defs>
+    <linearGradient id="sideGrad2" x1="0" y1="0" x2="0" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="20" width="40" height="40" rx="10" fill="#10b981" opacity="0.3"/>
+  <rect x="68" y="28" width="100" height="12" rx="3" fill="#d1fae5" opacity="0.8"/>
+  <!-- Header -->
+  <rect x="216" y="16" width="140" height="16" rx="4" fill="#e2e8f0"/>
+  <rect x="216" y="38" width="100" height="10" rx="3" fill="#64748b"/>
+  <!-- Date range + tabs -->
+  <rect x="216" y="62" width="120" height="30" rx="6" fill="#1e293b"/>
+  <rect x="344" y="62" width="120" height="30" rx="6" fill="#1e293b"/>
+  <rect x="490" y="62" width="60" height="30" rx="6" fill="#10b981"/>
+  <rect x="558" y="62" width="70" height="30" rx="6" fill="#1e293b"/>
+  <rect x="636" y="62" width="70" height="30" rx="6" fill="#1e293b"/>
+  <!-- KPI Summary Cards -->
+  <rect x="216" y="108" width="180" height="70" rx="8" fill="#1e293b"/>
+  <rect x="232" y="120" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="232" y="136" width="100" height="16" rx="3" fill="#10b981"/>
+  <rect x="232" y="158" width="40" height="8" rx="2" fill="#6ee7b7" opacity="0.5"/>
+  <rect x="404" y="108" width="180" height="70" rx="8" fill="#1e293b"/>
+  <rect x="420" y="120" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="420" y="136" width="60" height="16" rx="3" fill="#f59e0b"/>
+  <rect x="592" y="108" width="192" height="70" rx="8" fill="#1e293b"/>
+  <rect x="608" y="120" width="60" height="8" rx="2" fill="#94a3b8"/>
+  <rect x="608" y="136" width="80" height="16" rx="3" fill="#8b5cf6"/>
+  <!-- Sales Line Chart -->
+  <rect x="216" y="192" width="568" height="180" rx="10" fill="#1e293b"/>
+  <rect x="232" y="208" width="100" height="12" rx="3" fill="#e2e8f0"/>
+  <!-- Line chart path -->
+  <path d="M260 340 L310 310 L360 320 L410 280 L460 260 L510 270 L560 230 L610 240 L660 210 L710 220 L760 200" stroke="#10b981" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M260 340 L310 310 L360 320 L410 280 L460 260 L510 270 L560 230 L610 240 L660 210 L710 220 L760 200 L760 350 L260 350 Z" fill="#10b981" opacity="0.1"/>
+  <!-- Grid lines -->
+  <line x1="260" y1="240" x2="760" y2="240" stroke="#334155" stroke-dasharray="4"/>
+  <line x1="260" y1="280" x2="760" y2="280" stroke="#334155" stroke-dasharray="4"/>
+  <line x1="260" y1="320" x2="760" y2="320" stroke="#334155" stroke-dasharray="4"/>
+  <!-- Category breakdown -->
+  <rect x="216" y="386" width="280" height="100" rx="10" fill="#1e293b"/>
+  <rect x="232" y="402" width="100" height="10" rx="3" fill="#e2e8f0"/>
+  <!-- Horizontal bars -->
+  <rect x="232" y="424" width="180" height="12" rx="3" fill="#10b981"/>
+  <rect x="232" y="444" width="120" height="12" rx="3" fill="#0ea5e9"/>
+  <rect x="232" y="464" width="80" height="12" rx="3" fill="#f59e0b"/>
+  <!-- Payment method -->
+  <rect x="504" y="386" width="280" height="100" rx="10" fill="#1e293b"/>
+  <rect x="520" y="402" width="100" height="10" rx="3" fill="#e2e8f0"/>
+  <!-- Payment bars -->
+  <rect x="520" y="424" width="140" height="12" rx="3" fill="#10b981"/>
+  <text x="668" y="435" fill="#94a3b8" font-size="10" font-family="sans-serif">Cash 45%</text>
+  <rect x="520" y="444" width="90" height="12" rx="3" fill="#0ea5e9"/>
+  <text x="618" y="455" fill="#94a3b8" font-size="10" font-family="sans-serif">Card 28%</text>
+  <rect x="520" y="464" width="60" height="12" rx="3" fill="#8b5cf6"/>
+  <text x="588" y="475" fill="#94a3b8" font-size="10" font-family="sans-serif">QR 18%</text>
+</svg>
