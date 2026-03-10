@@ -73,11 +73,11 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0">
           {/* Aurora glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px]
-            bg-[radial-gradient(ellipse_at_top,rgba(147,51,234,0.14),transparent_70%)]" />
+            bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.12),transparent_70%)]" />
           {/* Dot grid */}
           <div className="absolute inset-0 opacity-[0.35]"
             style={{
-              backgroundImage: "radial-gradient(rgba(147,51,234,0.25) 1px, transparent 1px)",
+              backgroundImage: "radial-gradient(rgba(16,185,129,0.2) 1px, transparent 1px)",
               backgroundSize: "32px 32px",
               maskImage: "radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent)",
             }} />
@@ -104,7 +104,7 @@ export default function Home() {
           </motion.h1>
 
           {/* Title */}
-          <motion.p {...fadeUp(0.15)} className="text-lg md:text-xl text-purple-300 mb-6 font-medium">
+          <motion.p {...fadeUp(0.15)} className="text-lg md:text-xl text-emerald-300 mb-6 font-medium">
             Software Engineer — Distributed Systems &amp; Cloud-Native
           </motion.p>
 
@@ -229,7 +229,7 @@ export default function Home() {
             <h2 className="text-lg font-semibold text-white">Featured Work</h2>
             <Link
               href="/showcase"
-              className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-purple-400 transition-colors duration-200 group"
+              className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-emerald-400 transition-colors duration-200 group"
             >
               View all
               <FaArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform duration-150" />
@@ -262,7 +262,7 @@ export default function Home() {
 
                     {/* Title */}
                     <h3 className="text-sm font-semibold text-white mb-2 relative
-                      group-hover:text-purple-300 transition-colors duration-200">
+                      group-hover:text-emerald-300 transition-colors duration-200">
                       {item.title}
                     </h3>
 
@@ -286,7 +286,7 @@ export default function Home() {
                       {item.external && (
                         <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-medium">LIVE</span>
                       )}
-                      <span className="text-gray-700 group-hover:text-purple-400 group-hover:translate-x-0.5 transition-all duration-200">
+                      <span className="text-gray-700 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all duration-200">
                         <FaArrowRight size={11} />
                       </span>
                     </div>

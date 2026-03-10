@@ -31,14 +31,14 @@ export const PageViewsChart: React.FC<LineChartProps> = ({ data, title }) => {
           <Tooltip
             contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: 8 }}
             labelStyle={{ color: "#F3F4F6" }}
-            itemStyle={{ color: "#A78BFA" }}
+            itemStyle={{ color: "#6EE7B7" }}
           />
           <Line
             type="monotone"
             dataKey="views"
-            stroke="#9333ea"
+            stroke="#10B981"
             strokeWidth={2}
-            dot={{ fill: "#9333ea", r: 3 }}
+            dot={{ fill: "#10B981", r: 3 }}
             activeDot={{ r: 5 }}
           />
         </LineChart>
@@ -64,9 +64,9 @@ export const TopPagesChart: React.FC<TopPagesChartProps> = ({ data, title }) => 
           <Tooltip
             contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: 8 }}
             labelStyle={{ color: "#F3F4F6" }}
-            itemStyle={{ color: "#60A5FA" }}
+            itemStyle={{ color: "#8B5CF6" }}
           />
-          <Bar dataKey="views" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+          <Bar dataKey="views" fill="#8B5CF6" radius={[0, 4, 4, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

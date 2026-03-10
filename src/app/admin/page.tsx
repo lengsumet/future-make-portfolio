@@ -101,7 +101,7 @@ export default function AdminDashboard() {
                 <div className="text-center min-w-[100px]">
                   <p className="text-lg font-bold text-white">{step.value}</p>
                   <p className="text-xs text-gray-400">{step.label}</p>
-                  <p className="text-xs text-purple-400">{step.pct}%</p>
+                  <p className="text-xs text-emerald-400">{step.pct}%</p>
                 </div>
               </React.Fragment>
             ))}
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-300">Recent Orders</h2>
-          <Link href="/admin/orders" className="text-xs text-primary hover:underline">
+          <Link href="/admin/orders" className="text-xs text-emerald-400 hover:underline">
             View all →
           </Link>
         </div>

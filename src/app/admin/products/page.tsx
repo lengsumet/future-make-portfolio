@@ -17,7 +17,7 @@ export default function AdminProductsPage() {
   }, []);
 
   const categoryBadge: Record<string, string> = {
-    template: "bg-purple-500/20 text-purple-300",
+    template: "bg-emerald-500/20 text-emerald-300",
     service: "bg-blue-500/20 text-blue-300",
     saas: "bg-green-500/20 text-green-300",
     api: "bg-orange-500/20 text-orange-300",
@@ -73,7 +73,7 @@ export default function AdminProductsPage() {
                   <Link
                     href={`/shop/${product.slug}`}
                     target="_blank"
-                    className="text-xs text-primary hover:underline flex items-center gap-1 justify-end mt-1"
+                    className="text-xs text-emerald-400 hover:underline flex items-center gap-1 justify-end mt-1"
                   >
                     View <FaExternalLinkAlt size={9} />
                   </Link>

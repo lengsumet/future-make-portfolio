@@ -1,9 +1,8 @@
 "use client";
 
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useLoading } from '@/contexts/LoadingContext';
-import { useEffect } from 'react';
 
 export default function PageWrapper({
   children,
@@ -19,20 +18,16 @@ export default function PageWrapper({
   }
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{
-          duration: 0.5,
-          ease: "easeOut",
-          delay: 0.2 // Small delay to ensure loading screen has time to complete
-        }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: "easeOut",
+      }}
+    >
+      {children}
+    </motion.div>
   );
 }

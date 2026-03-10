@@ -85,21 +85,156 @@ const crmStatItems: { key: keyof CrmStats; label: string; icon: string }[] = [
 ];
 
 // ==========================================
+// TMS Stats
+// ==========================================
+
+interface TmsStats {
+  totalVehicles: number;
+  totalDrivers: number;
+  totalRoutes: number;
+  activeShipments: number;
+  totalDeliveries: number;
+  onTimeRate: number;
+}
+
+const TMS_URL =
+  process.env.NEXT_PUBLIC_TMS_URL || "http://localhost:3004";
+
+const tmsStatItems: { key: keyof TmsStats; label: string; icon: string }[] = [
+  { key: "totalVehicles", label: "Vehicles", icon: "🚛" },
+  { key: "totalDrivers", label: "Drivers", icon: "👨‍✈️" },
+  { key: "totalRoutes", label: "Routes", icon: "🗺️" },
+  { key: "activeShipments", label: "Active Shipments", icon: "📦" },
+  { key: "totalDeliveries", label: "Deliveries", icon: "✅" },
+  { key: "onTimeRate", label: "On-Time Rate (%)", icon: "⏱️" },
+];
+
+// ==========================================
+// IMS Stats
+// ==========================================
+
+interface ImsStats {
+  products: number;
+  movements: number;
+  warehouses: number;
+  status: string;
+}
+
+const IMS_URL =
+  process.env.NEXT_PUBLIC_IMS_URL || "http://localhost:3005";
+
+const imsStatItems: { key: keyof ImsStats; label: string; icon: string }[] = [
+  { key: "products", label: "Products", icon: "📦" },
+  { key: "movements", label: "Stock Movements", icon: "🔄" },
+  { key: "warehouses", label: "Warehouses", icon: "🏭" },
+];
+
+// ==========================================
+// SCMS Stats
+// ==========================================
+
+interface ScmsStats {
+  suppliers: number;
+  purchaseOrders: number;
+  orders: number;
+  risks: number;
+  status: string;
+}
+
+const SCMS_URL =
+  process.env.NEXT_PUBLIC_SCMS_URL || "http://localhost:3006";
+
+const scmsStatItems: { key: keyof ScmsStats; label: string; icon: string }[] = [
+  { key: "suppliers", label: "Suppliers", icon: "🏢" },
+  { key: "purchaseOrders", label: "Purchase Orders", icon: "📋" },
+  { key: "orders", label: "Sales Orders", icon: "🛒" },
+  { key: "risks", label: "Active Risks", icon: "⚠️" },
+];
+
+// ==========================================
+// PMS Stats
+// ==========================================
+
+interface PmsStats {
+  workOrders: number;
+  activeWorkOrders: number;
+  productionLines: number;
+  machines: number;
+  ncrs: number;
+  status: string;
+}
+
+const PMS_URL =
+  process.env.NEXT_PUBLIC_PMS_URL || "http://localhost:3007";
+
+const pmsStatItems: { key: keyof PmsStats; label: string; icon: string }[] = [
+  { key: "workOrders", label: "Work Orders", icon: "📝" },
+  { key: "activeWorkOrders", label: "Active WOs", icon: "🔧" },
+  { key: "productionLines", label: "Prod. Lines", icon: "🏭" },
+  { key: "machines", label: "Machines", icon: "⚙️" },
+  { key: "ncrs", label: "Open NCRs", icon: "🔴" },
+];
+
+// ==========================================
+// Dashboard Stats
+// ==========================================
+
+interface DashStats {
+  metricSnapshots: number;
+  totalAlerts: number;
+  activeAlerts: number;
+  reports: number;
+  status: string;
+}
+
+const DASH_URL =
+  process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3008";
+
+const dashStatItems: { key: keyof DashStats; label: string; icon: string }[] = [
+  { key: "metricSnapshots", label: "Metrics (30d)", icon: "📊" },
+  { key: "totalAlerts", label: "Total Alerts", icon: "🔔" },
+  { key: "activeAlerts", label: "Active Alerts", icon: "🚨" },
+  { key: "reports", label: "Reports", icon: "📄" },
+];
+
+// ==========================================
+// System Config Map
+// ==========================================
+
+const SYSTEM_CONFIG = {
+  wms: { url: WMS_URL, label: "WMS", accent: "indigo", port: "3001", items: wmsStatItems },
+  pos: { url: POS_URL, label: "POS", accent: "emerald", port: "3002", items: posStatItems },
+  crm: { url: CRM_URL, label: "CRM", accent: "amber", port: "3003", items: crmStatItems },
+  tms: { url: TMS_URL, label: "TMS", accent: "teal", port: "3004", items: tmsStatItems },
+  ims: { url: IMS_URL, label: "IMS", accent: "cyan", port: "3005", items: imsStatItems },
+  scms: { url: SCMS_URL, label: "SCMS", accent: "indigo", port: "3006", items: scmsStatItems },
+  pms: { url: PMS_URL, label: "PMS", accent: "orange", port: "3007", items: pmsStatItems },
+  dashboard: { url: DASH_URL, label: "Dashboard", accent: "blue", port: "3008", items: dashStatItems },
+};
+
+const accentColorMap: Record<string, string> = {
+  indigo: "bg-indigo-400",
+  emerald: "bg-emerald-400",
+  amber: "bg-amber-400",
+  teal: "bg-teal-400",
+  cyan: "bg-cyan-400",
+  orange: "bg-orange-400",
+  blue: "bg-blue-400",
+};
+
+// ==========================================
 // Generic Stats Panel
 // ==========================================
 
 interface LiveStatsProps {
-  system?: "wms" | "pos" | "crm";
+  system?: "wms" | "pos" | "crm" | "tms" | "ims" | "scms" | "pms" | "dashboard";
 }
 
 export default function LiveStats({ system = "wms" }: LiveStatsProps) {
-  const isWms = system === "wms";
-  const isCrm = system === "crm";
-  const apiUrl = isWms ? WMS_URL : isCrm ? CRM_URL : POS_URL;
-  const systemLabel = isWms ? "WMS" : isCrm ? "CRM" : "POS";
-  const accentColor = isWms ? "indigo" : isCrm ? "amber" : "emerald";
+  const config = SYSTEM_CONFIG[system];
+  const { url: apiUrl, label: systemLabel, accent: accentColor, port, items: statItems } = config;
 
-  const [stats, setStats] = useState<WmsStats | PosStats | CrmStats | null>(null);
+  const [stats, setStats] = useState<WmsStats | PosStats | CrmStats | TmsStats | ImsStats | ScmsStats | PmsStats | DashStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [offline, setOffline] = useState(false);
 
@@ -125,7 +260,6 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
     return () => clearInterval(interval);
   }, []);
 
-  const statItems = isWms ? wmsStatItems : isCrm ? crmStatItems : posStatItems;
   const gridCols = "grid-cols-3";
 
   if (loading) {
@@ -153,7 +287,6 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
   }
 
   if (offline) {
-    const port = isWms ? "3001" : isCrm ? "3003" : "3002";
     return (
       <div className="bg-gray-800/40 border border-gray-700/50 rounded-xl p-6 my-6">
         <div className="flex items-center gap-2 mb-2">
@@ -176,7 +309,7 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
         <div className="flex items-center gap-2">
           <div
             className={`h-2 w-2 rounded-full animate-pulse ${
-              accentColor === "emerald" ? "bg-emerald-400" : accentColor === "amber" ? "bg-amber-400" : "bg-green-400"
+              accentColorMap[accentColor] || "bg-green-400"
             }`}
           />
           <span className="text-sm font-medium text-gray-300">
@@ -184,9 +317,9 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
           </span>
         </div>
         <span className="text-xs text-gray-500">
-          {isWms && (stats as WmsStats)?.systemStatus === "operational"
+          {system === "wms" && (stats as WmsStats)?.systemStatus === "operational"
             ? "System Operational"
-            : !isWms
+            : system !== "wms"
               ? "System Online"
               : ""}
         </span>
@@ -199,7 +332,9 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
               typeof value === "number"
                 ? key === "todaySales" || key === "pipelineValue"
                   ? `฿${value.toLocaleString()}`
-                  : value.toLocaleString()
+                  : key === "onTimeRate"
+                    ? `${value}%`
+                    : value.toLocaleString()
                 : "0";
             return (
               <div

@@ -36,8 +36,8 @@ function NavIcon({
       title={name}
       className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-colors duration-200"
       style={{
-        backgroundColor: isActive ? "rgb(147 51 234 / 0.75)" : "transparent",
-        boxShadow: isActive ? "0 0 14px rgb(147 51 234 / 0.35)" : "none",
+        backgroundColor: isActive ? "rgb(16 185 129 / 0.75)" : "transparent",
+        boxShadow: isActive ? "0 0 14px rgb(16 185 129 / 0.35)" : "none",
       }}
     >
       <div className="transition-transform duration-150 ease-out group-hover:scale-125">
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Admin badge */}
         <Link
           href="/admin"
-          className="w-7 h-7 rounded-lg bg-purple-600 hover:bg-purple-500 transition-colors flex items-center justify-center mb-5 flex-shrink-0"
+          className="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors flex items-center justify-center mb-5 flex-shrink-0"
         >
           <span className="text-[9px] font-bold text-white">ADM</span>
         </Link>
@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-4 text-base font-medium transition-colors ${
-                      pathname === item.href ? "text-purple-400" : "text-gray-400 hover:text-white"
+                      pathname === item.href ? "text-emerald-400" : "text-gray-400 hover:text-white"
                     }`}
                   >
                     <Icon size={16} />

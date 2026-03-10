@@ -28,7 +28,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onTrack }) =>
   return (
     <motion.div
       className="bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700/50 flex flex-col"
-      whileHover={{ y: -6, boxShadow: "0 20px 40px -12px rgba(147, 51, 234, 0.3)" }}
+      whileHover={{ y: -6, boxShadow: "0 20px 40px -12px rgba(16, 185, 129, 0.25)" }}
       transition={{ type: "spring", stiffness: 300 }}
       onClick={() => onTrack?.(product.id)}
     >

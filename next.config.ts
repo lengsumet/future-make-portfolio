@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
     ],
     unoptimized: true,
   },
+  // Disable automatic static optimization to prevent double renders
+  experimental: {
+    optimizePackageImports: ['framer-motion'],
+  },
 };
 
 export default nextConfig;

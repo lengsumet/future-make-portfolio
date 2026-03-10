@@ -39,7 +39,7 @@ export default function AdminAnalyticsPage() {
               key={r}
               onClick={() => setRange(r)}
               className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                range === r ? "bg-primary text-white" : "bg-gray-800 text-gray-400 hover:text-white"
+                range === r ? "bg-emerald-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white"
               }`}
             >
               {r}
@@ -88,7 +88,7 @@ export default function AdminAnalyticsPage() {
                 label: "Product Views",
                 value: summary.shopFunnel.productViews,
                 pct: 100,
-                color: "bg-purple-500",
+                color: "bg-emerald-500",
               },
               {
                 label: "Checkout Starts",

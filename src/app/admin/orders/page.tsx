@@ -71,7 +71,7 @@ export default function AdminOrdersPage() {
             onClick={() => setFilter(s)}
             className={`px-3 py-1.5 rounded-lg text-sm capitalize transition-colors ${
               filter === s
-                ? "bg-primary text-white"
+                ? "bg-emerald-600 text-white"
                 : "bg-gray-800 text-gray-400 hover:text-white"
             }`}
           >
@@ -124,7 +124,7 @@ export default function AdminOrdersPage() {
                       <button
                         disabled={updating === order.id}
                         onClick={() => updateStatus(order.id, STATUS_FLOW[order.status])}
-                        className="text-xs bg-primary/20 hover:bg-primary/40 text-purple-300 px-2 py-1 rounded transition-colors disabled:opacity-50 capitalize"
+                        className="text-xs bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-300 px-2 py-1 rounded transition-colors disabled:opacity-50 capitalize"
                       >
                         Mark {STATUS_FLOW[order.status]}
                       </button>

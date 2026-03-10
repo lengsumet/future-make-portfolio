@@ -46,8 +46,8 @@ export default function AdminLoginPage() {
       >
         <div className="bg-gray-900 border border-gray-700/50 rounded-2xl p-8">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FaLock className="text-primary text-xl" />
+            <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaLock className="text-emerald-400 text-xl" />
             </div>
             <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
             <p className="text-gray-400 text-sm mt-1">Sumet Buarod Portfolio</p>
@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-primary focus:outline-none"
+                className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-emerald-500 focus:outline-none"
                 placeholder="Enter admin password"
                 autoFocus
               />
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+              className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
             >
               {loading ? "Logging in..." : "Login"}
             </button>

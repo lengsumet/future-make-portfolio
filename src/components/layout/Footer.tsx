@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
               key={index}
               href={link.href}
               className="text-gray-400 hover:text-white"
-              whileHover={{ scale: 1.2, color: '#9333ea' }}
+              whileHover={{ scale: 1.2, color: '#10B981' }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
               {React.cloneElement(link.icon, { size: 24 })}

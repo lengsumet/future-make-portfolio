@@ -87,7 +87,7 @@ export default function ShopPage() {
             onClick={() => setActiveCategory(cat.value)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeCategory === cat.value
-                ? "bg-primary text-white shadow-glow-purple"
+                ? "bg-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]"
                 : "bg-gray-800/60 text-gray-400 hover:text-white hover:bg-gray-700/60"
             }`}
           >
@@ -131,7 +131,7 @@ export default function ShopPage() {
       )}
 
       {/* Custom work CTA */}
-      <div className="mt-20 text-center bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-2xl p-10">
+      <div className="mt-20 text-center bg-gradient-to-br from-emerald-500/10 to-violet-500/10 border border-emerald-500/20 rounded-2xl p-10">
         <h2 className="text-2xl font-bold text-white mb-3">Need Something Custom?</h2>
         <p className="text-gray-400 max-w-xl mx-auto mb-6">
           I build custom distributed systems, API integrations, and cloud-native architectures.
@@ -139,7 +139,7 @@ export default function ShopPage() {
         </p>
         <a
           href="mailto:sumet.buarod@gmail.com"
-          className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+          className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
           onClick={() => track("cta_click", "contact_custom")}
         >
           Get in Touch

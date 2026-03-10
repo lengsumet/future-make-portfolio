@@ -51,10 +51,15 @@ const ShowcaseModal: React.FC<ShowcaseModalProps> = ({ item, onClose }) => {
           </div>
           <p className="text-gray-300 mb-6">{item.longDescription}</p>
 
-          {/* Live Stats for WMS */}
-          {item.livePreview?.includes("3001") && <LiveStats system="wms" />}
-          {item.livePreview?.includes("3002") && <LiveStats system="pos" />}
-          {item.livePreview?.includes("3003") && <LiveStats system="crm" />}
+          {/* Live Stats for enterprise systems */}
+          {item.livePreview?.includes("wms") && <LiveStats system="wms" />}
+          {item.livePreview?.includes("pos") && <LiveStats system="pos" />}
+          {item.livePreview?.includes("crm") && <LiveStats system="crm" />}
+          {item.livePreview?.includes("tms") && <LiveStats system="tms" />}
+          {item.livePreview?.includes("ims") && <LiveStats system="ims" />}
+          {item.livePreview?.includes("scms") && <LiveStats system="scms" />}
+          {item.livePreview?.includes("pms") && <LiveStats system="pms" />}
+          {item.livePreview?.includes("dashboard") && <LiveStats system="dashboard" />}
 
           <div className="mb-6">
             <h4 className="font-semibold text-white mb-2">Key Features:</h4>

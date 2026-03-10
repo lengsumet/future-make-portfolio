@@ -24,9 +24,9 @@ function SectionHeading({ title }: { title: string }) {
     <motion.div {...fadeUp()} className="mb-10 text-center">
       <h2 className="text-2xl font-bold text-white">{title}</h2>
       <div className="mt-3 flex items-center justify-center gap-3">
-        <div className="h-px w-12 bg-purple-500/30 rounded-full" />
-        <div className="h-1 w-1 rounded-full bg-purple-500/50" />
-        <div className="h-px w-12 bg-purple-500/30 rounded-full" />
+        <div className="h-px w-12 bg-emerald-500/30 rounded-full" />
+        <div className="h-1 w-1 rounded-full bg-emerald-500/50" />
+        <div className="h-px w-12 bg-emerald-500/30 rounded-full" />
       </div>
     </motion.div>
   );
@@ -40,12 +40,12 @@ function ExpCard({ title, subtitle, period, description, delay }: {
     <motion.div
       {...fadeUp(delay)}
       className="relative overflow-hidden rounded-2xl border border-gray-700/30 bg-gray-900/40
-        hover:border-purple-500/25 hover:bg-gray-900/60 hover:-translate-y-1
+        hover:border-emerald-500/25 hover:bg-gray-900/60 hover:-translate-y-1
         transition-all duration-300 group cursor-default p-6"
     >
       {/* Bottom sweep line on hover */}
       <div className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full
-        bg-gradient-to-r from-purple-500/50 via-purple-400/30 to-transparent
+        bg-gradient-to-r from-emerald-500/50 via-emerald-400/30 to-transparent
         transition-all duration-500 ease-out" />
 
       {/* Period badge */}
@@ -55,10 +55,10 @@ function ExpCard({ title, subtitle, period, description, delay }: {
       </span>
 
       <h3 className="text-lg font-semibold text-white pr-28 mb-0.5
-        group-hover:text-purple-300 transition-colors duration-200">
+        group-hover:text-emerald-300 transition-colors duration-200">
         {title}
       </h3>
-      <p className="text-purple-400 text-sm mb-4">{subtitle}</p>
+      <p className="text-emerald-400 text-sm mb-4">{subtitle}</p>
       <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
     </motion.div>
   );
@@ -136,8 +136,8 @@ export default function AboutContent({ data }: { data: AboutData }) {
             </AnimatePresence>
 
             {/* Outer glow ring — pulses while spinning */}
-            <div className="absolute inset-0 rounded-full ring-4 ring-purple-500/20
-              shadow-xl shadow-purple-900/20 pointer-events-none z-[1]" />
+            <div className="absolute inset-0 rounded-full ring-4 ring-emerald-500/20
+              shadow-xl shadow-emerald-900/20 pointer-events-none z-[1]" />
 
             {/* Spinning image */}
             <motion.div
@@ -158,7 +158,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           </div>
 
           <h1 className="text-4xl font-bold text-white mb-2">{introduction.name}</h1>
-          <p className="text-lg text-purple-300 mb-5">{introduction.title}</p>
+          <p className="text-lg text-emerald-300 mb-5">{introduction.title}</p>
         </motion.div>
 
         <motion.p {...fadeUp(0.1)} className="max-w-2xl mx-auto text-gray-400 leading-relaxed mb-8">
@@ -170,11 +170,11 @@ export default function AboutContent({ data }: { data: AboutData }) {
           className="flex flex-wrap items-center justify-center gap-5 text-sm text-gray-500"
         >
           <a href="mailto:sumet.buarod@gmail.com"
-            className="flex items-center gap-2 hover:text-purple-400 transition-colors duration-200">
+            className="flex items-center gap-2 hover:text-emerald-400 transition-colors duration-200">
             <FaEnvelope size={13} /> sumet.buarod@gmail.com
           </a>
           <a href="tel:0958039303"
-            className="flex items-center gap-2 hover:text-purple-400 transition-colors duration-200">
+            className="flex items-center gap-2 hover:text-emerald-400 transition-colors duration-200">
             <FaPhone size={13} /> 095-803-9303
           </a>
           <span className="flex items-center gap-2">
@@ -257,8 +257,8 @@ export default function AboutContent({ data }: { data: AboutData }) {
               className="flex flex-col items-center gap-3 cursor-default group"
             >
               <div className="w-14 h-14 rounded-2xl bg-gray-900/50 border border-gray-800/40
-                group-hover:border-purple-500/30 group-hover:bg-gray-900/80
-                flex items-center justify-center text-gray-500 group-hover:text-purple-400
+                group-hover:border-emerald-500/30 group-hover:bg-gray-900/80
+                flex items-center justify-center text-gray-500 group-hover:text-emerald-400
                 transition-all duration-300">
                 {hobbyIcons[hobby.icon] ?? null}
               </div>

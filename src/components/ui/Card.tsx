@@ -16,7 +16,7 @@ const Card: React.FC<CardProps> = ({ title, description, image, tags, onClick })
   return (
     <motion.div
       className="bg-gray-800/50 rounded-lg overflow-hidden cursor-pointer shadow-lg"
-      whileHover={{ y: -10, boxShadow: "0 25px 50px -12px rgba(147, 51, 234, 0.25)" }}
+      whileHover={{ y: -10, boxShadow: "0 25px 50px -12px rgba(16, 185, 129, 0.25)" }}
       transition={{ type: 'spring', stiffness: 300 }}
       onClick={onClick}
     >
@@ -28,7 +28,7 @@ const Card: React.FC<CardProps> = ({ title, description, image, tags, onClick })
         <p className="text-gray-400 mb-4">{description}</p>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <span key={tag} className="bg-primary/50 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full">
+            <span key={tag} className="bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-2.5 py-1 rounded-full">
               {tag}
             </span>
           ))}

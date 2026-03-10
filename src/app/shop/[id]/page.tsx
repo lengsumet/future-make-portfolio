@@ -92,7 +92,7 @@ function CheckoutModal({
               required
               value={form.buyerName}
               onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary focus:outline-none"
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-emerald-500 focus:outline-none"
               placeholder="John Doe"
             />
           </div>
@@ -103,7 +103,7 @@ function CheckoutModal({
               required
               value={form.buyerEmail}
               onChange={(e) => setForm({ ...form, buyerEmail: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary focus:outline-none"
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-emerald-500 focus:outline-none"
               placeholder="you@example.com"
             />
           </div>
@@ -112,7 +112,7 @@ function CheckoutModal({
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-primary focus:outline-none resize-none"
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-emerald-500 focus:outline-none resize-none"
               rows={2}
               placeholder="Any specific requirements..."
             />
@@ -222,7 +222,7 @@ export default function ProductDetailPage() {
         {/* Left: Info */}
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <span className="bg-primary/20 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full capitalize">
+            <span className="bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full capitalize">
               {product.category}
             </span>
             {product.featured && (
@@ -274,6 +274,14 @@ export default function ProductDetailPage() {
             <div className="mb-8">
               <h3 className="text-lg font-semibold text-white mb-3">Live System Stats</h3>
               <LiveStats system="crm" />
+            </div>
+          )}
+
+          {/* Live Stats for TMS product */}
+          {product.demoUrl?.includes("3004") && (
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-white mb-3">Live System Stats</h3>
+              <LiveStats system="tms" />
             </div>
           )}
 

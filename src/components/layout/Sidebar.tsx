@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaHome, FaUser, FaStar, FaShoppingBag,
@@ -26,33 +26,55 @@ function NavIcon({
   name,
   isActive,
   onClick,
+  isNavigating,
 }: {
   href: string;
   icon: React.ElementType;
   name: string;
   isActive: boolean;
   onClick?: () => void;
+  isNavigating?: boolean;
 }) {
   return (
     <Link
       href={href}
       onClick={onClick}
       title={name}
-      className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-colors duration-200"
+      className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
       style={{
-        backgroundColor: isActive ? "rgb(147 51 234 / 0.75)" : "transparent",
-        boxShadow: isActive ? "0 0 14px rgb(147 51 234 / 0.35)" : "none",
+        backgroundColor: isActive ? "rgb(16 185 129 / 0.75)" : "transparent",
+        boxShadow: isActive ? "0 0 14px rgb(16 185 129 / 0.35)" : "none",
+        opacity: isNavigating ? 0.6 : 1,
+        transform: isNavigating ? "scale(0.95)" : "scale(1)",
       }}
     >
-      {/* Icon — scales on hover independently of tooltip */}
+      {/* Icon - always visible, no replacement */}
       <div className="transition-transform duration-150 ease-out group-hover:scale-125">
         <Icon
           size={14}
           className={`transition-colors duration-150 ${
-            isActive ? "text-white" : "text-gray-600 group-hover:text-gray-100"
+            isActive ? "text-white" : "text-gray-600 group-hover:text-emerald-200"
           }`}
         />
       </div>
+      
+      {/* Loading indicator - subtle pulse overlay */}
+      {isNavigating && (
+        <motion.div
+          className="absolute inset-0 rounded-xl border-2 border-emerald-400"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ 
+            opacity: [0.5, 1, 0.5],
+            scale: [0.9, 1.05, 0.9],
+          }}
+          transition={{
+            duration: 1,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      )}
+      
       {/* Tooltip */}
       <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 bg-gray-900/95 border border-gray-700/40 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl">
         {name}
@@ -63,7 +85,38 @@ function NavIcon({
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
+  const [showLoading, setShowLoading] = useState(false);
+
+  const handleNavigation = (href: string, closeMobile = false) => {
+    if (pathname === href) return;
+    
+    setNavigatingTo(href);
+    if (closeMobile) setMobileOpen(false);
+    
+    // Only show loading if navigation takes > 100ms (avoid flash)
+    const loadingTimer = setTimeout(() => {
+      setShowLoading(true);
+    }, 100);
+    
+    startTransition(() => {
+      router.push(href);
+      // Reset after navigation completes
+      clearTimeout(loadingTimer);
+      setShowLoading(false);
+      setNavigatingTo(null);
+    });
+  };
+
+  // Prefetch all routes on mount for instant navigation
+  React.useEffect(() => {
+    [...navItems, ...adminItems].forEach(item => {
+      router.prefetch(item.href);
+    });
+  }, [router]);
 
   return (
     <>
@@ -72,15 +125,31 @@ export default function Sidebar() {
         {/* Logo */}
         <Link
           href="/"
-          className="w-7 h-7 rounded-lg bg-purple-600 hover:bg-purple-500 transition-colors flex items-center justify-center mb-5 flex-shrink-0"
+          className="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors flex items-center justify-center mb-5 flex-shrink-0"
         >
           <span className="text-[10px] font-bold text-white">SB</span>
         </Link>
 
+        {/* Top loading bar - global navigation indicator */}
+        {showLoading && (
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-t-2xl"
+            initial={{ scaleX: 0, transformOrigin: "left" }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+        )}
+
         {/* Nav */}
         <nav className="flex flex-col items-center gap-0.5 flex-1 w-full px-1.5">
           {navItems.map((item) => (
-            <NavIcon key={item.href} {...item} isActive={pathname === item.href} />
+            <div key={item.href} onClick={() => handleNavigation(item.href)} className="cursor-pointer">
+              <NavIcon 
+                {...item} 
+                isActive={pathname === item.href}
+                isNavigating={navigatingTo === item.href}
+              />
+            </div>
           ))}
         </nav>
 
@@ -88,7 +157,13 @@ export default function Sidebar() {
         <div className="w-5 h-px bg-white/8 my-2" />
         <div className="flex flex-col items-center w-full px-1.5">
           {adminItems.map((item) => (
-            <NavIcon key={item.href} {...item} isActive={!!pathname?.startsWith("/admin")} />
+            <div key={item.href} onClick={() => handleNavigation(item.href)} className="cursor-pointer">
+              <NavIcon 
+                {...item} 
+                isActive={!!pathname?.startsWith("/admin")}
+                isNavigating={navigatingTo === item.href}
+              />
+            </div>
           ))}
         </div>
       </aside>
@@ -123,20 +198,37 @@ export default function Sidebar() {
                 const isActive =
                   pathname === item.href ||
                   (item.href === "/admin" && pathname?.startsWith("/admin"));
+                const isLoading = navigatingTo === item.href;
                 return (
-                  <Link
+                  <button
                     key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-4 text-base transition-colors ${
+                    onClick={() => handleNavigation(item.href, true)}
+                    disabled={isLoading}
+                    className={`relative flex items-center gap-4 text-base transition-all text-left ${
                       isActive
-                        ? "text-purple-400"
+                        ? "text-emerald-400"
                         : "text-gray-400 hover:text-white"
-                    }`}
+                    } ${isLoading ? "opacity-60 scale-95" : ""}`}
                   >
                     <Icon size={16} />
                     <span className="font-medium">{item.name}</span>
-                  </Link>
+                    
+                    {/* Loading indicator - subtle dot animation */}
+                    {isLoading && (
+                      <motion.span
+                        className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400"
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.5, 1, 0.5],
+                        }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    )}
+                  </button>
                 );
               })}
             </nav>
