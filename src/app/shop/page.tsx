@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Container from "@/components/layout/Container";
-import SectionHeader from "@/components/ui/SectionHeader";
+import { motion } from "framer-motion";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Product, ProductCategory } from "@/types/shop";
 import { useTracking, usePageView } from "@/hooks/useTracking";
-import { motion } from "framer-motion";
 
 const CATEGORIES: { label: string; value: ProductCategory | "all" }[] = [
   { label: "All", value: "all" },
@@ -15,6 +13,8 @@ const CATEGORIES: { label: string; value: ProductCategory | "all" }[] = [
   { label: "APIs & Systems", value: "api" },
   { label: "Services", value: "service" },
 ];
+
+const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
 export default function ShopPage() {
   usePageView();
@@ -37,114 +37,144 @@ export default function ShopPage() {
   const storeUrl = process.env.NEXT_PUBLIC_STORE_URL || "http://localhost:3001";
 
   return (
-    <Container className="py-16">
-      {/* ── Live E-Commerce Store Banner ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/8 to-transparent mb-14 p-8"
-      >
-        <div className="absolute inset-0 opacity-20"
-          style={{ backgroundImage: "radial-gradient(rgba(16,185,129,0.2) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-        <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[10px] uppercase tracking-widest text-emerald-500 font-medium">Live Project</span>
+    <div style={{ background: "var(--background)" }} className="min-h-screen">
+      {/* Aurora bg */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div
+          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
+          style={{
+            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 md:pl-20">
+        {/* Live E-Commerce Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={spring}
+          className="relative overflow-hidden rounded-2xl mb-14 p-8"
+          style={{
+            background: "rgba(99,102,241,0.06)",
+            border: "1px solid rgba(99,102,241,0.2)",
+          }}
+        >
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{ backgroundImage: "radial-gradient(rgba(99,102,241,0.3) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
+          />
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#22c55e" }} />
+                <span className="text-[10px] uppercase tracking-widest font-medium" style={{ color: "#86efac" }}>Live Project</span>
+              </div>
+              <h2 className="text-xl font-bold text-white mb-1">Full E-Commerce Store</h2>
+              <p className="text-sm max-w-md" style={{ color: "rgba(255,255,255,0.35)" }}>
+                Production-ready store with product catalog, PromptPay QR checkout, order management, and admin dashboard with sales reports.
+              </p>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {["Next.js 15", "Prisma", "NextAuth", "Zustand", "Recharts"].map((t) => (
+                  <span key={t} className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}>{t}</span>
+                ))}
+              </div>
             </div>
-            <h2 className="text-xl font-bold text-white mb-1">Full E-Commerce Store</h2>
-            <p className="text-gray-500 text-sm max-w-md">
-              Production-ready store with product catalog, PromptPay QR checkout, order management, and admin dashboard with sales reports.
-            </p>
-            <div className="flex flex-wrap gap-1.5 mt-3">
-              {["Next.js 15", "Prisma", "NextAuth", "Zustand", "Recharts"].map((t) => (
-                <span key={t} className="text-[10px] px-2 py-0.5 rounded-md bg-gray-800/60 text-gray-500">{t}</span>
-              ))}
-            </div>
+            <a
+              href={storeUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-opacity duration-150 hover:opacity-85"
+              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff" }}
+            >
+              Open Store →
+            </a>
           </div>
-          <a
-            href={storeUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-semibold transition-colors"
+        </motion.div>
+
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...spring, delay: 0.1 }} className="mb-10">
+          <p className="text-[10px] uppercase tracking-[0.22em] mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Shop</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white">Templates &amp; Systems</h1>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
+            Production-ready code built with real-world enterprise experience.
+          </p>
+        </motion.div>
+
+        {/* Category Filter */}
+        <div className="flex flex-wrap gap-2 mb-10">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.value}
+              onClick={() => setActiveCategory(cat.value)}
+              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+              style={{
+                background: activeCategory === cat.value ? "linear-gradient(135deg, #6366f1, #8b5cf6)" : "rgba(255,255,255,0.04)",
+                color: activeCategory === cat.value ? "#fff" : "rgba(255,255,255,0.4)",
+                border: `1px solid ${activeCategory === cat.value ? "transparent" : "rgba(255,255,255,0.07)"}`,
+                boxShadow: activeCategory === cat.value ? "0 0 20px rgba(99,102,241,0.3)" : "none",
+              }}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Product Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-xl h-80 animate-pulse" style={{ background: "rgba(255,255,255,0.03)" }} />
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+            initial="hidden"
+            animate="show"
+            variants={{ show: { transition: { staggerChildren: 0.07 } } }}
           >
-            Open Store →
+            {filtered.map((product) => (
+              <motion.div
+                key={product.id}
+                variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: spring } }}
+              >
+                <ProductCard product={product} onTrack={() => track("product_view", product.id)} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
+        {!loading && filtered.length === 0 && (
+          <p className="text-center py-16 text-sm" style={{ color: "rgba(255,255,255,0.25)" }}>
+            No products in this category yet.
+          </p>
+        )}
+
+        {/* Custom work CTA */}
+        <div
+          className="mt-20 text-center rounded-2xl p-10"
+          style={{
+            background: "rgba(99,102,241,0.05)",
+            border: "1px solid rgba(99,102,241,0.15)",
+          }}
+        >
+          <h2 className="text-2xl font-bold text-white mb-3">Need Something Custom?</h2>
+          <p className="text-sm max-w-xl mx-auto mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>
+            I build custom distributed systems, API integrations, and cloud-native architectures.
+            Let&apos;s discuss your project.
+          </p>
+          <a
+            href="mailto:sumet.buarod@gmail.com"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-opacity duration-150 hover:opacity-85"
+            style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff" }}
+            onClick={() => track("cta_click", "contact_custom")}
+          >
+            Get in Touch
           </a>
         </div>
-      </motion.div>
-
-      <SectionHeader
-        title="Templates & Systems"
-        subtitle="Production-ready code built with real-world enterprise experience."
-      />
-
-      {/* Category Filter */}
-      <div className="flex flex-wrap gap-2 justify-center mb-12">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat.value}
-            onClick={() => setActiveCategory(cat.value)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              activeCategory === cat.value
-                ? "bg-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-                : "bg-gray-800/60 text-gray-400 hover:text-white hover:bg-gray-700/60"
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
       </div>
-
-      {/* Product Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="bg-gray-800/30 rounded-xl h-80 animate-pulse" />
-          ))}
-        </div>
-      ) : (
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ staggerChildren: 0.1 }}
-        >
-          {filtered.map((product) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <ProductCard
-                product={product}
-                onTrack={() => track("product_view", product.id)}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
-      )}
-
-      {!loading && filtered.length === 0 && (
-        <p className="text-center text-gray-500 py-16">No products in this category yet.</p>
-      )}
-
-      {/* Custom work CTA */}
-      <div className="mt-20 text-center bg-gradient-to-br from-emerald-500/10 to-violet-500/10 border border-emerald-500/20 rounded-2xl p-10">
-        <h2 className="text-2xl font-bold text-white mb-3">Need Something Custom?</h2>
-        <p className="text-gray-400 max-w-xl mx-auto mb-6">
-          I build custom distributed systems, API integrations, and cloud-native architectures.
-          Let&apos;s discuss your project.
-        </p>
-        <a
-          href="mailto:sumet.buarod@gmail.com"
-          className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-          onClick={() => track("cta_click", "contact_custom")}
-        >
-          Get in Touch
-        </a>
-      </div>
-    </Container>
+    </div>
   );
 }
