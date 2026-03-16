@@ -12,10 +12,10 @@ import { AboutData, Experience, Education, Hobby, Skill } from "@/types/types";
 
 /* ── animation helpers ─────────────────────────── */
 const fadeUp = (delay = 0) => ({
-  initial:   { opacity: 0, y: 28 },
+  initial:     { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport:  { once: true, margin: "-60px" },
-  transition: { duration: 0.55, ease: "easeOut" as const, delay },
+  viewport:    { once: true, margin: "-60px" },
+  transition:  { duration: 0.55, ease: "easeOut" as const, delay },
 });
 
 /* ── section heading ────────────────────────────── */
@@ -24,9 +24,9 @@ function SectionHeading({ title }: { title: string }) {
     <motion.div {...fadeUp()} className="mb-10 text-center">
       <h2 className="text-2xl font-bold text-white">{title}</h2>
       <div className="mt-3 flex items-center justify-center gap-3">
-        <div className="h-px w-12 bg-emerald-500/30 rounded-full" />
-        <div className="h-1 w-1 rounded-full bg-emerald-500/50" />
-        <div className="h-px w-12 bg-emerald-500/30 rounded-full" />
+        <div className="h-px w-12 rounded-full" style={{ background: "rgba(99,102,241,0.3)" }} />
+        <div className="h-1 w-1 rounded-full" style={{ background: "rgba(99,102,241,0.5)" }} />
+        <div className="h-px w-12 rounded-full" style={{ background: "rgba(99,102,241,0.3)" }} />
       </div>
     </motion.div>
   );
@@ -39,36 +39,53 @@ function ExpCard({ title, subtitle, period, description, delay }: {
   return (
     <motion.div
       {...fadeUp(delay)}
-      className="relative overflow-hidden rounded-2xl border border-gray-700/30 bg-gray-900/40
-        hover:border-emerald-500/25 hover:bg-gray-900/60 hover:-translate-y-1
-        transition-all duration-300 group cursor-default p-6"
+      className="relative overflow-hidden rounded-2xl p-6 transition-all duration-300 group cursor-default"
+      style={{
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.07)",
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.25)";
+        (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+        (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+      }}
     >
       {/* Bottom sweep line on hover */}
-      <div className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full
-        bg-gradient-to-r from-emerald-500/50 via-emerald-400/30 to-transparent
-        transition-all duration-500 ease-out" />
+      <div
+        className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-500 ease-out"
+        style={{ background: "linear-gradient(90deg, rgba(99,102,241,0.5), rgba(139,92,246,0.3), transparent)" }}
+      />
 
       {/* Period badge */}
-      <span className="absolute top-5 right-5 text-[11px] text-gray-600 font-mono
-        bg-gray-800/70 px-2.5 py-1 rounded-lg tracking-tight">
+      <span
+        className="absolute top-5 right-5 text-[11px] font-mono px-2.5 py-1 rounded-lg tracking-tight"
+        style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}
+      >
         {period}
       </span>
 
-      <h3 className="text-lg font-semibold text-white pr-28 mb-0.5
-        group-hover:text-emerald-300 transition-colors duration-200">
+      <h3
+        className="text-base font-semibold pr-28 mb-0.5 transition-colors duration-200"
+        style={{ color: "#fff" }}
+      >
         {title}
       </h3>
-      <p className="text-emerald-400 text-sm mb-4">{subtitle}</p>
-      <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+      <p className="text-sm mb-4" style={{ color: "#818cf8" }}>{subtitle}</p>
+      <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>{description}</p>
     </motion.div>
   );
 }
 
 const hobbyIcons: Record<string, React.ReactNode> = {
-  camera:   <FaCamera size={26} />,
-  mountain: <FaMountain size={26} />,
-  gamepad:  <FaGamepad size={26} />,
-  utensils: <FaUtensils size={26} />,
+  camera:   <FaCamera size={22} />,
+  mountain: <FaMountain size={22} />,
+  gamepad:  <FaGamepad size={22} />,
+  utensils: <FaUtensils size={22} />,
 };
 
 /* ── main component ─────────────────────────────── */
@@ -76,19 +93,17 @@ export default function AboutContent({ data }: { data: AboutData }) {
   const { introduction, education, experience, skills, hobbies } = data;
 
   /* ── Profile spin ──────────────────────────── */
-  const spinCtrl    = useAnimation();
-  const isSpinning  = useRef(false);
+  const spinCtrl   = useAnimation();
+  const isSpinning = useRef(false);
   const [sparkles, setSparkles] = useState<{ id: number; angle: number; char: string }[]>([]);
 
   const handleSpin = useCallback(async () => {
     if (isSpinning.current) return;
     isSpinning.current = true;
 
-    // Spawn sparkles radiating outward
     const chars = ["✦", "★", "✨", "◆", "✦", "★", "✨", "◆"];
     setSparkles(chars.map((char, i) => ({ id: Date.now() + i, angle: (i / chars.length) * 360, char })));
 
-    // Cartoon: wind-up back → fast spin forward
     await spinCtrl.start({ rotate: -20, transition: { duration: 0.13, ease: "easeIn" } });
     await spinCtrl.start({ rotate: 365, transition: { duration: 0.62, ease: [0.2, 1.55, 0.36, 1] } });
     spinCtrl.set({ rotate: 0 });
@@ -109,16 +124,13 @@ export default function AboutContent({ data }: { data: AboutData }) {
       {/* ── Profile ─────────────────────────────── */}
       <section className="text-center mb-24">
         <motion.div {...fadeUp(0)}>
-          {/* Profile image with cartoon spin */}
+          {/* Profile image */}
           <div className="relative w-36 h-36 mx-auto mb-6">
-
-            {/* Sparkles */}
             <AnimatePresence>
               {sparkles.map((s) => (
                 <motion.span
                   key={s.id}
-                  className="absolute top-1/2 left-1/2 pointer-events-none select-none
-                    text-yellow-300 text-base z-10"
+                  className="absolute top-1/2 left-1/2 pointer-events-none select-none text-yellow-300 text-base z-10"
                   style={{ translateX: "-50%", translateY: "-50%" }}
                   initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
                   animate={{
@@ -135,9 +147,11 @@ export default function AboutContent({ data }: { data: AboutData }) {
               ))}
             </AnimatePresence>
 
-            {/* Outer glow ring — pulses while spinning */}
-            <div className="absolute inset-0 rounded-full ring-4 ring-emerald-500/20
-              shadow-xl shadow-emerald-900/20 pointer-events-none z-[1]" />
+            {/* Glow ring */}
+            <div
+              className="absolute inset-0 rounded-full pointer-events-none z-[1]"
+              style={{ boxShadow: "0 0 0 3px rgba(99,102,241,0.2), 0 0 30px rgba(99,102,241,0.1)" }}
+            />
 
             {/* Spinning image */}
             <motion.div
@@ -158,23 +172,36 @@ export default function AboutContent({ data }: { data: AboutData }) {
           </div>
 
           <h1 className="text-4xl font-bold text-white mb-2">{introduction.name}</h1>
-          <p className="text-lg text-emerald-300 mb-5">{introduction.title}</p>
+          <p className="text-lg mb-5" style={{ color: "#a5b4fc" }}>{introduction.title}</p>
         </motion.div>
 
-        <motion.p {...fadeUp(0.1)} className="max-w-2xl mx-auto text-gray-400 leading-relaxed mb-8">
+        <motion.p
+          {...fadeUp(0.1)}
+          className="max-w-2xl mx-auto leading-relaxed mb-8 text-sm"
+          style={{ color: "rgba(255,255,255,0.4)" }}
+        >
           {introduction.bio}
         </motion.p>
 
         <motion.div
           {...fadeUp(0.18)}
-          className="flex flex-wrap items-center justify-center gap-5 text-sm text-gray-500"
+          className="flex flex-wrap items-center justify-center gap-5 text-sm"
+          style={{ color: "rgba(255,255,255,0.3)" }}
         >
-          <a href="mailto:sumet.buarod@gmail.com"
-            className="flex items-center gap-2 hover:text-emerald-400 transition-colors duration-200">
+          <a
+            href="mailto:sumet.buarod@gmail.com"
+            className="flex items-center gap-2 transition-colors duration-200"
+            onMouseEnter={e => (e.currentTarget.style.color = "#818cf8")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
+          >
             <FaEnvelope size={13} /> sumet.buarod@gmail.com
           </a>
-          <a href="tel:0958039303"
-            className="flex items-center gap-2 hover:text-emerald-400 transition-colors duration-200">
+          <a
+            href="tel:0958039303"
+            className="flex items-center gap-2 transition-colors duration-200"
+            onMouseEnter={e => (e.currentTarget.style.color = "#818cf8")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
+          >
             <FaPhone size={13} /> 095-803-9303
           </a>
           <span className="flex items-center gap-2">
@@ -186,7 +213,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
       {/* ── Experience ──────────────────────────── */}
       <section className="mb-24">
         <SectionHeading title="Work Experience" />
-        <div className="space-y-5 max-w-3xl mx-auto">
+        <div className="space-y-4 max-w-3xl mx-auto">
           {experience.map((exp: Experience, i: number) => (
             <ExpCard
               key={i}
@@ -203,7 +230,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
       {/* ── Education ───────────────────────────── */}
       <section className="mb-24">
         <SectionHeading title="Education" />
-        <div className="space-y-5 max-w-3xl mx-auto">
+        <div className="space-y-4 max-w-3xl mx-auto">
           {education.map((edu: Education, i: number) => (
             <ExpCard
               key={i}
@@ -223,7 +250,10 @@ export default function AboutContent({ data }: { data: AboutData }) {
         <div className="max-w-4xl mx-auto space-y-12">
           {Object.entries(groupedSkills).map(([category, categorySkills], gi) => (
             <motion.div key={category} {...fadeUp(gi * 0.06)}>
-              <p className="text-xs text-gray-600 uppercase tracking-widest text-center mb-6">
+              <p
+                className="text-xs uppercase tracking-widest text-center mb-6"
+                style={{ color: "rgba(255,255,255,0.2)" }}
+              >
                 {category}
               </p>
               <SkillIcons skills={categorySkills} />
@@ -240,10 +270,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-40px" }}
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: 0.08 } },
-          }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
         >
           {hobbies.map((hobby: Hobby) => (
             <motion.div
@@ -256,13 +283,32 @@ export default function AboutContent({ data }: { data: AboutData }) {
               transition={{ duration: 0.2 }}
               className="flex flex-col items-center gap-3 cursor-default group"
             >
-              <div className="w-14 h-14 rounded-2xl bg-gray-900/50 border border-gray-800/40
-                group-hover:border-emerald-500/30 group-hover:bg-gray-900/80
-                flex items-center justify-center text-gray-500 group-hover:text-emerald-400
-                transition-all duration-300">
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-300"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  color: "rgba(255,255,255,0.3)",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)";
+                  (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.08)";
+                  (e.currentTarget as HTMLElement).style.color = "#818cf8";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
+                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                  (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.3)";
+                }}
+              >
                 {hobbyIcons[hobby.icon] ?? null}
               </div>
-              <p className="text-sm text-gray-500 group-hover:text-gray-300 transition-colors duration-200">
+              <p
+                className="text-sm transition-colors duration-200"
+                style={{ color: "rgba(255,255,255,0.3)" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
+              >
                 {hobby.name}
               </p>
             </motion.div>

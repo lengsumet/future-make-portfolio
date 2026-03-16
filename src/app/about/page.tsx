@@ -1,6 +1,5 @@
 import { promises as fs } from "fs";
 import path from "path";
-import Container from "@/components/layout/Container";
 import AboutContent from "@/components/about/AboutContent";
 import { AboutData } from "@/types/types";
 
@@ -10,9 +9,21 @@ const AboutPage = async () => {
   const data: AboutData = JSON.parse(file);
 
   return (
-    <Container className="py-16">
-      <AboutContent data={data} />
-    </Container>
+    <div style={{ background: "var(--background)" }} className="min-h-screen">
+      {/* Aurora bg */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div
+          className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
+          style={{
+            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
+      </div>
+      <div className="relative z-10 max-w-4xl mx-auto px-6 py-20 md:pl-20">
+        <AboutContent data={data} />
+      </div>
+    </div>
   );
 };
 
