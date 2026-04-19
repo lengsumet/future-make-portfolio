@@ -151,7 +151,7 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
     <div className="rounded-xl p-6 my-6" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full animate-pulse" style={{ background: "#818cf8" }} />
+          <div className="h-2 w-2 rounded-full animate-pulse" style={{ background: "#E0A878" }} />
           <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>
             Live {systemLabel} Statistics
           </span>
@@ -176,7 +176,7 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
               key={key}
               className="rounded-lg p-3 transition-colors duration-150"
               style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.06)"}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(192, 133, 82,0.06)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)"}
             >
               <div className="flex items-center gap-1.5 mb-1">

@@ -13,11 +13,11 @@ import CatWidget from "@/components/animations/CatWidget";
 /* ── data ─────────────────────────────────────────── */
 const tech = [
   { name: "React / Next.js", icon: SiReact,      color: "#61DAFB" },
-  { name: "TypeScript",      icon: SiTypescript, color: "#818cf8" },
+  { name: "TypeScript",      icon: SiTypescript, color: "#E0A878" },
   { name: "C# / .NET",       icon: SiSharp,      color: "#a78bfa" },
   { name: "Python",          icon: SiPython,     color: "#67e8f9" },
   { name: "Golang",          icon: SiGo,         color: "#22d3ee" },
-  { name: "PostgreSQL",      icon: SiPostgresql, color: "#818cf8" },
+  { name: "PostgreSQL",      icon: SiPostgresql, color: "#E0A878" },
   { name: "Docker",          icon: SiDocker,     color: "#67e8f9" },
   { name: "AWS",             icon: FaAws,        color: "#fbbf24" },
 ];
@@ -31,8 +31,8 @@ const featured = [
     description: "High-concurrency workflow engine for financial transaction lifecycle. Real-time third-party API integrations, policy management, and granular access control.",
     tags: [".NET Core 8", "C#", "React", "PostgreSQL", "Docker"],
     external: false,
-    gradient: "from-indigo-500/10 via-purple-500/5 to-transparent",
-    border: "group-hover:border-indigo-500/30",
+    gradient: "from-[#C08552]/10 via-[#8C5A3C]/8 to-transparent",
+    border: "group-hover:border-[#C08552]/30",
   },
   {
     slug: "ecommerce-suite",
@@ -42,8 +42,8 @@ const featured = [
     description: "Full e-commerce platform with product catalog, cart, PromptPay QR checkout, coupon system, and admin dashboard with weekly/monthly/yearly sales reports.",
     tags: ["Next.js 15", "Prisma", "NextAuth", "Zustand", "Recharts"],
     external: true,
-    gradient: "from-cyan-500/10 via-blue-500/5 to-transparent",
-    border: "group-hover:border-cyan-500/30",
+    gradient: "from-[#E0A878]/10 via-[#C08552]/8 to-transparent",
+    border: "group-hover:border-[#E0A878]/30",
   },
 ];
 
@@ -90,7 +90,7 @@ export default function Home() {
           <motion.div
             className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full opacity-30"
             style={{
-              background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 30%, transparent 70%)",
+              background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 30%, transparent 70%)",
               filter: "blur(80px)",
             }}
             animate={{ scale: [1, 1.08, 1], opacity: [0.25, 0.35, 0.25] }}
@@ -100,7 +100,7 @@ export default function Home() {
           <motion.div
             className="absolute top-1/3 -right-40 w-[500px] h-[500px] rounded-full opacity-20"
             style={{
-              background: "radial-gradient(ellipse, #06b6d4 0%, transparent 70%)",
+              background: "radial-gradient(ellipse, #E0A878 0%, transparent 70%)",
               filter: "blur(60px)",
             }}
             animate={{ scale: [1, 1.12, 1], x: [0, -20, 0] }}
@@ -172,7 +172,7 @@ export default function Home() {
             <Link
               href="/showcase"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 glow-accent"
-              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff" }}
+              style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)", color: "#fff" }}
               onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
               onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
             >
@@ -187,7 +187,7 @@ export default function Home() {
                 border: "1px solid rgba(255,255,255,0.1)",
                 color: "rgba(255,255,255,0.7)",
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(99,102,241,0.4)"; e.currentTarget.style.color = "#fff"; }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(192, 133, 82,0.4)"; e.currentTarget.style.color = "#fff"; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.7)"; }}
             >
               Shop Templates
@@ -226,7 +226,7 @@ export default function Home() {
         >
           <motion.div
             className="w-px h-10 rounded-full"
-            style={{ background: "linear-gradient(to bottom, rgba(99,102,241,0.6), transparent)" }}
+            style={{ background: "linear-gradient(to bottom, rgba(192, 133, 82,0.6), transparent)" }}
             animate={{ scaleY: [0, 1, 0], originY: 0 }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -266,9 +266,9 @@ export default function Home() {
                   color: "rgba(255,255,255,0.4)",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(192, 133, 82,0.35)";
                   (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.8)";
-                  (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.06)";
+                  (e.currentTarget as HTMLElement).style.background = "rgba(192, 133, 82,0.06)";
                 }}
                 onMouseLeave={e => {
                   (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
@@ -299,7 +299,7 @@ export default function Home() {
               href="/showcase"
               className="flex items-center gap-1.5 text-xs transition-colors duration-200 group"
               style={{ color: "rgba(255,255,255,0.3)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "#818cf8")}
+              onMouseEnter={e => (e.currentTarget.style.color = "#E0A878")}
               onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
             >
               View all
@@ -381,7 +381,7 @@ export default function Home() {
                       <motion.span
                         className="block"
                         style={{ color: "rgba(255,255,255,0.2)" }}
-                        whileHover={{ x: 3, color: "#818cf8" }}
+                        whileHover={{ x: 3, color: "#E0A878" }}
                       >
                         <FaArrowRight size={11} />
                       </motion.span>

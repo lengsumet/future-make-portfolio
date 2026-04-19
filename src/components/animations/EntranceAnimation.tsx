@@ -53,7 +53,7 @@ const EntranceAnimation: React.FC<EntranceAnimationProps> = ({ name, title }) =>
                 ))}
             </motion.h1>
             <motion.p
-                className="text-lg md:text-2xl text-purple-300"
+                className="text-lg md:text-2xl text-[#E0A878]"
                 variants={subtitleVariants}
             >
                 {title}

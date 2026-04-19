@@ -24,9 +24,9 @@ function SectionHeading({ title }: { title: string }) {
     <motion.div {...fadeUp()} className="mb-10 text-center">
       <h2 className="text-2xl font-bold text-white">{title}</h2>
       <div className="mt-3 flex items-center justify-center gap-3">
-        <div className="h-px w-12 rounded-full" style={{ background: "rgba(99,102,241,0.3)" }} />
-        <div className="h-1 w-1 rounded-full" style={{ background: "rgba(99,102,241,0.5)" }} />
-        <div className="h-px w-12 rounded-full" style={{ background: "rgba(99,102,241,0.3)" }} />
+        <div className="h-px w-12 rounded-full" style={{ background: "rgba(192, 133, 82,0.3)" }} />
+        <div className="h-1 w-1 rounded-full" style={{ background: "rgba(192, 133, 82,0.5)" }} />
+        <div className="h-px w-12 rounded-full" style={{ background: "rgba(192, 133, 82,0.3)" }} />
       </div>
     </motion.div>
   );
@@ -46,7 +46,7 @@ function ExpCard({ title, subtitle, period, description, delay }: {
       }}
       onMouseEnter={e => {
         (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.25)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgba(192, 133, 82,0.25)";
         (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
       }}
       onMouseLeave={e => {
@@ -58,7 +58,7 @@ function ExpCard({ title, subtitle, period, description, delay }: {
       {/* Bottom sweep line on hover */}
       <div
         className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-500 ease-out"
-        style={{ background: "linear-gradient(90deg, rgba(99,102,241,0.5), rgba(139,92,246,0.3), transparent)" }}
+        style={{ background: "linear-gradient(90deg, rgba(192, 133, 82,0.5), rgba(140, 90, 60,0.3), transparent)" }}
       />
 
       {/* Period badge */}
@@ -75,7 +75,7 @@ function ExpCard({ title, subtitle, period, description, delay }: {
       >
         {title}
       </h3>
-      <p className="text-sm mb-4" style={{ color: "#818cf8" }}>{subtitle}</p>
+      <p className="text-sm mb-4" style={{ color: "#E0A878" }}>{subtitle}</p>
       <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>{description}</p>
     </motion.div>
   );
@@ -150,7 +150,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
             {/* Glow ring */}
             <div
               className="absolute inset-0 rounded-full pointer-events-none z-[1]"
-              style={{ boxShadow: "0 0 0 3px rgba(99,102,241,0.2), 0 0 30px rgba(99,102,241,0.1)" }}
+              style={{ boxShadow: "0 0 0 3px rgba(192, 133, 82,0.2), 0 0 30px rgba(192, 133, 82,0.1)" }}
             />
 
             {/* Spinning image */}
@@ -172,7 +172,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           </div>
 
           <h1 className="text-4xl font-bold text-white mb-2">{introduction.name}</h1>
-          <p className="text-lg mb-5" style={{ color: "#a5b4fc" }}>{introduction.title}</p>
+          <p className="text-lg mb-5" style={{ color: "#F2C9A0" }}>{introduction.title}</p>
         </motion.div>
 
         <motion.p
@@ -191,7 +191,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           <a
             href="mailto:sumet.buarod@gmail.com"
             className="flex items-center gap-2 transition-colors duration-200"
-            onMouseEnter={e => (e.currentTarget.style.color = "#818cf8")}
+            onMouseEnter={e => (e.currentTarget.style.color = "#E0A878")}
             onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
           >
             <FaEnvelope size={13} /> sumet.buarod@gmail.com
@@ -199,7 +199,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           <a
             href="tel:0958039303"
             className="flex items-center gap-2 transition-colors duration-200"
-            onMouseEnter={e => (e.currentTarget.style.color = "#818cf8")}
+            onMouseEnter={e => (e.currentTarget.style.color = "#E0A878")}
             onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.3)")}
           >
             <FaPhone size={13} /> 095-803-9303
@@ -291,9 +291,9 @@ export default function AboutContent({ data }: { data: AboutData }) {
                   color: "rgba(255,255,255,0.3)",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.35)";
-                  (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.08)";
-                  (e.currentTarget as HTMLElement).style.color = "#818cf8";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(192, 133, 82,0.35)";
+                  (e.currentTarget as HTMLElement).style.background = "rgba(192, 133, 82,0.08)";
+                  (e.currentTarget as HTMLElement).style.color = "#E0A878";
                 }}
                 onMouseLeave={e => {
                   (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";

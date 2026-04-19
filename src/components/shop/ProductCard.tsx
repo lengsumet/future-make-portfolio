@@ -12,10 +12,27 @@ interface ProductCardProps {
 }
 
 const categoryColors: Record<string, string> = {
-  template: "bg-purple-500/20 text-purple-300",
+  template: "bg-[#8C5A3C]/20 text-[#E0A878]",
   service: "bg-blue-500/20 text-blue-300",
   saas: "bg-green-500/20 text-green-300",
   api: "bg-orange-500/20 text-orange-300",
+  fullstack: "bg-[#C08552]/20 text-[#E0A878]",
+};
+
+const categoryLabels: Record<string, string> = {
+  template: "Template",
+  service: "Service",
+  saas: "SaaS",
+  api: "API",
+  fullstack: "Enterprise",
+};
+
+const categoryIcons: Record<string, string> = {
+  template: "T",
+  service: "S",
+  saas: "S",
+  api: "A",
+  fullstack: "E",
 };
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onTrack }) => {
@@ -27,27 +44,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onTrack }) =>
 
   return (
     <motion.div
-      className="bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700/50 flex flex-col"
-      whileHover={{ y: -6, boxShadow: "0 20px 40px -12px rgba(16, 185, 129, 0.25)" }}
+      className="bg-gray-800/50 rounded-xl overflow-hidden border border-gray-700/50 flex flex-col cursor-pointer"
+      whileHover={{ y: -6, boxShadow: "0 20px 40px -12px rgba(192, 133, 82, 0.35)" }}
       transition={{ type: "spring", stiffness: 300 }}
       onClick={() => onTrack?.(product.id)}
     >
       {/* Thumbnail */}
       <div className="relative h-48 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10" />
-        <div className="text-6xl opacity-20 select-none">
-          {product.category === "template" && "🎨"}
-          {product.category === "service" && "⚙️"}
-          {product.category === "saas" && "🚀"}
-          {product.category === "api" && "🔌"}
+        <div className="text-6xl font-bold opacity-10 select-none text-white">
+          {categoryIcons[product.category] ?? "?"}
         </div>
         {product.featured && (
           <span className="absolute top-3 right-3 bg-accent/90 text-black text-xs font-bold px-2 py-1 rounded-full">
             Featured
           </span>
         )}
-        <span className={`absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full capitalize ${categoryColors[product.category]}`}>
-          {product.category}
+        <span className={`absolute top-3 left-3 text-xs font-semibold px-2.5 py-1 rounded-full ${categoryColors[product.category]}`}>
+          {categoryLabels[product.category] ?? product.category}
         </span>
       </div>
 

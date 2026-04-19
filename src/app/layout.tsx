@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Noto_Sans_Thai } from "next/font/google";
+import { Prompt, Inter, Playfair_Display, Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import ClientShell from "@/components/layout/ClientShell";
 import { LoadingProvider } from "@/contexts/LoadingContext";
 import LoadingScreen from "@/components/animations/LoadingScreen";
+
+const prompt = Prompt({
+  variable: "--font-prompt",
+  subsets: ["latin", "thai"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${inter.className}`}>
+      <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${prompt.className}`}>
         <LoadingProvider>
           <LoadingScreen />
           <ClientShell>{children}</ClientShell>

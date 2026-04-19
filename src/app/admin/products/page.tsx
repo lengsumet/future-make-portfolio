@@ -21,6 +21,7 @@ export default function AdminProductsPage() {
     service: "bg-blue-500/20 text-blue-300",
     saas: "bg-green-500/20 text-green-300",
     api: "bg-orange-500/20 text-orange-300",
+    fullstack: "bg-[#C08552]/20 text-[#E0A878]",
   };
 
   return (

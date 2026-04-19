@@ -3,10 +3,10 @@
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FaHome, FaUser, FaStar, FaShoppingBag,
-  FaCog, FaBars, FaTimes,
+  FaCog,
 } from "react-icons/fa";
 
 const navItems = [
@@ -42,8 +42,8 @@ function NavIcon({
       title={name}
       className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
       style={{
-        backgroundColor: isActive ? "rgba(99,102,241,0.75)" : "transparent",
-        boxShadow: isActive ? "0 0 14px rgba(99,102,241,0.4)" : "none",
+        backgroundColor: isActive ? "rgba(192, 133, 82,0.75)" : "transparent",
+        boxShadow: isActive ? "0 0 14px rgba(192, 133, 82,0.4)" : "none",
         opacity: isNavigating ? 0.6 : 1,
         transform: isNavigating ? "scale(0.95)" : "scale(1)",
       }}
@@ -61,7 +61,7 @@ function NavIcon({
       {isNavigating && (
         <motion.div
           className="absolute inset-0 rounded-xl"
-          style={{ border: "2px solid #818cf8" }}
+          style={{ border: "2px solid #E0A878" }}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.05, 0.9] }}
           transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
@@ -85,15 +85,13 @@ function NavIcon({
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [, startTransition] = useTransition();
   const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
   const [showLoading, setShowLoading] = useState(false);
 
-  const handleNavigation = (href: string, closeMobile = false) => {
+  const handleNavigation = (href: string) => {
     if (pathname === href) return;
     setNavigatingTo(href);
-    if (closeMobile) setMobileOpen(false);
 
     const loadingTimer = setTimeout(() => setShowLoading(true), 100);
 
@@ -125,7 +123,7 @@ export default function Sidebar() {
         <Link
           href="/"
           className="w-7 h-7 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 transition-opacity duration-150 hover:opacity-80"
-          style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
+          style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)" }}
         >
           <span className="text-[10px] font-bold text-white">SB</span>
         </Link>
@@ -134,7 +132,7 @@ export default function Sidebar() {
         {showLoading && (
           <motion.div
             className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl"
-            style={{ background: "linear-gradient(90deg, #6366f1, #8b5cf6)" }}
+            style={{ background: "linear-gradient(90deg, #C08552, #8C5A3C)" }}
             initial={{ scaleX: 0, transformOrigin: "left" }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -169,77 +167,53 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* ── Mobile Hamburger ── */}
-      <button
-        className="md:hidden fixed top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-lg backdrop-blur transition-colors duration-150"
+      {/* ── Minimal Mobile Bottom Bar ── */}
+      <nav
+        className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 px-2 py-2 rounded-2xl"
         style={{
-          background: "rgba(17,17,24,0.9)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          color: "rgba(255,255,255,0.5)",
+          background: "rgba(17,17,24,0.85)",
+          border: "1px solid rgba(255,255,255,0.06)",
+          backdropFilter: "blur(16px)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
         }}
-        onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label="Toggle menu"
+        aria-label="Primary navigation"
       >
-        {mobileOpen ? <FaTimes size={13} /> : <FaBars size={13} />}
-      </button>
-
-      {/* ── Mobile Menu ── */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="md:hidden fixed inset-0 backdrop-blur-xl z-40 flex flex-col px-8 py-12"
-            style={{ background: "rgba(10,10,15,0.97)" }}
-            initial={{ opacity: 0, x: "-100%" }}
-            animate={{ opacity: 1, x: "0%" }}
-            exit={{ opacity: 0, x: "-100%" }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-          >
-            <div className="mb-10">
-              <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: "rgba(255,255,255,0.2)" }}>
-                Navigation
-              </p>
-              <h2 className="text-lg font-semibold text-white">Sumet Buarod</h2>
-            </div>
-
-            <nav className="flex flex-col gap-5">
-              {[...navItems, ...adminItems].map((item) => {
-                const Icon = item.icon;
-                const isActive =
-                  pathname === item.href ||
-                  (item.href === "/admin" && pathname?.startsWith("/admin"));
-                const isLoading = navigatingTo === item.href;
-                return (
-                  <button
-                    key={item.href}
-                    onClick={() => handleNavigation(item.href, true)}
-                    disabled={isLoading}
-                    className="relative flex items-center gap-4 text-base transition-all text-left"
-                    style={{
-                      color: isActive ? "#818cf8" : "rgba(255,255,255,0.4)",
-                      opacity: isLoading ? 0.6 : 1,
-                      transform: isLoading ? "scale(0.95)" : "scale(1)",
-                    }}
-                    onMouseEnter={e => { if (!isActive) (e.currentTarget as HTMLElement).style.color = "#fff"; }}
-                    onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.4)"; }}
-                  >
-                    <Icon size={16} />
-                    <span className="font-medium">{item.name}</span>
-
-                    {isLoading && (
-                      <motion.span
-                        className="ml-auto w-1.5 h-1.5 rounded-full"
-                        style={{ background: "#818cf8" }}
-                        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                    )}
-                  </button>
-                );
-              })}
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {[...navItems, ...adminItems].map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            pathname === item.href ||
+            (item.href === "/admin" && pathname?.startsWith("/admin"));
+          const isNavigating = navigatingTo === item.href;
+          return (
+            <button
+              key={item.href}
+              onClick={() => handleNavigation(item.href)}
+              aria-label={item.name}
+              className="relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200"
+              style={{
+                backgroundColor: isActive ? "rgba(192,133,82,0.75)" : "transparent",
+                boxShadow: isActive ? "0 0 14px rgba(192,133,82,0.4)" : "none",
+                opacity: isNavigating ? 0.6 : 1,
+                transform: isNavigating ? "scale(0.95)" : "scale(1)",
+              }}
+            >
+              <Icon
+                size={15}
+                style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.4)" }}
+              />
+              {isNavigating && (
+                <motion.div
+                  className="absolute inset-0 rounded-xl"
+                  style={{ border: "2px solid #E0A878" }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: [0.5, 1, 0.5], scale: [0.9, 1.05, 0.9] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                />
+              )}
+            </button>
+          );
+        })}
+      </nav>
     </>
   );
 }

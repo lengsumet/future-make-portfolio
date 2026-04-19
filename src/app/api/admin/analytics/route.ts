@@ -1,7 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   const [totalPageViews, recentEvents, productViews, checkoutStarts, purchases, uniqueSessions, topPageCounts, recentForDaily] =
@@ -39,7 +42,7 @@ export async function GET() {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   const conversionRate =
-    totalVisitors > 0 ? parseFloat(((purchases / totalVisitors) * 100).toFixed(2)) : 0;
+    productViews > 0 ? parseFloat(((purchases / productViews) * 100).toFixed(2)) : 0;
 
   return NextResponse.json({
     summary: {

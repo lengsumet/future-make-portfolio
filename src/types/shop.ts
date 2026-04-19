@@ -1,4 +1,4 @@
-export type ProductCategory = "template" | "service" | "saas" | "api";
+export type ProductCategory = "template" | "service" | "saas" | "api" | "fullstack";
 
 export interface Product {
   id: string;

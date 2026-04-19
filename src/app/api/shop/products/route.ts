@@ -15,13 +15,19 @@ export async function GET(request: NextRequest) {
     orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
   });
 
-  const parsed = products.map((p) => ({
-    ...p,
-    images: JSON.parse(p.images),
-    techStack: JSON.parse(p.techStack),
-    features: JSON.parse(p.features),
-    deliverables: JSON.parse(p.deliverables),
-  }));
+  const parsed = products.map((p) => {
+    try {
+      return {
+        ...p,
+        images: JSON.parse(p.images),
+        techStack: JSON.parse(p.techStack),
+        features: JSON.parse(p.features),
+        deliverables: JSON.parse(p.deliverables),
+      };
+    } catch {
+      return { ...p, images: [], techStack: [], features: [], deliverables: [] };
+    }
+  });
 
   return NextResponse.json(parsed);
 }

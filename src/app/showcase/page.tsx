@@ -36,7 +36,7 @@ export default function ShowcasePage() {
         <div
           className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
           style={{
-            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+            background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -95,7 +95,7 @@ export default function ShowcasePage() {
                   border: "1px solid rgba(255,255,255,0.07)",
                 }}
                 onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.3)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(192, 133, 82,0.3)";
                   (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
                 }}
                 onMouseLeave={e => {

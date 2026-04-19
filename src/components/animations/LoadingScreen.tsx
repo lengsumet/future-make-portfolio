@@ -40,7 +40,7 @@ const LoadingScreen: React.FC = () => {
             <div
               className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
               style={{
-                background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+                background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
                 filter: "blur(80px)",
               }}
             />
@@ -64,7 +64,7 @@ const LoadingScreen: React.FC = () => {
                   key={index}
                   className="inline-block"
                   style={{
-                    background: "linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4)",
+                    background: "linear-gradient(135deg, #C08552, #8C5A3C, #E0A878)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -88,7 +88,7 @@ const LoadingScreen: React.FC = () => {
             {/* Underline */}
             <motion.div
               className="h-px rounded-full"
-              style={{ background: "linear-gradient(90deg, transparent, #6366f1, #8b5cf6, transparent)" }}
+              style={{ background: "linear-gradient(90deg, transparent, #C08552, #8C5A3C, transparent)" }}
               initial={{ width: 0 }}
               animate={{ width: '200px' }}
               transition={{

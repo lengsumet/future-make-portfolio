@@ -1,7 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
   const [orders, productViews, checkoutStarts, purchases, totalPageViews] = await Promise.all([
     db.order.findMany({ select: { status: true, totalAmount: true } }),
     db.pageEvent.count({ where: { eventType: "product_view" } }),

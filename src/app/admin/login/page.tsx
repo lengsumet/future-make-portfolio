@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiLock, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -51,7 +52,7 @@ export default function AdminLoginPage() {
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-20"
           style={{
-            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+            background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -77,11 +78,11 @@ export default function AdminLoginPage() {
             <div
               className="w-14 h-14 rounded-2xl flex items-center justify-center"
               style={{
-                background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2))",
-                border: "1px solid rgba(99,102,241,0.3)",
+                background: "linear-gradient(135deg, rgba(192, 133, 82,0.2), rgba(140, 90, 60,0.2))",
+                border: "1px solid rgba(192, 133, 82,0.3)",
               }}
             >
-              <FiLock size={22} style={{ color: "#818cf8" }} />
+              <FiLock size={22} style={{ color: "#E0A878" }} />
             </div>
           </div>
 
@@ -120,7 +121,7 @@ export default function AdminLoginPage() {
                   }}
                   placeholder="Enter admin password"
                   autoFocus
-                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.6)")}
+                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(192, 133, 82,0.6)")}
                   onBlur={e => (e.currentTarget.style.borderColor = error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.08)")}
                 />
                 <button
@@ -158,9 +159,9 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="w-full py-3 rounded-xl text-sm font-semibold transition-opacity duration-150 disabled:opacity-50"
               style={{
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                background: "linear-gradient(135deg, #C08552, #8C5A3C)",
                 color: "#fff",
-                boxShadow: "0 0 24px rgba(99,102,241,0.3)",
+                boxShadow: "0 0 24px rgba(192, 133, 82,0.3)",
               }}
               whileHover={{ opacity: 0.88 }}
               whileTap={{ scale: 0.98 }}
@@ -179,12 +180,20 @@ export default function AdminLoginPage() {
             </motion.button>
           </form>
 
-          <p
-            className="text-center text-xs mt-6"
-            style={{ color: "rgba(255,255,255,0.15)" }}
-          >
-            Default: admin123 · change via ADMIN_PASSWORD env var
-          </p>
+          <div className="mt-6 text-center">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-xs transition-colors duration-150"
+              style={{ color: "rgba(255,255,255,0.25)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.25)")}
+            >
+              <FiArrowLeft size={12} />
+              Back to site
+            </Link>
+          </div>
+
+
         </div>
       </motion.div>
     </div>

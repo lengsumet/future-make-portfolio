@@ -144,7 +144,7 @@ const SkillIcons: React.FC<SkillIconsProps> = ({ skills }) => {
 
             {/* Level badge on hover */}
             {skill.level && (
-              <span className="opacity-0 group-hover:opacity-100 text-[10px] font-semibold text-purple-400 transition-opacity">
+              <span className="opacity-0 group-hover:opacity-100 text-[10px] font-semibold text-[#C08552] transition-opacity">
                 {skill.level}%
               </span>
             )}

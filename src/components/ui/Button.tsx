@@ -11,10 +11,10 @@ export interface ButtonProps extends HTMLMotionProps<'button'> {
 
 const styles: Record<Variant, React.CSSProperties> = {
   primary: {
-    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+    background: 'linear-gradient(135deg, #C08552, #8C5A3C)',
     color: '#fff',
     border: 'none',
-    boxShadow: '0 0 24px rgba(99,102,241,0.3)',
+    boxShadow: '0 0 24px rgba(192, 133, 82,0.3)',
   },
   secondary: {
     background: 'rgba(255,255,255,0.04)',

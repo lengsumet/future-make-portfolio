@@ -8,9 +8,8 @@ import { useTracking, usePageView } from "@/hooks/useTracking";
 
 const CATEGORIES: { label: string; value: ProductCategory | "all" }[] = [
   { label: "All", value: "all" },
+  { label: "Enterprise Systems", value: "fullstack" },
   { label: "Templates", value: "template" },
-  { label: "SaaS Starters", value: "saas" },
-  { label: "APIs & Systems", value: "api" },
   { label: "Services", value: "service" },
 ];
 
@@ -43,7 +42,7 @@ export default function ShopPage() {
         <div
           className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
           style={{
-            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+            background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -57,13 +56,13 @@ export default function ShopPage() {
           transition={spring}
           className="relative overflow-hidden rounded-2xl mb-14 p-8"
           style={{
-            background: "rgba(99,102,241,0.06)",
-            border: "1px solid rgba(99,102,241,0.2)",
+            background: "rgba(192, 133, 82,0.06)",
+            border: "1px solid rgba(192, 133, 82,0.2)",
           }}
         >
           <div
             className="absolute inset-0 opacity-10"
-            style={{ backgroundImage: "radial-gradient(rgba(99,102,241,0.3) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
+            style={{ backgroundImage: "radial-gradient(rgba(192, 133, 82,0.3) 1px, transparent 1px)", backgroundSize: "24px 24px" }}
           />
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div>
@@ -86,7 +85,7 @@ export default function ShopPage() {
               target="_blank"
               rel="noreferrer"
               className="shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-opacity duration-150 hover:opacity-85"
-              style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff" }}
+              style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)", color: "#fff" }}
             >
               Open Store →
             </a>
@@ -110,10 +109,10 @@ export default function ShopPage() {
               onClick={() => setActiveCategory(cat.value)}
               className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
               style={{
-                background: activeCategory === cat.value ? "linear-gradient(135deg, #6366f1, #8b5cf6)" : "rgba(255,255,255,0.04)",
+                background: activeCategory === cat.value ? "linear-gradient(135deg, #C08552, #8C5A3C)" : "rgba(255,255,255,0.04)",
                 color: activeCategory === cat.value ? "#fff" : "rgba(255,255,255,0.4)",
                 border: `1px solid ${activeCategory === cat.value ? "transparent" : "rgba(255,255,255,0.07)"}`,
-                boxShadow: activeCategory === cat.value ? "0 0 20px rgba(99,102,241,0.3)" : "none",
+                boxShadow: activeCategory === cat.value ? "0 0 20px rgba(192, 133, 82,0.3)" : "none",
               }}
             >
               {cat.label}
@@ -156,8 +155,8 @@ export default function ShopPage() {
         <div
           className="mt-20 text-center rounded-2xl p-10"
           style={{
-            background: "rgba(99,102,241,0.05)",
-            border: "1px solid rgba(99,102,241,0.15)",
+            background: "rgba(192, 133, 82,0.05)",
+            border: "1px solid rgba(192, 133, 82,0.15)",
           }}
         >
           <h2 className="text-2xl font-bold text-white mb-3">Need Something Custom?</h2>
@@ -168,7 +167,7 @@ export default function ShopPage() {
           <a
             href="mailto:sumet.buarod@gmail.com"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-opacity duration-150 hover:opacity-85"
-            style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff" }}
+            style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)", color: "#fff" }}
             onClick={() => track("cta_click", "contact_custom")}
           >
             Get in Touch

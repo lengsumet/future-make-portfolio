@@ -15,7 +15,7 @@ const AboutPage = async () => {
         <div
           className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
           style={{
-            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
+            background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />

@@ -44,7 +44,7 @@ const ShowcaseModal: React.FC<ShowcaseModalProps> = ({ item, onClose }) => {
           <h2 className="text-3xl font-bold text-white mb-4">{item.title}</h2>
           <div className="flex flex-wrap gap-2 mb-4">
             {item.tags.map((tag) => (
-              <span key={tag} className="bg-primary/50 text-purple-300 text-xs font-semibold px-2.5 py-1 rounded-full">
+              <span key={tag} className="bg-primary/50 text-[#E0A878] text-xs font-semibold px-2.5 py-1 rounded-full">
                 {tag}
               </span>
             ))}

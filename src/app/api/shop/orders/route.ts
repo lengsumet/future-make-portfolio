@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { z } from "zod";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 
 const CheckoutSchema = z.object({
   buyerName: z.string().min(2).max(100),
@@ -53,15 +54,21 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
+
   const orders = await db.order.findMany({
     include: { items: true },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
   return NextResponse.json(orders);
 }
 
 export async function PATCH(request: NextRequest) {
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
   try {
     const { orderId, status } = await request.json();
     const order = await db.order.update({

@@ -60,6 +60,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isLoginPage = pathname === "/admin/login";
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
   const handleLogout = async () => {
     await fetch("/api/auth/admin", { method: "DELETE" });
     router.push("/admin/login");
