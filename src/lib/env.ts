@@ -17,15 +17,23 @@ function isInsecureDefault(value: string): boolean {
 }
 
 export function validateEnv(): void {
+  // Skip during `next build` — env vars aren't guaranteed at build time
+  if (process.env.NEXT_PHASE === "phase-production-build") return;
+
   const isProd = process.env.NODE_ENV === "production";
   const errors: string[] = [];
 
   // Required in all environments
-  const required: string[] = ["DATABASE_URL", "ADMIN_JWT_SECRET", "ADMIN_PASSWORD"];
+  const required: string[] = ["ADMIN_JWT_SECRET", "ADMIN_PASSWORD"];
   for (const key of required) {
     if (!process.env[key]) {
       errors.push(`Missing required env var: ${key}`);
     }
+  }
+
+  // DATABASE_URL is required only in production (dev uses SQLite file via .env.local)
+  if (isProd && !process.env.DATABASE_URL) {
+    errors.push("Missing required env var: DATABASE_URL");
   }
 
   // In production, forbid insecure default values
