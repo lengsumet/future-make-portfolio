@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHmac } from "crypto";
 import { signAdminToken } from "@/lib/auth/admin";
+import { timingSafeEqual } from "crypto";
 
 // Simple in-memory rate limiter: max 5 attempts per IP per 15 minutes
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
@@ -14,6 +16,15 @@ function checkRateLimit(ip: string): boolean {
   if (entry.count >= 5) return false;
   entry.count++;
   return true;
+}
+
+// Use HMAC to produce fixed-length buffers, then timingSafeEqual to prevent
+// timing attacks that could reveal the password via response time differences.
+function safePasswordCompare(input: string, expected: string): boolean {
+  const key = process.env.ADMIN_JWT_SECRET || "dev-secret-please-change-in-production";
+  const inputHash = createHmac("sha256", key).update(input).digest();
+  const expectedHash = createHmac("sha256", key).update(expected).digest();
+  return timingSafeEqual(inputHash, expectedHash);
 }
 
 export async function POST(request: NextRequest) {
@@ -34,7 +45,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Password required" }, { status: 400 });
     }
 
-    if (password !== adminPassword) {
+    if (!safePasswordCompare(password, adminPassword)) {
       return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
 
@@ -50,7 +61,8 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch {
+  } catch (error) {
+    console.error("[auth/admin] POST error:", error);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

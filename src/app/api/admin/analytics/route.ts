@@ -5,6 +5,8 @@ import { requireAdmin } from "@/lib/auth/requireAdmin";
 export async function GET(request: NextRequest) {
   const authError = await requireAdmin(request);
   if (authError) return authError;
+
+  try {
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
   const [totalPageViews, recentEvents, productViews, checkoutStarts, purchases, uniqueSessions, topPageCounts, recentForDaily] =
@@ -56,4 +58,8 @@ export async function GET(request: NextRequest) {
     },
     recentEvents,
   });
+  } catch (error) {
+    console.error("[admin/analytics] GET error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }

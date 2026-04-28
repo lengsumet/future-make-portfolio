@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiLock, FiEye, FiEyeOff, FiArrowLeft } from "react-icons/fi";
+import { FiLock, FiEye, FiEyeOff, FiArrowLeft, FiAlertCircle } from "react-icons/fi";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -12,6 +12,7 @@ export default function AdminLoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [shakeKey, setShakeKey] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,15 +30,31 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ password }),
       });
 
+      if (res.status === 429) {
+        setError("Too many attempts. Please wait 15 minutes before trying again.");
+        setShakeKey((k) => k + 1);
+        setLoading(false);
+        return;
+      }
+
+      if (res.status === 401 || res.status === 400) {
+        setError("Incorrect password. Please try again.");
+        setShakeKey((k) => k + 1);
+        setLoading(false);
+        return;
+      }
+
       if (!res.ok) {
-        setError("Incorrect password");
+        setError("Login failed. Please try again later.");
+        setShakeKey((k) => k + 1);
         setLoading(false);
         return;
       }
 
       router.push("/admin");
     } catch {
-      setError("Login failed. Please try again.");
+      setError("Cannot connect to server. Please try again.");
+      setShakeKey((k) => k + 1);
       setLoading(false);
     }
   };
@@ -50,19 +67,26 @@ export default function AdminLoginPage() {
       {/* Aurora bg */}
       <div className="pointer-events-none absolute inset-0">
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-20"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-25"
           style={{
-            background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
+            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
       </div>
 
       <motion.div
+        key={shakeKey}
         className="relative w-full max-w-sm"
-        initial={{ opacity: 0, y: 28, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        initial={{ opacity: shakeKey === 0 ? 0 : 1, y: shakeKey === 0 ? 28 : 0, scale: shakeKey === 0 ? 0.97 : 1 }}
+        animate={shakeKey > 0
+          ? { x: [0, -10, 10, -8, 8, -4, 4, 0] }
+          : { opacity: 1, y: 0, scale: 1 }
+        }
+        transition={shakeKey > 0
+          ? { duration: 0.45, ease: "easeInOut" }
+          : { type: "spring", stiffness: 100, damping: 20 }
+        }
       >
         {/* Card */}
         <div
@@ -78,11 +102,11 @@ export default function AdminLoginPage() {
             <div
               className="w-14 h-14 rounded-2xl flex items-center justify-center"
               style={{
-                background: "linear-gradient(135deg, rgba(192, 133, 82,0.2), rgba(140, 90, 60,0.2))",
-                border: "1px solid rgba(192, 133, 82,0.3)",
+                background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2))",
+                border: "1px solid rgba(99,102,241,0.35)",
               }}
             >
-              <FiLock size={22} style={{ color: "#E0A878" }} />
+              <FiLock size={22} style={{ color: "#a5b4fc" }} />
             </div>
           </div>
 
@@ -112,7 +136,7 @@ export default function AdminLoginPage() {
                 <input
                   type={showPw ? "text" : "password"}
                   value={password}
-                  onChange={(e) => { setPassword(e.target.value); setError(""); }}
+                  onChange={(e) => { setPassword(e.target.value); if (error) setError(""); }}
                   className="w-full rounded-xl px-4 py-3 pr-11 text-sm transition-all duration-200 outline-none"
                   style={{
                     background: "rgba(255,255,255,0.05)",
@@ -121,7 +145,7 @@ export default function AdminLoginPage() {
                   }}
                   placeholder="Enter admin password"
                   autoFocus
-                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(192, 133, 82,0.6)")}
+                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.6)")}
                   onBlur={e => (e.currentTarget.style.borderColor = error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.08)")}
                 />
                 <button
@@ -140,16 +164,22 @@ export default function AdminLoginPage() {
             {/* Error */}
             <AnimatePresence>
               {error && (
-                <motion.p
-                  className="text-xs text-center"
-                  style={{ color: "#f87171" }}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
+                <motion.div
+                  className="flex items-start gap-2 rounded-xl px-3 py-2.5"
+                  style={{
+                    background: "rgba(239,68,68,0.1)",
+                    border: "1px solid rgba(239,68,68,0.25)",
+                  }}
+                  initial={{ opacity: 0, y: -6, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {error}
-                </motion.p>
+                  <FiAlertCircle size={14} className="mt-0.5 shrink-0" style={{ color: "#f87171" }} />
+                  <p className="text-xs leading-snug" style={{ color: "#f87171" }}>
+                    {error}
+                  </p>
+                </motion.div>
               )}
             </AnimatePresence>
 
@@ -159,9 +189,9 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="w-full py-3 rounded-xl text-sm font-semibold transition-opacity duration-150 disabled:opacity-50"
               style={{
-                background: "linear-gradient(135deg, #C08552, #8C5A3C)",
+                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
                 color: "#fff",
-                boxShadow: "0 0 24px rgba(192, 133, 82,0.3)",
+                boxShadow: "0 0 24px rgba(99,102,241,0.35)",
               }}
               whileHover={{ opacity: 0.88 }}
               whileTap={{ scale: 0.98 }}

@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ ok: true, id: event.id });
-  } catch {
+  } catch (error) {
+    console.error("[track] POST error:", error);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "placehold.co" },
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
-    unoptimized: true,
   },
   // Disable automatic static optimization to prevent double renders
   experimental: {

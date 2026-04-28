@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
     }
+    console.error("[shop/orders] POST error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -80,7 +81,8 @@ export async function PATCH(request: NextRequest) {
       include: { items: true },
     });
     return NextResponse.json({ ok: true, order });
-  } catch {
+  } catch (error) {
+    console.error("[shop/orders] PATCH error:", error);
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 }

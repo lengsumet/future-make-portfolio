@@ -212,7 +212,7 @@ export default function ProductDetailPage() {
   return (
     <Container className="py-16">
       <button
-        onClick={() => router.back()}
+        onClick={() => router.push('/shop')}
         className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
       >
         <FaArrowLeft size={12} /> Back to Shop

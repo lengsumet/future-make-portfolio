@@ -34,21 +34,28 @@ function NavIcon({
       href={href}
       onClick={onClick}
       title={name}
-      className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-colors duration-200"
+      className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
       style={{
-        backgroundColor: isActive ? "rgb(16 185 129 / 0.75)" : "transparent",
-        boxShadow: isActive ? "0 0 14px rgb(16 185 129 / 0.35)" : "none",
+        backgroundColor: isActive ? "rgba(192,133,82,0.75)" : "transparent",
+        boxShadow: isActive ? "0 0 14px rgba(192,133,82,0.4)" : "none",
       }}
     >
       <div className="transition-transform duration-150 ease-out group-hover:scale-125">
         <Icon
           size={14}
-          className={`transition-colors duration-150 ${
-            isActive ? "text-white" : "text-gray-600 group-hover:text-gray-100"
-          }`}
+          style={{
+            color: isActive ? "#fff" : "rgba(255,255,255,0.3)",
+            transition: "color 0.15s",
+          }}
         />
       </div>
-      <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 bg-gray-900/95 border border-gray-700/40 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl">
+      <span
+        className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
+        style={{
+          background: "rgba(17,17,24,0.95)",
+          border: "1px solid rgba(255,255,255,0.08)",
+        }}
+      >
         {name}
       </span>
     </Link>
@@ -76,11 +83,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-background flex">
       {/* ── Floating Admin Sidebar ── */}
-      <aside className="hidden md:flex flex-col items-center fixed left-3 top-1/2 -translate-y-1/2 z-30 rounded-2xl bg-gray-950/75 border border-white/5 backdrop-blur-xl shadow-xl shadow-black/50 py-4 w-12">
+      <aside
+        className="hidden md:flex flex-col items-center fixed left-3 top-1/2 -translate-y-1/2 z-30 rounded-2xl py-4 w-12"
+        style={{
+          background: "rgba(17,17,24,0.97)",
+          border: "1px solid rgba(255,255,255,0.06)",
+          backdropFilter: "blur(16px)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
+        }}
+      >
         {/* Admin badge */}
         <Link
           href="/admin"
-          className="w-7 h-7 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition-colors flex items-center justify-center mb-5 flex-shrink-0"
+          className="w-7 h-7 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 transition-opacity duration-150 hover:opacity-80"
+          style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)" }}
         >
           <span className="text-[9px] font-bold text-white">ADM</span>
         </Link>
@@ -93,23 +109,37 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Divider + bottom actions */}
-        <div className="w-5 h-px bg-white/8 my-2" />
+        <div className="w-5 h-px my-2" style={{ background: "rgba(255,255,255,0.07)" }} />
         <div className="flex flex-col items-center gap-0.5 w-full px-1.5">
           <Link
             href="/"
-            className="group relative flex items-center justify-center w-9 h-9 rounded-xl text-gray-500 hover:text-gray-200 transition-colors"
+            className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
           >
-            <FaHome size={14} />
-            <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 bg-gray-900/95 border border-gray-700/50 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-xl">
+            <FaHome
+              size={14}
+              style={{ color: "rgba(255,255,255,0.3)", transition: "color 0.15s" }}
+              className="group-hover:!text-white"
+            />
+            <span
+              className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
+              style={{ background: "rgba(17,17,24,0.95)", border: "1px solid rgba(255,255,255,0.08)" }}
+            >
               View Site
             </span>
           </Link>
           <button
             onClick={handleLogout}
-            className="group relative flex items-center justify-center w-9 h-9 rounded-xl text-gray-500 hover:text-red-400 transition-colors"
+            className="group relative flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-200"
           >
-            <FaSignOutAlt size={14} />
-            <span className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 bg-gray-900/95 border border-gray-700/50 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 shadow-xl">
+            <FaSignOutAlt
+              size={14}
+              style={{ color: "rgba(255,255,255,0.3)", transition: "color 0.15s" }}
+              className="group-hover:!text-red-400"
+            />
+            <span
+              className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
+              style={{ background: "rgba(17,17,24,0.95)", border: "1px solid rgba(255,255,255,0.08)" }}
+            >
               Logout
             </span>
           </button>
@@ -120,7 +150,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="md:hidden fixed inset-0 bg-gray-950/97 backdrop-blur-xl z-40 flex flex-col px-8 py-12"
+            className="md:hidden fixed inset-0 backdrop-blur-xl z-40 flex flex-col px-8 py-12"
+            style={{ background: "rgba(11,11,17,0.97)" }}
             initial={{ opacity: 0, x: "-100%" }}
             animate={{ opacity: 1, x: "0%" }}
             exit={{ opacity: 0, x: "-100%" }}
@@ -139,7 +170,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-4 text-base font-medium transition-colors ${
-                      pathname === item.href ? "text-emerald-400" : "text-gray-400 hover:text-white"
+                      pathname === item.href ? "text-amber-400" : "text-gray-400 hover:text-white"
                     }`}
                   >
                     <Icon size={16} />
@@ -165,7 +196,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Mobile hamburger */}
       <button
-        className="md:hidden fixed top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-lg bg-gray-900/90 border border-gray-700/60 text-gray-300 backdrop-blur"
+        className="md:hidden fixed top-4 right-4 z-50 w-9 h-9 flex items-center justify-center rounded-lg backdrop-blur"
+        style={{
+          background: "rgba(17,17,24,0.85)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          color: "rgba(255,255,255,0.6)",
+        }}
         onClick={() => setMobileOpen(!mobileOpen)}
       >
         {mobileOpen ? <FaTimes size={13} /> : <FaBars size={13} />}
@@ -174,9 +210,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* ── Main Content ── */}
       <div className="flex-1 md:ml-16 flex flex-col min-h-screen">
         {/* Top bar */}
-        <header className="sticky top-0 z-20 bg-gray-950/80 backdrop-blur border-b border-gray-800/40 px-6 py-3.5 flex items-center gap-3">
-          <span className="text-sm font-medium text-gray-300">{currentPage}</span>
-          <span className="ml-auto text-xs text-gray-600">Admin</span>
+        <header
+          className="sticky top-0 z-20 backdrop-blur px-6 py-3.5 flex items-center gap-3"
+          style={{
+            background: "rgba(17,17,24,0.85)",
+            borderBottom: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.7)" }}>{currentPage}</span>
+          <span className="ml-auto text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>Admin</span>
         </header>
 
         <main className="flex-1 p-5 md:p-7">{children}</main>

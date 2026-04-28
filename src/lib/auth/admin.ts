@@ -1,4 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
+import { validateEnv } from "@/lib/env";
+
+validateEnv();
 
 const getSecret = () =>
   new TextEncoder().encode(

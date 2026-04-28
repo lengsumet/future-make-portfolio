@@ -14,9 +14,9 @@ export default function ClientShell({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex">
+    <div className="flex flex-col">
       <Sidebar />
-      <main className="flex-1 md:pl-16">
+      <main className="flex-1 md:pt-20">
         <PageWrapper>{children}</PageWrapper>
         <Footer />
       </main>

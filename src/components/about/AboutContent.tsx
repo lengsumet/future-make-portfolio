@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useCallback, useRef } from "react";
+import React from "react";
 import Image from "next/image";
-import { motion, useAnimation, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FaCamera, FaMountain, FaGamepad, FaUtensils,
   FaEnvelope, FaPhone, FaMapMarkerAlt,
@@ -92,25 +92,6 @@ const hobbyIcons: Record<string, React.ReactNode> = {
 export default function AboutContent({ data }: { data: AboutData }) {
   const { introduction, education, experience, skills, hobbies } = data;
 
-  /* ── Profile spin ──────────────────────────── */
-  const spinCtrl   = useAnimation();
-  const isSpinning = useRef(false);
-  const [sparkles, setSparkles] = useState<{ id: number; angle: number; char: string }[]>([]);
-
-  const handleSpin = useCallback(async () => {
-    if (isSpinning.current) return;
-    isSpinning.current = true;
-
-    const chars = ["✦", "★", "✨", "◆", "✦", "★", "✨", "◆"];
-    setSparkles(chars.map((char, i) => ({ id: Date.now() + i, angle: (i / chars.length) * 360, char })));
-
-    await spinCtrl.start({ rotate: -20, transition: { duration: 0.13, ease: "easeIn" } });
-    await spinCtrl.start({ rotate: 365, transition: { duration: 0.62, ease: [0.2, 1.55, 0.36, 1] } });
-    spinCtrl.set({ rotate: 0 });
-
-    setTimeout(() => { setSparkles([]); isSpinning.current = false; }, 850);
-  }, [spinCtrl]);
-
   /* ── Grouped skills ─────────────────────── */
   const groupedSkills = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
     const cat = skill.category ?? "Other";
@@ -126,41 +107,16 @@ export default function AboutContent({ data }: { data: AboutData }) {
         <motion.div {...fadeUp(0)}>
           {/* Profile image */}
           <div className="relative w-36 h-36 mx-auto mb-6">
-            <AnimatePresence>
-              {sparkles.map((s) => (
-                <motion.span
-                  key={s.id}
-                  className="absolute top-1/2 left-1/2 pointer-events-none select-none text-yellow-300 text-base z-10"
-                  style={{ translateX: "-50%", translateY: "-50%" }}
-                  initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
-                  animate={{
-                    x: Math.cos((s.angle * Math.PI) / 180) * 80,
-                    y: Math.sin((s.angle * Math.PI) / 180) * 80,
-                    opacity: 0,
-                    scale: 1.4,
-                  }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.75, ease: "easeOut" }}
-                >
-                  {s.char}
-                </motion.span>
-              ))}
-            </AnimatePresence>
-
             {/* Glow ring */}
             <div
               className="absolute inset-0 rounded-full pointer-events-none z-[1]"
               style={{ boxShadow: "0 0 0 3px rgba(192, 133, 82,0.2), 0 0 30px rgba(192, 133, 82,0.1)" }}
             />
 
-            {/* Spinning image */}
             <motion.div
-              animate={spinCtrl}
-              onMouseEnter={handleSpin}
-              className="absolute inset-0 rounded-full cursor-pointer overflow-hidden"
-              style={{ transformOrigin: "center" }}
+              className="absolute inset-0 rounded-full overflow-hidden"
               whileHover={{ scale: 1.06 }}
-              transition={{ scale: { duration: 0.2 } }}
+              transition={{ duration: 0.2 }}
             >
               <Image
                 src={introduction.profileImage}

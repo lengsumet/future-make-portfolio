@@ -2,7 +2,7 @@
   "introduction": {
     "name": "Sumet Buarod",
     "title": "Software Engineer — Distributed Systems & Cloud-Native Architecture",
-    "bio": "Software Engineer specializing in high-performance distributed systems and cloud-native architecture. Expert in building scalable backends with C#, .NET Core, Python, and Golang, and modern frontend ecosystems (React/Next.js). Proficient in visualizing complex logic through Swimlane Diagrams to bridge the gap between business requirements and technical implementation. Strong advocate for Feature-driven development (FDD) and Agile methodologies, with deep hands-on experience in AWS Cloud Infrastructure and Containerization.",
+    "bio": "Software Engineer specializing in high-performance distributed systems and cloud-native architecture. Expert in building scalable backends with C#, .NET Core and Python, and modern frontend ecosystems (React/Next.js). Proficient in visualizing complex logic through Swimlane Diagrams to bridge the gap between business requirements and technical implementation. Strong advocate for Feature-driven development (FDD) and Agile methodologies, with deep hands-on experience in AWS Cloud Infrastructure and Containerization.",
     "profileImage": "/images/profile/profile.jpg"
   },
   "experience": [
@@ -28,7 +28,6 @@
     { "name": "Tailwind CSS / Material UI", "level": 92, "category": "Frontend" },
     { "name": "C# / .NET Core (Web API, Microservices)", "level": 95, "category": "Backend" },
     { "name": "Python (FastAPI / Flask)", "level": 85, "category": "Backend" },
-    { "name": "Golang (Concurrency / Goroutines)", "level": 78, "category": "Backend" },
     { "name": "SQL / PostgreSQL (Performance Tuning)", "level": 90, "category": "Backend" },
     { "name": "GraphQL", "level": 75, "category": "Backend" },
     { "name": "Kotlin (Android)", "level": 70, "category": "Backend" },
