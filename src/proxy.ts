@@ -5,7 +5,15 @@ const secret = new TextEncoder().encode(
   process.env.ADMIN_JWT_SECRET || "dev-secret-please-change-in-production"
 );
 
-export async function middleware(request: NextRequest) {
+/**
+ * Admin route guard.
+ *
+ * Renamed from `middleware.ts`: Next.js 16 deprecated that file convention in
+ * favour of `proxy`, and the exported function has to match the filename.
+ * `config.matcher` still applies; route segment config such as `runtime` does
+ * not, because proxy always runs on the Node.js runtime.
+ */
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /admin routes except /admin/login
