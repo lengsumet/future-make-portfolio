@@ -10,7 +10,8 @@
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "lint:a11y": "eslint -c eslint.a11y.mjs src"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

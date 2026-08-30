@@ -108,7 +108,7 @@ const SkillIcons: React.FC<SkillIconsProps> = ({ skills }) => {
           >
             {/* Icon circle */}
             <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center bg-gray-800/80 border border-gray-700/50 group-hover:border-opacity-80 transition-all duration-200"
+              className="w-14 h-14 rounded-2xl flex items-center justify-center bg-surface-2 border border-border group-hover:border-opacity-80 transition-all duration-200"
               style={{
                 boxShadow: `0 0 0 0 ${color}33`,
               }}
@@ -127,7 +127,7 @@ const SkillIcons: React.FC<SkillIconsProps> = ({ skills }) => {
             </div>
 
             {/* Skill name */}
-            <span className="text-xs text-gray-400 text-center max-w-[72px] leading-tight group-hover:text-gray-200 transition-colors line-clamp-2">
+            <span className="text-xs text-muted-foreground text-center max-w-[72px] leading-tight group-hover:text-ink-2 transition-colors line-clamp-2">
               {/* Shorten long names for display */}
               {skill.name
                 .replace(" (Web API, Microservices)", "")
@@ -144,7 +144,7 @@ const SkillIcons: React.FC<SkillIconsProps> = ({ skills }) => {
 
             {/* Level badge on hover */}
             {skill.level && (
-              <span className="opacity-0 group-hover:opacity-100 text-[10px] font-semibold text-[#C08552] transition-opacity">
+              <span className="opacity-0 group-hover:opacity-100 text-2xs font-semibold text-primary transition-opacity">
                 {skill.level}%
               </span>
             )}

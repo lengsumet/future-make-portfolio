@@ -21,17 +21,17 @@ export default function AdminProductsPage() {
     service: "bg-blue-500/20 text-blue-300",
     saas: "bg-green-500/20 text-green-300",
     api: "bg-orange-500/20 text-orange-300",
-    fullstack: "bg-[#C08552]/20 text-[#E0A878]",
+    fullstack: "bg-primary/20 text-accent-soft",
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">Products</h1>
-          <p className="text-sm text-gray-400">{products.length} products</p>
+          <h1 className="text-xl font-bold text-foreground">Products</h1>
+          <p className="text-sm text-muted-foreground">{products.length} products</p>
         </div>
-        <div className="text-xs text-gray-500 bg-gray-800 px-3 py-1.5 rounded-lg">
+        <div className="text-xs text-muted-foreground bg-surface-2 px-3 py-1.5 rounded-lg">
           Edit via public/data/products.json
         </div>
       </div>
@@ -39,7 +39,7 @@ export default function AdminProductsPage() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-gray-800/30 rounded-xl h-32 animate-pulse" />
+            <div key={i} className="bg-surface-2 rounded-xl h-32 animate-pulse" />
           ))}
         </div>
       ) : (
@@ -47,7 +47,7 @@ export default function AdminProductsPage() {
           {products.map((product, i) => (
             <motion.div
               key={product.id}
-              className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4"
+              className="bg-surface-2 border border-border rounded-xl p-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
@@ -64,11 +64,11 @@ export default function AdminProductsPage() {
                       </span>
                     )}
                   </div>
-                  <h3 className="font-semibold text-white truncate">{product.title}</h3>
-                  <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">{product.shortDescription}</p>
+                  <h3 className="font-semibold text-foreground truncate">{product.title}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{product.shortDescription}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-lg font-bold text-white">
+                  <p className="text-lg font-bold text-foreground">
                     ฿{product.price.toLocaleString()}
                   </p>
                   <Link
@@ -82,7 +82,7 @@ export default function AdminProductsPage() {
               </div>
               <div className="mt-3 flex flex-wrap gap-1">
                 {product.techStack.slice(0, 4).map((t) => (
-                  <span key={t} className="text-xs bg-gray-700/60 text-gray-400 px-1.5 py-0.5 rounded">
+                  <span key={t} className="text-xs bg-surface-3 text-muted-foreground px-1.5 py-0.5 rounded">
                     {t}
                   </span>
                 ))}

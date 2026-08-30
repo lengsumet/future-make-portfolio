@@ -45,7 +45,7 @@ const EntranceAnimation: React.FC<EntranceAnimationProps> = ({ name, title }) =>
             initial="hidden"
             animate="visible"
         >
-            <motion.h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">
+            <motion.h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-foreground mb-4">
                 {name.split('').map((char, index) => (
                     <motion.span key={index} variants={letterVariants} style={{ display: 'inline-block' }}>
                         {char === ' ' ? '\u00A0' : char}
@@ -53,7 +53,7 @@ const EntranceAnimation: React.FC<EntranceAnimationProps> = ({ name, title }) =>
                 ))}
             </motion.h1>
             <motion.p
-                className="text-lg md:text-2xl text-[#E0A878]"
+                className="text-lg md:text-2xl text-accent-soft"
                 variants={subtitleVariants}
             >
                 {title}

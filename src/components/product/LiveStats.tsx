@@ -9,6 +9,7 @@ interface TmsStats { totalVehicles: number; totalDrivers: number; totalRoutes: n
 interface ImsStats { products: number; movements: number; warehouses: number; status: string; }
 interface ScmsStats { suppliers: number; purchaseOrders: number; orders: number; risks: number; status: string; }
 interface PmsStats { workOrders: number; activeWorkOrders: number; productionLines: number; machines: number; ncrs: number; status: string; }
+interface ShopStats { products: number; activeProducts: number; lowStockProducts: number; orders: number; paidOrders: number; customers: number; revenue: number; revenueThisMonth: number; ordersThisMonth: number; }
 interface DashStats { metricSnapshots: number; totalAlerts: number; activeAlerts: number; reports: number; status: string; }
 
 const wmsStatItems = [
@@ -71,6 +72,15 @@ const dashStatItems = [
   { key: "reports", label: "Reports", icon: "📄" },
 ];
 
+const shopStatItems = [
+  { key: "products", label: "Products", icon: "🛍️" },
+  { key: "activeProducts", label: "On Sale", icon: "✅" },
+  { key: "lowStockProducts", label: "Low Stock", icon: "⚠️" },
+  { key: "orders", label: "Orders", icon: "🧾" },
+  { key: "customers", label: "Customers", icon: "👥" },
+  { key: "revenue", label: "Revenue (฿)", icon: "💰" },
+];
+
 const SYSTEM_CONFIG = {
   wms:       { url: process.env.NEXT_PUBLIC_WMS_URL       || "http://localhost:3001", label: "WMS",       port: "3001", items: wmsStatItems },
   pos:       { url: process.env.NEXT_PUBLIC_POS_URL       || "http://localhost:3002", label: "POS",       port: "3002", items: posStatItems },
@@ -80,10 +90,20 @@ const SYSTEM_CONFIG = {
   scms:      { url: process.env.NEXT_PUBLIC_SCMS_URL      || "http://localhost:3006", label: "SCMS",      port: "3006", items: scmsStatItems },
   pms:       { url: process.env.NEXT_PUBLIC_PMS_URL       || "http://localhost:3007", label: "PMS",       port: "3007", items: pmsStatItems },
   dashboard: { url: process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3008", label: "Dashboard", port: "3008", items: dashStatItems },
+  ecommerce: { url: process.env.NEXT_PUBLIC_ECOMMERCE_URL || "http://localhost:3009", label: "Storefront", port: "3009", items: shopStatItems },
 };
 
+/**
+ * Derived from the config rather than written out again.
+ *
+ * The two lists had already drifted: the storefront was added to neither, so
+ * the one system a customer actually sees was the only one with no live read.
+ * Deriving it means adding a system to `SYSTEM_CONFIG` is all it takes.
+ */
+export type LiveSystem = keyof typeof SYSTEM_CONFIG;
+
 interface LiveStatsProps {
-  system?: "wms" | "pos" | "crm" | "tms" | "ims" | "scms" | "pms" | "dashboard";
+  system?: LiveSystem;
 }
 
 export default function LiveStats({ system = "wms" }: LiveStatsProps) {
@@ -183,7 +203,7 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
                 <span className="text-sm">{icon}</span>
                 <span className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>{label}</span>
               </div>
-              <p className="text-lg font-bold text-white">{displayValue}</p>
+              <p className="text-lg font-bold text-foreground">{displayValue}</p>
             </div>
           );
         })}

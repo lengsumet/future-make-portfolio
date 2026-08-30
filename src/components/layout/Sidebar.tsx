@@ -5,13 +5,12 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  FaHome, FaUser, FaStar, FaShoppingBag, FaCog,
+  FaHome, FaUser, FaShoppingBag, FaCog,
 } from "react-icons/fa";
 
 const navItems = [
   { name: "Home",     href: "/",         icon: FaHome },
   { name: "About",    href: "/about",    icon: FaUser },
-  { name: "Showcase", href: "/showcase", icon: FaStar },
   { name: "Shop",     href: "/shop",     icon: FaShoppingBag },
 ];
 
@@ -55,7 +54,7 @@ export default function Sidebar() {
           className="w-7 h-7 rounded-lg flex items-center justify-center mr-1 flex-shrink-0 hover:opacity-80 transition-opacity duration-150"
           style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
         >
-          <span className="text-[10px] font-bold text-white tracking-wide">SB</span>
+          <span className="text-2xs font-bold text-foreground tracking-wide">SB</span>
         </Link>
 
         {/* Divider */}
@@ -71,9 +70,10 @@ export default function Sidebar() {
             <button
               key={item.href}
               onClick={() => handleNav(item.href)}
-              className="relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-sm font-medium transition-colors duration-150"
+              className="nav-pill relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-sm font-medium transition-colors duration-150"
               style={{
-                color: isActive ? "#fff" : "rgba(255,255,255,0.42)",
+                color: isActive ? "#fff" : "var(--nav-idle-fg)",
+                backgroundColor: isActive ? "transparent" : "var(--nav-idle-bg)",
                 opacity: isLoading ? 0.6 : 1,
               }}
             >
@@ -112,10 +112,10 @@ export default function Sidebar() {
         <button
           onClick={() => handleNav("/admin")}
           title="Admin"
-          className="relative flex items-center justify-center w-8 h-8 rounded-xl transition-colors duration-150"
+          className="nav-cog relative flex items-center justify-center w-8 h-8 rounded-xl transition-colors duration-150"
           style={{
-            color: isAdminActive ? "#a5b4fc" : "rgba(255,255,255,0.28)",
-            backgroundColor: isAdminActive ? "rgba(99,102,241,0.2)" : "transparent",
+            color: isAdminActive ? "#a5b4fc" : "var(--nav-idle-fg)",
+            backgroundColor: isAdminActive ? "rgba(99,102,241,0.2)" : "var(--nav-idle-bg)",
           }}
         >
           <FaCog size={13} />
@@ -144,8 +144,11 @@ export default function Sidebar() {
               key={item.href}
               onClick={() => handleNav(item.href)}
               aria-label={item.name}
-              className="relative flex items-center justify-center w-11 h-10 rounded-xl transition-colors duration-150"
-              style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.35)" }}
+              className="nav-pill nav-pill-mobile relative flex items-center justify-center w-11 h-10 rounded-xl transition-colors duration-150"
+              style={{
+                color: isActive ? "#fff" : "var(--nav-idle-fg)",
+                backgroundColor: isActive ? "transparent" : "var(--nav-idle-bg)",
+              }}
             >
               {isActive && (
                 <motion.div

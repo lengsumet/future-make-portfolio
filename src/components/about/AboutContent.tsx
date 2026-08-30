@@ -22,7 +22,7 @@ const fadeUp = (delay = 0) => ({
 function SectionHeading({ title }: { title: string }) {
   return (
     <motion.div {...fadeUp()} className="mb-10 text-center">
-      <h2 className="text-2xl font-bold text-white">{title}</h2>
+      <h2 className="text-2xl font-bold text-foreground">{title}</h2>
       <div className="mt-3 flex items-center justify-center gap-3">
         <div className="h-px w-12 rounded-full" style={{ background: "rgba(192, 133, 82,0.3)" }} />
         <div className="h-1 w-1 rounded-full" style={{ background: "rgba(192, 133, 82,0.5)" }} />
@@ -63,7 +63,7 @@ function ExpCard({ title, subtitle, period, description, delay }: {
 
       {/* Period badge */}
       <span
-        className="absolute top-5 right-5 text-[11px] font-mono px-2.5 py-1 rounded-lg tracking-tight"
+        className="absolute top-5 right-5 text-2xs font-mono px-2.5 py-1 rounded-lg tracking-tight"
         style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}
       >
         {period}
@@ -127,7 +127,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
             </motion.div>
           </div>
 
-          <h1 className="text-4xl font-bold text-white mb-2">{introduction.name}</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">{introduction.name}</h1>
           <p className="text-lg mb-5" style={{ color: "#F2C9A0" }}>{introduction.title}</p>
         </motion.div>
 

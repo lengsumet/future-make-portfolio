@@ -50,7 +50,7 @@ function NavIcon({
         />
       </div>
       <span
-        className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
+        className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-foreground text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
         style={{
           background: "rgba(17,17,24,0.95)",
           border: "1px solid rgba(255,255,255,0.08)",
@@ -98,7 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           className="w-7 h-7 rounded-lg flex items-center justify-center mb-5 flex-shrink-0 transition-opacity duration-150 hover:opacity-80"
           style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)" }}
         >
-          <span className="text-[9px] font-bold text-white">ADM</span>
+          <span className="text-2xs font-bold text-foreground">ADM</span>
         </Link>
 
         {/* Nav */}
@@ -118,10 +118,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <FaHome
               size={14}
               style={{ color: "rgba(255,255,255,0.3)", transition: "color 0.15s" }}
-              className="group-hover:!text-white"
+              className="group-hover:!text-foreground"
             />
             <span
-              className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
+              className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-foreground text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
               style={{ background: "rgba(17,17,24,0.95)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
               View Site
@@ -137,7 +137,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="group-hover:!text-red-400"
             />
             <span
-              className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
+              className="pointer-events-none absolute left-full ml-3 px-2.5 py-1 text-foreground text-xs rounded-lg opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-150 whitespace-nowrap z-50 shadow-xl"
               style={{ background: "rgba(17,17,24,0.95)", border: "1px solid rgba(255,255,255,0.08)" }}
             >
               Logout
@@ -158,8 +158,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             transition={{ duration: 0.22, ease: "easeOut" }}
           >
             <div className="mb-10">
-              <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-1">Admin Panel</p>
-              <h2 className="text-lg font-semibold text-white">Sumet Buarod</h2>
+              <p className="text-2xs uppercase tracking-widest text-muted-foreground mb-1">Admin Panel</p>
+              <h2 className="text-lg font-semibold text-foreground">Sumet Buarod</h2>
             </div>
             <nav className="flex flex-col gap-5">
               {adminNav.map((item) => {
@@ -170,7 +170,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={`flex items-center gap-4 text-base font-medium transition-colors ${
-                      pathname === item.href ? "text-amber-400" : "text-gray-400 hover:text-white"
+                      pathname === item.href ? "text-amber-400" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     <Icon size={16} />
@@ -179,13 +179,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 );
               })}
             </nav>
-            <div className="mt-auto flex flex-col gap-4 border-t border-gray-800 pt-6">
-              <Link href="/" className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors">
+            <div className="mt-auto flex flex-col gap-4 border-t border-border pt-6">
+              <Link href="/" className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors">
                 <FaHome size={16} /> View Site
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-4 text-gray-400 hover:text-red-400 transition-colors"
+                className="flex items-center gap-4 text-muted-foreground hover:text-red-400 transition-colors"
               >
                 <FaSignOutAlt size={16} /> Logout
               </button>

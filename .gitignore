@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local SQLite dev database
+# Was committed as prisma/prisma/dev.db: DATABASE_URL said "file:./prisma/dev.db"
+# but Prisma resolves relative SQLite paths against the schema's own directory,
+# so it landed one level deeper than intended. /api/track writes to it on every
+# page view, which kept the binary permanently dirty in git.
+*.db
+*.db-journal
+*.db-wal
+*.db-shm

@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
             <motion.a
               key={index}
               href={link.href}
-              className="text-gray-400 hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
               whileHover={{ scale: 1.2, color: '#10B981' }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
             </motion.a>
           ))}
         </div>
-        <p className="text-gray-500 mt-4 md:mt-0">
+        <p className="text-muted-foreground mt-4 md:mt-0">
           © {new Date().getFullYear()} Sumet Buarod. All rights reserved.
         </p>
       </Container>

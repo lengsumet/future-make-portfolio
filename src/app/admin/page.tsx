@@ -75,8 +75,8 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-white">Dashboard</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Overview of your portfolio business</p>
+        <h1 className="text-xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">Overview of your portfolio business</p>
       </div>
 
       {data && <DashboardStats stats={stats} />}
@@ -84,12 +84,12 @@ export default function AdminDashboard() {
       {/* Shop Funnel */}
       {data && (
         <motion.div
-          className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5"
+          className="bg-surface-2 border border-border rounded-xl p-5"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <h2 className="text-sm font-semibold text-gray-300 mb-4">Shop Funnel</h2>
+          <h2 className="text-sm font-semibold text-ink-2 mb-4">Shop Funnel</h2>
           <div className="flex items-center gap-2 flex-wrap">
             {[
               { label: "Product Views", value: data.shopFunnel.productViews, pct: 100 },
@@ -97,10 +97,10 @@ export default function AdminDashboard() {
               { label: "Purchases", value: data.shopFunnel.purchases, pct: data.shopFunnel.productViews > 0 ? Math.round((data.shopFunnel.purchases / data.shopFunnel.productViews) * 100) : 0 },
             ].map((step, i) => (
               <React.Fragment key={step.label}>
-                {i > 0 && <span className="text-gray-600">→</span>}
+                {i > 0 && <span className="text-muted-foreground">→</span>}
                 <div className="text-center min-w-[100px]">
-                  <p className="text-lg font-bold text-white">{step.value}</p>
-                  <p className="text-xs text-gray-400">{step.label}</p>
+                  <p className="text-lg font-bold text-foreground">{step.value}</p>
+                  <p className="text-xs text-muted-foreground">{step.label}</p>
                   <p className="text-xs text-emerald-400">{step.pct}%</p>
                 </div>
               </React.Fragment>
@@ -111,13 +111,13 @@ export default function AdminDashboard() {
 
       {/* Recent Orders */}
       <motion.div
-        className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5"
+        className="bg-surface-2 border border-border rounded-xl p-5"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-gray-300">Recent Orders</h2>
+          <h2 className="text-sm font-semibold text-ink-2">Recent Orders</h2>
           <Link href="/admin/orders" className="text-xs text-emerald-400 hover:underline">
             View all →
           </Link>
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-500 border-b border-gray-700/50">
+              <tr className="text-left text-muted-foreground border-b border-border">
                 <th className="pb-3 pr-4">Order #</th>
                 <th className="pb-3 pr-4">Buyer</th>
                 <th className="pb-3 pr-4">Product</th>
@@ -136,10 +136,10 @@ export default function AdminDashboard() {
             </thead>
             <tbody className="divide-y divide-gray-700/30">
               {orders.map((order) => (
-                <tr key={order.id} className="text-gray-300">
-                  <td className="py-3 pr-4 font-mono text-xs text-gray-400">{order.orderNumber}</td>
+                <tr key={order.id} className="text-ink-2">
+                  <td className="py-3 pr-4 font-mono text-xs text-muted-foreground">{order.orderNumber}</td>
                   <td className="py-3 pr-4">{order.buyerName}</td>
-                  <td className="py-3 pr-4 text-gray-400 truncate max-w-[150px]">
+                  <td className="py-3 pr-4 text-muted-foreground truncate max-w-[150px]">
                     {order.items[0]?.title}
                   </td>
                   <td className="py-3 pr-4">฿{order.totalAmount.toLocaleString()}</td>
