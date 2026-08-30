@@ -8,7 +8,9 @@ import { Product } from "@/types/shop";
 import { useTracking, usePageView } from "@/hooks/useTracking";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCheck, FaExternalLinkAlt, FaArrowLeft, FaTimes } from "react-icons/fa";
-import LiveStats from "@/components/showcase/LiveStats";
+import LiveStats from "@/components/product/LiveStats";
+import ProductGallery from "@/components/product/ProductGallery";
+import { liveSystemFor } from "@/lib/live-systems";
 
 function CheckoutModal({
   product,
@@ -67,52 +69,52 @@ function CheckoutModal({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <motion.div
-        className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md p-6"
+        className="bg-background border border-border rounded-2xl w-full max-w-md p-6"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">Complete Purchase</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white">
+          <h2 className="text-xl font-bold text-foreground">Complete Purchase</h2>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
             <FaTimes />
           </button>
         </div>
 
-        <div className="bg-gray-800/50 rounded-xl p-4 mb-6">
-          <p className="text-sm text-gray-400">{product.title}</p>
-          <p className="text-2xl font-bold text-white mt-1">{priceFormatted}</p>
+        <div className="bg-surface-2 rounded-xl p-4 mb-6">
+          <p className="text-sm text-muted-foreground">{product.title}</p>
+          <p className="text-2xl font-bold text-foreground mt-1">{priceFormatted}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Full Name *</label>
-            <input
+            <label htmlFor="full-name" className="block text-sm text-muted-foreground mb-1">Full Name *</label>
+            <input id="full-name"
               type="text"
               required
               value={form.buyerName}
               onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-emerald-500 focus:outline-none"
+              className="w-full bg-surface-2 border border-input rounded-lg px-4 py-2.5 text-foreground focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
               placeholder="John Doe"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Email *</label>
-            <input
+            <label htmlFor="email" className="block text-sm text-muted-foreground mb-1">Email *</label>
+            <input id="email"
               type="email"
               required
               value={form.buyerEmail}
               onChange={(e) => setForm({ ...form, buyerEmail: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-emerald-500 focus:outline-none"
+              className="w-full bg-surface-2 border border-input rounded-lg px-4 py-2.5 text-foreground focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
               placeholder="you@example.com"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Notes (optional)</label>
-            <textarea
+            <label htmlFor="notes-optional" className="block text-sm text-muted-foreground mb-1">Notes (optional)</label>
+            <textarea id="notes-optional"
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-white focus:border-emerald-500 focus:outline-none resize-none"
+              className="w-full bg-surface-2 border border-input rounded-lg px-4 py-2.5 text-foreground focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60 resize-none"
               rows={2}
               placeholder="Any specific requirements..."
             />
@@ -142,7 +144,7 @@ function SuccessModal({ orderNumber, onClose }: { orderNumber: string; onClose: 
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-gray-900 border border-green-500/40 rounded-2xl w-full max-w-md p-8 text-center"
+        className="bg-background border border-green-500/40 rounded-2xl w-full max-w-md p-8 text-center"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
@@ -150,14 +152,14 @@ function SuccessModal({ orderNumber, onClose }: { orderNumber: string; onClose: 
         <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <FaCheck className="text-green-400 text-2xl" />
         </div>
-        <h2 className="text-2xl font-bold text-white mb-2">Order Placed!</h2>
-        <p className="text-gray-400 mb-4">Your order number is:</p>
-        <p className="text-xl font-mono text-green-400 bg-gray-800 rounded-lg px-4 py-2 mb-6">
+        <h2 className="text-2xl font-bold text-foreground mb-2">Order Placed!</h2>
+        <p className="text-muted-foreground mb-4">Your order number is:</p>
+        <p className="text-xl font-mono text-green-400 bg-surface-2 rounded-lg px-4 py-2 mb-6">
           {orderNumber}
         </p>
-        <p className="text-gray-400 text-sm mb-6">
-          Transfer via PromptPay <strong className="text-white">095-803-9303</strong> and email
-          the slip to <strong className="text-white">sumet.buarod@gmail.com</strong> with your
+        <p className="text-muted-foreground text-sm mb-6">
+          Transfer via PromptPay <strong className="text-foreground">095-803-9303</strong> and email
+          the slip to <strong className="text-foreground">sumet.buarod@gmail.com</strong> with your
           order number. Delivery within 24 hours.
         </p>
         <Button variant="primary" onClick={onClose}>Done</Button>
@@ -188,6 +190,8 @@ export default function ProductDetailPage() {
       .catch(() => setLoading(false));
   }, [params.id, track]);
 
+  const liveSystem = liveSystemFor(product?.slug);
+
   const priceFormatted = product
     ? new Intl.NumberFormat("th-TH", {
         style: "currency",
@@ -199,13 +203,13 @@ export default function ProductDetailPage() {
   if (loading)
     return (
       <Container className="py-24 text-center">
-        <div className="animate-pulse text-gray-500">Loading...</div>
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
       </Container>
     );
   if (!product)
     return (
       <Container className="py-24 text-center">
-        <p className="text-gray-400">Product not found.</p>
+        <p className="text-muted-foreground">Product not found.</p>
       </Container>
     );
 
@@ -213,7 +217,7 @@ export default function ProductDetailPage() {
     <Container className="py-16">
       <button
         onClick={() => router.push('/shop')}
-        className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors"
+        className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
       >
         <FaArrowLeft size={12} /> Back to Shop
       </button>
@@ -221,6 +225,10 @@ export default function ProductDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Left: Info */}
         <div>
+          <div className="mb-8">
+            <ProductGallery images={product.images} title={product.title} />
+          </div>
+
           <div className="flex items-center gap-2 mb-4">
             <span className="bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full capitalize">
               {product.category}
@@ -231,64 +239,39 @@ export default function ProductDetailPage() {
               </span>
             )}
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{product.title}</h1>
-          <p className="text-gray-300 text-lg mb-8 leading-relaxed">{product.longDescription}</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">{product.title}</h1>
+          <p className="text-ink-2 text-lg mb-8 leading-relaxed">{product.longDescription}</p>
 
-          <h3 className="text-lg font-semibold text-white mb-4">What is Included</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-4">What is Included</h3>
           <ul className="space-y-2 mb-8">
             {product.features.map((f) => (
-              <li key={f} className="flex items-start gap-3 text-gray-300">
+              <li key={f} className="flex items-start gap-3 text-ink-2">
                 <FaCheck className="text-green-400 mt-1 flex-shrink-0" size={12} />
                 {f}
               </li>
             ))}
           </ul>
 
-          <h3 className="text-lg font-semibold text-white mb-3">Tech Stack</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-3">Tech Stack</h3>
           <div className="flex flex-wrap gap-2 mb-8">
             {product.techStack.map((t) => (
-              <span key={t} className="bg-gray-700/60 text-gray-300 text-sm px-3 py-1 rounded-lg">
+              <span key={t} className="bg-surface-3 text-ink-2 text-sm px-3 py-1 rounded-lg">
                 {t}
               </span>
             ))}
           </div>
 
-          {/* Live Stats for WMS product */}
-          {product.demoUrl?.includes("3001") && (
+          {liveSystem && (
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-white mb-3">Live System Stats</h3>
-              <LiveStats system="wms" />
+              <h3 className="text-lg font-semibold text-foreground mb-3">Live System Stats</h3>
+              <LiveStats system={liveSystem} />
             </div>
           )}
 
-          {/* Live Stats for POS product */}
-          {product.demoUrl?.includes("3002") && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-white mb-3">Live System Stats</h3>
-              <LiveStats system="pos" />
-            </div>
-          )}
-
-          {/* Live Stats for CRM product */}
-          {product.demoUrl?.includes("3003") && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-white mb-3">Live System Stats</h3>
-              <LiveStats system="crm" />
-            </div>
-          )}
-
-          {/* Live Stats for TMS product */}
-          {product.demoUrl?.includes("3004") && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-white mb-3">Live System Stats</h3>
-              <LiveStats system="tms" />
-            </div>
-          )}
-
-          <h3 className="text-lg font-semibold text-white mb-3">Deliverables</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-3">Deliverables</h3>
           <ul className="space-y-2">
             {product.deliverables.map((d) => (
-              <li key={d} className="flex items-start gap-3 text-gray-400 text-sm">
+              <li key={d} className="flex items-start gap-3 text-muted-foreground text-sm">
                 <FaCheck className="text-primary mt-1 flex-shrink-0" size={11} />
                 {d}
               </li>
@@ -298,9 +281,9 @@ export default function ProductDetailPage() {
 
         {/* Right: Buy panel */}
         <div>
-          <div className="sticky top-8 bg-gray-800/60 border border-gray-700/50 rounded-2xl p-6">
-            <div className="text-4xl font-bold text-white mb-1">{priceFormatted}</div>
-            <p className="text-gray-400 text-sm mb-6">One-time payment · Lifetime access</p>
+          <div className="sticky top-8 bg-surface-2 border border-border rounded-2xl p-6">
+            <div className="text-4xl font-bold text-foreground mb-1">{priceFormatted}</div>
+            <p className="text-muted-foreground text-sm mb-6">One-time payment · Lifetime access</p>
 
             <div className="space-y-3">
               <Button
@@ -318,7 +301,7 @@ export default function ProductDetailPage() {
                   href={product.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full border border-gray-600 text-gray-300 hover:text-white rounded-xl py-3 text-sm font-medium transition-colors"
+                  className="flex items-center justify-center gap-2 w-full border border-input text-ink-2 hover:text-foreground rounded-xl py-3 text-sm font-medium transition-colors"
                   onClick={() => track("demo_click", product.id)}
                 >
                   <FaExternalLinkAlt size={12} /> View Live Demo
@@ -326,7 +309,7 @@ export default function ProductDetailPage() {
               )}
             </div>
 
-            <div className="mt-6 pt-6 border-t border-gray-700/50 space-y-2 text-sm text-gray-400">
+            <div className="mt-6 pt-6 border-t border-border space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <FaCheck className="text-green-400" size={11} /> Source code included
               </div>
@@ -338,8 +321,8 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-gray-700/50 text-sm text-gray-500">
-              <p className="mb-1 font-medium text-gray-400">Payment via PromptPay</p>
+            <div className="mt-6 pt-6 border-t border-border text-sm text-muted-foreground">
+              <p className="mb-1 font-medium text-muted-foreground">Payment via PromptPay</p>
               <p>095-803-9303 · Sumet B.</p>
               <p className="mt-1">After payment, email slip to sumet.buarod@gmail.com</p>
             </div>

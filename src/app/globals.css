@@ -1,5 +1,65 @@
 @import "tailwindcss";
 
+
+@theme inline {
+  /* The step below xs, used by uppercase table headers and badge counters.
+     It was being typed as text-[11px] in 184 places before it had a name. */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
+/* ===========================================================
+   The ramp above, exposed to Tailwind.
+
+   The palette was already well organised — a five-step text ramp,
+   three surfaces, a copper accent — but nothing bound it to utility
+   names, so components reached for bg-gray-800 and text-gray-400
+   instead. Those are cool greys sitting on a warm brown ground:
+   readable, but off-key next to the copper.
+
+   Deliberately single-theme. This is a warm dark portfolio; there is
+   no light version to switch to, so there is no .dark block.
+   =========================================================== */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--text-1);
+
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text-1);
+  --color-popover: var(--surface-2);
+  --color-popover-foreground: var(--text-1);
+
+  --color-muted: var(--surface-2);
+  --color-muted-foreground: var(--text-3);
+  --color-secondary: var(--surface-2);
+  --color-secondary-foreground: var(--text-2);
+  --color-accent: var(--surface-3);
+  --color-accent-foreground: var(--text-1);
+
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--background);
+  --color-ring: var(--accent);
+
+  --color-border: var(--border);
+  --color-input: var(--border-strong-visible);
+
+  /* the ramp itself, for the places that need a specific step */
+  --color-ink-1: var(--text-1);
+  --color-ink-2: var(--text-2);
+  --color-ink-3: var(--text-3);
+  --color-ink-4: var(--text-4);
+  --color-surface-1: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+
+  /* the copper ramp, for the places that need a specific step */
+  --color-accent-soft: var(--accent-3);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-deep: var(--accent-2);
+}
+
+
 /* ── Warm-Earth Aesthetic ──────────────────────────────
    Espresso canvas + caramel accent + cream text.
    4-swatch palette:
@@ -20,14 +80,14 @@
   /* Borders — cream-alpha hairlines */
   --border:        rgba(255, 248, 240, 0.08);
   --border-mid:    rgba(255, 248, 240, 0.14);
-  --border-strong: rgba(255, 248, 240, 0.22);
+  /* the outline of a control, not a divider — WCAG 1.4.11 wants 3:1 */
+  --border-strong-visible: rgba(255, 248, 240, 0.42);
 
   /* Text — cream base, alpha ladder */
   --text-1: #FFF8F0;
   --text-2: rgba(255, 248, 240, 0.72);
   --text-3: rgba(255, 248, 240, 0.50);
-  --text-4: rgba(255, 248, 240, 0.28);
-  --text-5: rgba(255, 248, 240, 0.14);
+  --text-4: rgba(255, 248, 240, 0.35); /* faintest readable — 3:1, large or incidental text only */
 
   /* Accent — caramel family */
   --accent:        #C08552;
@@ -174,3 +234,89 @@ h1, h2, h3 {
 .cat-leg-a        { animation: cat-leg-a        0.45s ease-in-out infinite; }
 .cat-leg-b        { animation: cat-leg-b        0.45s ease-in-out infinite; }
 .cat-paw-wave     { animation: cat-paw-wave     0.6s  ease-in-out infinite; }
+
+/* ---- Reduced motion --------------------------------------------
+   Honours the OS "reduce motion" setting for CSS-driven animation
+   (cat widget, skeleton sweep, hover transitions).
+   framer-motion is covered separately by <MotionConfig reducedMotion="user">
+   in components/providers/MotionProvider.tsx
+   ---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Tailwind v4 dropped `cursor: pointer` on buttons.
+ *
+ * v3's preflight set it; v4's follows the browser default of `cursor: default`
+ * instead. Every button in every one of these apps went from feeling clickable
+ * to feeling like text, and nothing in the diff said so — the change came from
+ * upgrading a dependency.
+ *
+ * `:not(:disabled)` because a disabled button is not clickable and should not
+ * claim to be; `not-allowed` says why it did nothing.
+ */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+/* ── Nav pill items (Sidebar) ─────────────────────────
+   Inline styles on these buttons beat any plain class rule,
+   so hover is driven through custom properties the inline
+   style reads via var(). @media (hover:hover) keeps the
+   state from sticking after a tap on touch devices. */
+.nav-pill {
+  --nav-idle-fg: rgba(255, 255, 255, 0.42);
+  --nav-idle-bg: transparent;
+}
+.nav-pill-mobile { --nav-idle-fg: rgba(255, 255, 255, 0.35); }
+.nav-cog {
+  --nav-idle-fg: rgba(255, 255, 255, 0.28);
+  --nav-idle-bg: transparent;
+}
+@media (hover: hover) {
+  .nav-pill:hover {
+    --nav-idle-fg: rgba(255, 255, 255, 0.82);
+    --nav-idle-bg: rgba(255, 255, 255, 0.05);
+  }
+  .nav-pill-mobile:hover { --nav-idle-bg: rgba(255, 255, 255, 0.06); }
+  .nav-cog:hover {
+    --nav-idle-fg: rgba(165, 180, 252, 0.9);
+    --nav-idle-bg: rgba(99, 102, 241, 0.12);
+  }
+}
+
+/* ── Filter chip (shop categories) ───────────────── */
+.filter-chip {
+  --chip-fg: rgba(255, 255, 255, 0.4);
+  --chip-bg: rgba(255, 255, 255, 0.04);
+  --chip-border: rgba(255, 255, 255, 0.07);
+}
+@media (hover: hover) {
+  .filter-chip:hover {
+    --chip-fg: rgba(255, 255, 255, 0.85);
+    --chip-bg: rgba(255, 255, 255, 0.08);
+    --chip-border: rgba(192, 133, 82, 0.35);
+  }
+  .filter-chip[data-active="true"]:hover { opacity: 0.88; }
+}

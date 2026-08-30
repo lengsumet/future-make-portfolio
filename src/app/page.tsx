@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import productsData from "../../public/data/products.json";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
@@ -9,6 +10,16 @@ import {
 } from "react-icons/si";
 import { FaAws, FaGithub, FaLinkedin, FaArrowRight } from "react-icons/fa";
 import CatWidget from "@/components/animations/CatWidget";
+
+interface ProductEntry {
+  slug: string;
+  title: string;
+  category: string;
+  shortDescription: string;
+  techStack: string[];
+  featured: boolean;
+  status: string;
+}
 
 /* ── data ─────────────────────────────────────────── */
 const tech = [
@@ -22,30 +33,31 @@ const tech = [
   { name: "AWS",             icon: FaAws,        color: "#fbbf24" },
 ];
 
-const featured = [
-  {
-    slug: "insurance-platform-api",
-    href: "/shop/insurance-platform-api",
-    category: "Enterprise / API",
-    title: "Insurance & Fintech Platform",
-    description: "High-concurrency workflow engine for financial transaction lifecycle. Real-time third-party API integrations, policy management, and granular access control.",
-    tags: [".NET Core 8", "C#", "React", "PostgreSQL", "Docker"],
+/**
+ * The two entries here were written by hand and had drifted from the shop.
+ *
+ * One of them, `insurance-platform-api`, is a product the catalogue no longer
+ * carries — the link went to a page that says "Product not found". Read from
+ * `products.json` now, which is the file the admin screen calls the source of
+ * truth, so the front page cannot advertise something the shop will not sell.
+ *
+ * Top four by the order they appear in the file, because the front page has
+ * room for four and the file is already in the order they should be shown.
+ */
+const featured = (productsData as ProductEntry[])
+  .filter((p) => p.featured && p.status === "active")
+  .slice(0, 4)
+  .map((p) => ({
+    slug: p.slug,
+    href: `/shop/${p.slug}`,
+    category: p.category === "template" ? "Template" : "Enterprise / Full-Stack",
+    title: p.title,
+    description: p.shortDescription,
+    tags: p.techStack.slice(0, 5),
     external: false,
     gradient: "from-[#C08552]/10 via-[#8C5A3C]/8 to-transparent",
-    border: "group-hover:border-[#C08552]/30",
-  },
-  {
-    slug: "ecommerce-suite",
-    href: process.env.NEXT_PUBLIC_STORE_URL || "http://localhost:3001",
-    category: "Full-Stack / Live Demo",
-    title: "E-Commerce Store",
-    description: "Full e-commerce platform with product catalog, cart, PromptPay QR checkout, coupon system, and admin dashboard with weekly/monthly/yearly sales reports.",
-    tags: ["Next.js 15", "Prisma", "NextAuth", "Zustand", "Recharts"],
-    external: true,
-    gradient: "from-[#E0A878]/10 via-[#C08552]/8 to-transparent",
-    border: "group-hover:border-[#E0A878]/30",
-  },
-];
+    border: "group-hover:border-primary/30",
+  }));
 
 const stats = [
   { value: "3+",  label: "Years" },
@@ -124,7 +136,7 @@ export default function Home() {
           {/* Available badge */}
           <motion.div {...fadeUp(0)} className="mb-8 flex justify-center">
             <span
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-medium tracking-wide"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-2xs font-medium tracking-wide"
               style={{
                 background: "rgba(34,197,94,0.08)",
                 border: "1px solid rgba(34,197,94,0.2)",
@@ -170,7 +182,7 @@ export default function Home() {
           {/* CTAs */}
           <motion.div {...fadeUp(0.28)} className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
             <Link
-              href="/showcase"
+              href="/shop"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 glow-accent"
               style={{ background: "linear-gradient(135deg, #C08552, #8C5A3C)", color: "#fff" }}
               onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
@@ -196,7 +208,7 @@ export default function Home() {
 
           {/* Social + stats */}
           <motion.div {...fadeUp(0.34)} className="flex items-center justify-center gap-6">
-            <a href="https://github.com" target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.25)" }}
+            <a href="https://github.com/lengsumet" target="_blank" rel="noreferrer" style={{ color: "rgba(255,255,255,0.25)" }}
               onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
               onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.25)")}
               className="transition-colors duration-150">
@@ -239,7 +251,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center text-[10px] uppercase tracking-[0.22em] mb-8"
+          className="text-center text-2xs uppercase tracking-[0.22em] mb-8"
           style={{ color: "rgba(255,255,255,0.2)" }}
         >
           Tech Stack
@@ -259,7 +271,7 @@ export default function Home() {
                 variants={itemAnim}
                 whileHover={{ y: -3, scale: 1.06 }}
                 transition={{ duration: 0.15 }}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-[12px] cursor-default transition-colors duration-200"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs cursor-default transition-colors duration-200"
                 style={{
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.07)",
@@ -296,7 +308,7 @@ export default function Home() {
           >
             <h2 className="text-lg font-semibold" style={{ color: "#fff" }}>Featured Work</h2>
             <Link
-              href="/showcase"
+              href="/shop"
               className="flex items-center gap-1.5 text-xs transition-colors duration-200 group"
               style={{ color: "rgba(255,255,255,0.3)" }}
               onMouseEnter={e => (e.currentTarget.style.color = "#E0A878")}
@@ -343,11 +355,11 @@ export default function Home() {
                     {/* Category */}
                     <div className="flex items-center gap-2 mb-4 relative">
                       <span className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--accent)" }} />
-                      <span className="text-[10px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}>
+                      <span className="text-2xs uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}>
                         {item.category}
                       </span>
                       {item.external && (
-                        <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide"
+                        <span className="ml-auto text-2xs px-1.5 py-0.5 rounded font-semibold uppercase tracking-wide"
                           style={{ background: "rgba(34,197,94,0.12)", color: "#86efac" }}>
                           Live
                         </span>
@@ -361,7 +373,7 @@ export default function Home() {
                     </h3>
 
                     {/* Description */}
-                    <p className="text-[12px] leading-relaxed mb-5 relative line-clamp-3"
+                    <p className="text-xs leading-relaxed mb-5 relative line-clamp-3"
                       style={{ color: "rgba(255,255,255,0.3)" }}>
                       {item.description}
                     </p>
@@ -369,7 +381,7 @@ export default function Home() {
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1.5 relative">
                       {item.tags.map(tag => (
-                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-md"
+                        <span key={tag} className="text-2xs px-2 py-0.5 rounded-md"
                           style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}>
                           {tag}
                         </span>
