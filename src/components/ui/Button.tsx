@@ -35,14 +35,19 @@ const sizes: Record<Size, string> = {
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', style, ...props }, ref) => {
+  ({ className = '', variant = 'primary', size = 'md', style, disabled, ...props }, ref) => {
+    // A disabled button that still lifts under the cursor reads as clickable.
+    const interaction = disabled
+      ? {}
+      : { whileHover: { scale: 1.03, opacity: 0.9 }, whileTap: { scale: 0.97 } };
+
     return (
       <motion.button
         ref={ref}
-        className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 ${sizes[size]} ${className}`}
+        disabled={disabled}
+        className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 ${sizes[size]} ${disabled ? 'cursor-not-allowed opacity-45' : ''} ${className}`}
         style={{ ...styles[variant], ...style }}
-        whileHover={{ scale: 1.03, opacity: 0.9 }}
-        whileTap={{ scale: 0.97 }}
+        {...interaction}
         {...props}
       />
     );

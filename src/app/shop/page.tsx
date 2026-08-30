@@ -33,7 +33,7 @@ export default function ShopPage() {
     ? products
     : products.filter((p) => p.category === activeCategory);
 
-  const storeUrl = process.env.NEXT_PUBLIC_STORE_URL || "http://localhost:3001";
+  const storeUrl = process.env.NEXT_PUBLIC_STORE_URL || "http://localhost:3009";
 
   return (
     <div style={{ background: "var(--background)" }} className="min-h-screen">
@@ -68,15 +68,15 @@ export default function ShopPage() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "#22c55e" }} />
-                <span className="text-[10px] uppercase tracking-widest font-medium" style={{ color: "#86efac" }}>Live Project</span>
+                <span className="text-2xs uppercase tracking-widest font-medium" style={{ color: "#86efac" }}>Live Project</span>
               </div>
-              <h2 className="text-xl font-bold text-white mb-1">Full E-Commerce Store</h2>
+              <h2 className="text-xl font-bold text-foreground mb-1">Full E-Commerce Store</h2>
               <p className="text-sm max-w-md" style={{ color: "rgba(255,255,255,0.35)" }}>
                 Production-ready store with product catalog, PromptPay QR checkout, order management, and admin dashboard with sales reports.
               </p>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {["Next.js 15", "Prisma", "NextAuth", "Zustand", "Recharts"].map((t) => (
-                  <span key={t} className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}>{t}</span>
+                  <span key={t} className="text-2xs px-2 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.3)" }}>{t}</span>
                 ))}
               </div>
             </div>
@@ -94,8 +94,8 @@ export default function ShopPage() {
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...spring, delay: 0.1 }} className="mb-10">
-          <p className="text-[10px] uppercase tracking-[0.22em] mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Shop</p>
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white">Templates &amp; Systems</h1>
+          <p className="text-2xs uppercase tracking-[0.22em] mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Shop</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-foreground">Templates &amp; Systems</h1>
           <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
             Production-ready code built with real-world enterprise experience.
           </p>
@@ -107,11 +107,13 @@ export default function ShopPage() {
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+              className="filter-chip px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+              data-active={activeCategory === cat.value}
+              aria-pressed={activeCategory === cat.value}
               style={{
-                background: activeCategory === cat.value ? "linear-gradient(135deg, #C08552, #8C5A3C)" : "rgba(255,255,255,0.04)",
-                color: activeCategory === cat.value ? "#fff" : "rgba(255,255,255,0.4)",
-                border: `1px solid ${activeCategory === cat.value ? "transparent" : "rgba(255,255,255,0.07)"}`,
+                background: activeCategory === cat.value ? "linear-gradient(135deg, #C08552, #8C5A3C)" : "var(--chip-bg)",
+                color: activeCategory === cat.value ? "#fff" : "var(--chip-fg)",
+                border: `1px solid ${activeCategory === cat.value ? "transparent" : "var(--chip-border)"}`,
                 boxShadow: activeCategory === cat.value ? "0 0 20px rgba(192, 133, 82,0.3)" : "none",
               }}
             >
@@ -159,7 +161,7 @@ export default function ShopPage() {
             border: "1px solid rgba(192, 133, 82,0.15)",
           }}
         >
-          <h2 className="text-2xl font-bold text-white mb-3">Need Something Custom?</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-3">Need Something Custom?</h2>
           <p className="text-sm max-w-xl mx-auto mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>
             I build custom distributed systems, API integrations, and cloud-native architectures.
             Let&apos;s discuss your project.
