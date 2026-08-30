@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion'],
   },
+  // The SQLite file is opened by path at runtime, so nothing imports it and
+  // file tracing cannot infer it. Without this the routes deploy without their
+  // database and every query fails on a file that is not there.
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./prisma/dev.db"],
+  },
   // /showcase was merged into /shop: it listed the same ten products from a
   // duplicate JSON file. Kept as a redirect so existing links still land.
   async redirects() {
