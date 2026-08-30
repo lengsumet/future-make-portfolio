@@ -21,7 +21,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
       {stats.map((stat, i) => (
         <motion.div
           key={stat.label}
-          className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5"
+          className="bg-surface-2 border border-border rounded-xl p-5"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.1 }}
@@ -29,9 +29,9 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ stats }) => {
           <div className="flex items-start justify-between mb-3">
             <span className="text-2xl">{stat.icon}</span>
           </div>
-          <p className={`text-2xl font-bold ${stat.color || "text-white"}`}>{stat.value}</p>
-          <p className="text-sm text-gray-400 mt-0.5">{stat.label}</p>
-          {stat.sub && <p className="text-xs text-gray-500 mt-1">{stat.sub}</p>}
+          <p className={`text-2xl font-bold ${stat.color || "text-foreground"}`}>{stat.value}</p>
+          <p className="text-sm text-muted-foreground mt-0.5">{stat.label}</p>
+          {stat.sub && <p className="text-xs text-muted-foreground mt-1">{stat.sub}</p>}
         </motion.div>
       ))}
     </div>

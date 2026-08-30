@@ -8,10 +8,21 @@
     "longDescription": "A modern, animated portfolio website built with Next.js 15, Framer Motion, and Tailwind CSS v4. Features cinematic entrance animations, dark celestial theme, about page with skill bars and experience timeline, project showcase with detail modals, integrated shop for selling templates, full admin dashboard with analytics, and proxy layer for third-party integrations. SEO optimized, fully responsive, and production-ready.",
     "price": 4900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/portfolio.jpg",
-    "images": ["/images/showcase/portfolio.jpg", "/images/showcase/portfolio-1.jpg", "/images/showcase/portfolio-2.jpg"],
+    "thumbnail": "/images/showcase/portfolio.png",
+    "images": [
+      "/images/showcase/portfolio.png",
+      "/images/showcase/portfolio-1.png",
+      "/images/showcase/portfolio-2.png"
+    ],
     "demoUrl": "https://future-make-portfolio.vercel.app",
-    "techStack": ["Next.js 15", "TypeScript", "Tailwind CSS v4", "Framer Motion", "Prisma", "SQLite"],
+    "techStack": [
+      "Next.js 15",
+      "TypeScript",
+      "Tailwind CSS v4",
+      "Framer Motion",
+      "Prisma",
+      "SQLite"
+    ],
     "features": [
       "Cinematic entrance animation with letter-by-letter reveal",
       "Dark celestial sidebar with navigation",
@@ -38,10 +49,24 @@
     "longDescription": "ระบบ WMS ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL ครอบคลุม workflow คลังสินค้าทั้งหมด: รับสินค้าเข้า (Inbound) พร้อม QC, จัดเก็บ (Putaway) อัตโนมัติ, ติดตาม Inventory แบบ Real-time ในระดับ Warehouse/Zone/Rack/Shelf/Bin, หยิบสินค้า (Picking) แบบ Single/Batch/Wave/Zone, แพ็คสินค้า (Packing) พร้อมจัดการกล่อง, นับสต็อก (Stock Count) พร้อม variance detection, รับคืนสินค้า (Returns) พร้อม disposition workflow และ RBAC 6 roles (Admin/Warehouse Manager/Picker/Receiver/Packer/Viewer)",
     "price": 39900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/wms-dashboard.svg",
-    "images": ["/images/showcase/wms-dashboard.svg", "/images/showcase/wms-inbound.svg", "/images/showcase/wms-space.svg"],
+    "thumbnail": "/images/showcase/wms-dashboard.png",
+    "images": [
+      "/images/showcase/wms-dashboard.png",
+      "/images/showcase/wms-inbound.png",
+      "/images/showcase/wms-space.png"
+    ],
     "demoUrl": "https://future-make-wms.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Inbound receiving with QC check (Pass/Fail/Conditional)",
       "Putaway task automation with bin assignment",
@@ -77,10 +102,24 @@
     "longDescription": "ระบบ POS สำหรับร้านค้าปลีก ร้านกาแฟ และร้านอาหาร สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL หน้า POS terminal แบบ full-width พร้อม product grid และ cart panel รองรับ barcode scanner, ชำระเงินหลายช่องทาง (เงินสด/บัตร/PromptPay KBank/โอนเงิน), Hold/Resume cart, จัดการสินค้าและ variant (S/M/L), ระบบสมาชิก loyalty points, จัดการสต็อก, รายงานยอดขาย, ปิดยอดประจำวัน และ RBAC 3 roles (Admin/Manager/Cashier)",
     "price": 29900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/pos-terminal.svg",
-    "images": ["/images/showcase/pos-terminal.svg", "/images/showcase/pos-dashboard.svg", "/images/showcase/pos-reports.svg"],
+    "thumbnail": "/images/showcase/pos-terminal.png",
+    "images": [
+      "/images/showcase/pos-terminal.png",
+      "/images/showcase/pos-dashboard.png",
+      "/images/showcase/pos-reports.png"
+    ],
     "demoUrl": "https://future-make-pos.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "qrcode.react"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "qrcode.react"
+    ],
     "features": [
       "Full-width POS terminal with product grid and cart panel",
       "Barcode scanner support (keystroke detection)",
@@ -115,10 +154,24 @@
     "longDescription": "ระบบ CRM ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL จัดการ Contact และ Company พร้อม interaction history, Deals pipeline แบบ Kanban (New/Contacted/Qualified/Proposal/Negotiation/Won/Lost), Activity tracking (Call/Email/Meeting/Task/Note), Sales dashboard พร้อม KPI cards และ charts, Pipeline reports พร้อม conversion metrics, Tags และ advanced filtering, RBAC 3 roles (Admin/Sales Manager/Sales Rep)",
     "price": 34900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/crm-dashboard.svg",
-    "images": ["/images/showcase/crm-dashboard.svg", "/images/showcase/crm-pipeline.svg", "/images/showcase/crm-contacts.svg"],
+    "thumbnail": "/images/showcase/crm-dashboard.png",
+    "images": [
+      "/images/showcase/crm-dashboard.png",
+      "/images/showcase/crm-pipeline.png",
+      "/images/showcase/crm-contacts.png"
+    ],
     "demoUrl": "https://future-make-crm.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Contact management with detailed profiles and interaction history",
       "Company management with size classification and associated contacts",
@@ -151,10 +204,24 @@
     "longDescription": "ระบบ TMS ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL จัดการ Fleet (Truck/Van/Pickup/Motorcycle/Trailer) พร้อม maintenance tracking, Driver management พร้อม license/certification tracking, Route planning, Shipment tracking พร้อม visual timeline, Delivery records พร้อม customer ratings และ proof of delivery, Expense tracking (Fuel/Toll/Parking/Maintenance), Fuel consumption analytics และ RBAC 4 roles (Admin/Fleet Manager/Dispatcher/Driver)",
     "price": 39900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/tms-dashboard.svg",
-    "images": ["/images/showcase/tms-dashboard.svg", "/images/showcase/tms-routes.svg", "/images/showcase/tms-shipments.svg"],
+    "thumbnail": "/images/showcase/tms-dashboard.png",
+    "images": [
+      "/images/showcase/tms-dashboard.png",
+      "/images/showcase/tms-routes.png",
+      "/images/showcase/tms-shipments.png"
+    ],
     "demoUrl": "https://future-make-tms.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Fleet management: Truck/Van/Pickup/Motorcycle/Trailer",
       "Vehicle maintenance scheduling with cost tracking",
@@ -187,10 +254,24 @@
     "longDescription": "ระบบ IMS ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL จัดการ Product catalog พร้อม UoM conversion, Multi-warehouse stock tracking ในระดับ Warehouse/Zone/Bin, Lot tracking พร้อม expiry dates (FIFO/FEFO), Serial number tracking, Stock transfers ระหว่าง warehouse พร้อม approval workflow, Stock adjustments (Count/Damage/Return/Correction/Write-off) พร้อม approval chain, Automatic replenishment (Reorder Point/Min-Max/Top-Off/Demand-Based), Stock movement history และ RBAC 5 roles (Admin/Manager/Supervisor/Operator/Viewer)",
     "price": 39900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/ims-dashboard.svg",
-    "images": ["/images/showcase/ims-dashboard.svg", "/images/showcase/ims-stock.svg", "/images/showcase/ims-transfers.svg"],
+    "thumbnail": "/images/showcase/ims-dashboard.png",
+    "images": [
+      "/images/showcase/ims-dashboard.png",
+      "/images/showcase/ims-stock.png",
+      "/images/showcase/ims-transfers.png"
+    ],
     "demoUrl": "https://future-make-ims.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Product catalog with categories and UoM conversion",
       "Multi-warehouse stock tracking: Warehouse → Zone → Bin",
@@ -223,10 +304,24 @@
     "longDescription": "ระบบ SCMS ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL ครอบคลุม Procurement workflow ครบวงจร (PR→RFQ→Quotation→PO→Goods Receipt), Supplier management พร้อม evaluation scoring (Quality/Delivery/Price/Service), Contract management พร้อม expiry tracking, Risk management พร้อม impact/probability matrix, Demand forecasting (Moving Average/Exponential Smoothing/Trend/Seasonal), Sales order management และ RBAC 5 roles (Admin/Procurement Manager/Supply Planner/Buyer/Viewer)",
     "price": 44900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/scms-dashboard.svg",
-    "images": ["/images/showcase/scms-dashboard.svg", "/images/showcase/scms-procurement.svg", "/images/showcase/scms-suppliers.svg"],
+    "thumbnail": "/images/showcase/scms-dashboard.png",
+    "images": [
+      "/images/showcase/scms-dashboard.png",
+      "/images/showcase/scms-procurement.png",
+      "/images/showcase/scms-suppliers.png"
+    ],
     "demoUrl": "https://future-make-scms.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Procurement workflow: PR → RFQ → Quotation → PO → Goods Receipt",
       "Supplier management with evaluation scoring (Quality/Delivery/Price/Service)",
@@ -258,10 +353,24 @@
     "longDescription": "ระบบ PMS ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL จัดการ Production Line พร้อม OEE monitoring, BOM management พร้อม tree visualization, Work order lifecycle (Draft→Scheduled→In Progress→On Hold→Completed), Machine management พร้อม maintenance scheduling, Quality control พร้อม Inspection และ NCR management (Minor/Major/Critical), Downtime logging พร้อม root cause analysis, Production costing (Material/Labor/Overhead) และ RBAC 5 roles (Admin/Production Manager/Quality Engineer/Operator/Viewer)",
     "price": 42900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/pms-dashboard.svg",
-    "images": ["/images/showcase/pms-dashboard.svg", "/images/showcase/pms-workorders.svg", "/images/showcase/pms-quality.svg"],
+    "thumbnail": "/images/showcase/pms-dashboard.png",
+    "images": [
+      "/images/showcase/pms-dashboard.png",
+      "/images/showcase/pms-workorders.png",
+      "/images/showcase/pms-quality.png"
+    ],
     "demoUrl": "https://future-make-pms.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Production line management with real-time status tracking",
       "OEE monitoring: Availability × Performance × Quality",
@@ -294,10 +403,24 @@
     "longDescription": "ระบบ Executive Dashboard ระดับ Enterprise สร้างด้วย Next.js 16, TypeScript, Prisma และ PostgreSQL รวมข้อมูลจากทุกระบบ (WMS/TMS/IMS/PMS/SCMS) ผ่าน MetricSnapshot, Alert management พร้อม configurable rules (INFO/WARNING/CRITICAL), Report generation และ scheduling (Daily/Weekly/Monthly) พร้อม recipient management, KPI monitoring และ RBAC 3 roles (Admin/Analyst/Viewer)",
     "price": 34900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/dashboard-executive.svg",
-    "images": ["/images/showcase/dashboard-executive.svg", "/images/showcase/dashboard-analytics.svg", "/images/showcase/dashboard-alerts.svg"],
+    "thumbnail": "/images/showcase/dashboard-executive.png",
+    "images": [
+      "/images/showcase/dashboard-executive.png",
+      "/images/showcase/dashboard-analytics.png",
+      "/images/showcase/dashboard-alerts.png"
+    ],
     "demoUrl": "https://future-make-dashboard.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "Zustand", "Tailwind CSS v4", "Recharts", "TanStack Table"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "NextAuth v5",
+      "Zustand",
+      "Tailwind CSS v4",
+      "Recharts",
+      "TanStack Table"
+    ],
     "features": [
       "Multi-system data aggregation via MetricSnapshot",
       "Alert management with configurable rules (INFO/WARNING/CRITICAL)",
@@ -328,10 +451,23 @@
     "longDescription": "ระบบ E-Commerce เต็มรูปแบบสร้างด้วย Next.js 16, TypeScript, Prisma และ SQLite รองรับ product catalog พร้อม custom metadata per category (JSONB), order lifecycle management (Pending→Paid→Delivered), PromptPay QR payment integration, Stripe credit card support, Email notifications via Resend API, LINE Notify order alerts, Usage analytics พร้อม conversion funnel tracking และ admin dashboard พร้อม charts และ export",
     "price": 24900,
     "currency": "THB",
-    "thumbnail": "/images/showcase/ecommerce.jpg",
-    "images": ["/images/showcase/ecommerce.jpg", "/images/showcase/ecommerce-1.jpg", "/images/showcase/ecommerce-2.jpg"],
+    "thumbnail": "/images/showcase/ecommerce.png",
+    "images": [
+      "/images/showcase/ecommerce.png",
+      "/images/showcase/ecommerce-1.png",
+      "/images/showcase/ecommerce-2.png"
+    ],
     "demoUrl": "https://future-make-ecommerce.vercel.app",
-    "techStack": ["Next.js 16", "TypeScript", "Prisma", "SQLite", "Stripe", "PromptPay", "Zustand", "Recharts"],
+    "techStack": [
+      "Next.js 16",
+      "TypeScript",
+      "Prisma",
+      "SQLite",
+      "Stripe",
+      "PromptPay",
+      "Zustand",
+      "Recharts"
+    ],
     "features": [
       "Dynamic product catalog with custom JSONB metadata per category",
       "Order lifecycle: Pending → Paid → Delivered",

@@ -21,8 +21,8 @@ interface LineChartProps {
 
 export const PageViewsChart: React.FC<LineChartProps> = ({ data, title }) => {
   return (
-    <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5">
-      <h3 className="text-sm font-semibold text-gray-300 mb-4">{title}</h3>
+    <div className="bg-surface-2 border border-border rounded-xl p-5">
+      <h3 className="text-sm font-semibold text-ink-2 mb-4">{title}</h3>
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -54,8 +54,8 @@ interface TopPagesChartProps {
 
 export const TopPagesChart: React.FC<TopPagesChartProps> = ({ data, title }) => {
   return (
-    <div className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5">
-      <h3 className="text-sm font-semibold text-gray-300 mb-4">{title}</h3>
+    <div className="bg-surface-2 border border-border rounded-xl p-5">
+      <h3 className="text-sm font-semibold text-ink-2 mb-4">{title}</h3>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />

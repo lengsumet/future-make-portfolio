@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAdmin } from "@/lib/auth/requireAdmin";
 
 type ServiceConfig = {
   baseUrl: string;
@@ -37,10 +38,33 @@ const PROXY_SERVICES: Record<string, ServiceConfig> = {
 
 type Params = { service: string };
 
+/**
+ * Resolve the caller-supplied `path` against the service base URL.
+ * Returns null if the result would leave the service's origin — without this,
+ * a path like "@evil.com/x" or "//evil.com/x" would send the service's API key
+ * to an attacker-controlled host.
+ */
+function resolveTargetUrl(baseUrl: string, path: string): URL | null {
+  if (path && !path.startsWith("/")) return null;
+  if (path.startsWith("//")) return null;
+
+  try {
+    const base = new URL(baseUrl);
+    const target = new URL(path || "/", base);
+    return target.origin === base.origin ? target : null;
+  } catch {
+    return null;
+  }
+}
+
 async function handler(
   request: NextRequest,
   { params }: { params: Promise<Params> }
 ) {
+  // Every service below forwards a server-held secret. Admin only.
+  const authError = await requireAdmin(request);
+  if (authError) return authError;
+
   const { service } = await params;
   const config = PROXY_SERVICES[service];
 
@@ -59,7 +83,14 @@ async function handler(
   }
 
   const targetPath = request.nextUrl.searchParams.get("path") || "";
-  const targetUrl = `${config.baseUrl}${targetPath}`;
+  const targetUrl = resolveTargetUrl(config.baseUrl, targetPath);
+
+  if (!targetUrl) {
+    return NextResponse.json(
+      { error: "Invalid path: must be an absolute path within the service origin" },
+      { status: 400 }
+    );
+  }
 
   try {
     const forwardHeaders: Record<string, string> = {

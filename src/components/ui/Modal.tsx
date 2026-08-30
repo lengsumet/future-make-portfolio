@@ -47,13 +47,13 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           onClick={onClose}
         >
           <motion.div
-            className="bg-gray-900/70 border border-gray-700 rounded-2xl shadow-2xl shadow-primary/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-8"
+            className="bg-background border border-border rounded-2xl shadow-2xl shadow-primary/20 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative p-8"
             variants={modalVariants}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
             >
               <FaTimes size={24} />
             </button>

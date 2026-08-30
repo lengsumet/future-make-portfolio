@@ -4,6 +4,7 @@ import "./globals.css";
 import ClientShell from "@/components/layout/ClientShell";
 import { LoadingProvider } from "@/contexts/LoadingContext";
 import LoadingScreen from "@/components/animations/LoadingScreen";
+import MotionProvider from "@/components/providers/MotionProvider";
 
 const prompt = Prompt({
   variable: "--font-prompt",
@@ -42,10 +43,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${prompt.className}`}>
-        <LoadingProvider>
-          <LoadingScreen />
-          <ClientShell>{children}</ClientShell>
-        </LoadingProvider>
+        <MotionProvider>
+          <LoadingProvider>
+            <LoadingScreen />
+            <ClientShell>{children}</ClientShell>
+          </LoadingProvider>
+        </MotionProvider>
       </body>
     </html>
   );

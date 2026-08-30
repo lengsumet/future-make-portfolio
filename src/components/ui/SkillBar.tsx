@@ -39,10 +39,10 @@ const SkillBar: React.FC<SkillBarProps> = ({ skills }) => {
       {skills.map((skill, index) => (
         <motion.div key={index} className="w-full" variants={item}>
           <div className="flex justify-between mb-1">
-            <span className="text-base font-medium text-[#F2C9A0]">{skill.name}</span>
-            <span className="text-sm font-medium text-[#F2C9A0]">{skill.level}%</span>
+            <span className="text-base font-medium text-accent-fg">{skill.name}</span>
+            <span className="text-sm font-medium text-accent-fg">{skill.level}%</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2.5">
+          <div className="w-full bg-surface-3 rounded-full h-2.5">
             <motion.div
               className="bg-gradient-to-r from-secondary to-primary h-2.5 rounded-full"
               initial={{ width: 0 }}

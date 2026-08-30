@@ -126,14 +126,14 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* Password field */}
             <div>
-              <label
+              <label htmlFor="password"
                 className="block text-xs mb-2 tracking-wide"
                 style={{ color: "rgba(255,255,255,0.4)" }}
               >
                 Password
               </label>
               <div className="relative">
-                <input
+                <input id="password"
                   type={showPw ? "text" : "password"}
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); if (error) setError(""); }}
@@ -144,7 +144,6 @@ export default function AdminLoginPage() {
                     color: "#fff",
                   }}
                   placeholder="Enter admin password"
-                  autoFocus
                   onFocus={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.6)")}
                   onBlur={e => (e.currentTarget.style.borderColor = error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.08)")}
                 />

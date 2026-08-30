@@ -58,8 +58,8 @@ export default function AdminOrdersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-white">Orders</h1>
-          <p className="text-sm text-gray-400 mt-0.5">{orders.length} total orders</p>
+          <h1 className="text-xl font-bold text-foreground">Orders</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">{orders.length} total orders</p>
         </div>
       </div>
 
@@ -71,8 +71,8 @@ export default function AdminOrdersPage() {
             onClick={() => setFilter(s)}
             className={`px-3 py-1.5 rounded-lg text-sm capitalize transition-colors ${
               filter === s
-                ? "bg-emerald-600 text-white"
-                : "bg-gray-800 text-gray-400 hover:text-white"
+                ? "bg-emerald-600 text-foreground"
+                : "bg-surface-2 text-muted-foreground hover:text-foreground"
             }`}
           >
             {s} <span className="ml-1 text-xs opacity-70">({counts[s as keyof typeof counts] ?? 0})</span>
@@ -81,14 +81,14 @@ export default function AdminOrdersPage() {
       </div>
 
       <motion.div
-        className="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden"
+        className="bg-surface-2 border border-border rounded-xl overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="border-b border-gray-700/50">
-              <tr className="text-left text-gray-500">
+            <thead className="border-b border-border">
+              <tr className="text-left text-muted-foreground">
                 <th className="px-4 py-3">Order #</th>
                 <th className="px-4 py-3">Buyer</th>
                 <th className="px-4 py-3">Product</th>
@@ -100,18 +100,18 @@ export default function AdminOrdersPage() {
             </thead>
             <tbody className="divide-y divide-gray-700/30">
               {filtered.map((order) => (
-                <tr key={order.id} className="text-gray-300 hover:bg-gray-700/20 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-gray-400">{order.orderNumber}</td>
+                <tr key={order.id} className="text-ink-2 hover:bg-surface-3 transition-colors">
+                  <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{order.orderNumber}</td>
                   <td className="px-4 py-3">
                     <div>{order.buyerName}</div>
-                    <div className="text-xs text-gray-500">{order.buyerEmail}</div>
+                    <div className="text-xs text-muted-foreground">{order.buyerEmail}</div>
                   </td>
-                  <td className="px-4 py-3 text-gray-400 text-xs max-w-[140px] truncate">
+                  <td className="px-4 py-3 text-muted-foreground text-xs max-w-[140px] truncate">
                     {order.items[0]?.title}
                     {order.items.length > 1 && ` +${order.items.length - 1}`}
                   </td>
                   <td className="px-4 py-3 font-medium">฿{order.totalAmount.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">
+                  <td className="px-4 py-3 text-muted-foreground text-xs">
                     {new Date(order.createdAt).toLocaleDateString("th-TH")}
                   </td>
                   <td className="px-4 py-3">
@@ -135,7 +135,7 @@ export default function AdminOrdersPage() {
             </tbody>
           </table>
           {filtered.length === 0 && (
-            <p className="text-center text-gray-500 py-8">No orders found.</p>
+            <p className="text-center text-muted-foreground py-8">No orders found.</p>
           )}
         </div>
       </motion.div>
