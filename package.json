@@ -14,7 +14,7 @@
     "lint:a11y": "eslint -c eslint.a11y.mjs src"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "node --import tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
