@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { SkeletonTable, LoadingRegion } from "@/components/ui/Skeleton";
 import { motion } from "framer-motion";
 import { Order } from "@/types/shop";
 
@@ -21,10 +22,14 @@ export default function AdminOrdersPage() {
   const [filter, setFilter] = useState("all");
   const [updating, setUpdating] = useState<string | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetch("/api/shop/orders")
       .then((r) => r.json())
-      .then(setOrders);
+      .then(setOrders)
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = filter === "all" ? orders : orders.filter((o) => o.status === filter);
@@ -85,6 +90,15 @@ export default function AdminOrdersPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
+        {loading ? (
+          <LoadingRegion label="Loading orders">
+            <SkeletonTable rows={6} cols={7} />
+          </LoadingRegion>
+        ) : filtered.length === 0 ? (
+          <p className="py-12 text-center text-sm text-muted-foreground">
+            {orders.length === 0 ? "No orders yet." : "No orders with this status."}
+          </p>
+        ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b border-border">
@@ -134,10 +148,8 @@ export default function AdminOrdersPage() {
               ))}
             </tbody>
           </table>
-          {filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-8">No orders found.</p>
-          )}
         </div>
+        )}
       </motion.div>
     </div>
   );

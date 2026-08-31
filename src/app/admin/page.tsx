@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Skeleton, SkeletonStat, SkeletonTable, LoadingRegion } from "@/components/ui/Skeleton";
 import { DashboardStats } from "@/components/admin/DashboardStats";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -33,10 +34,22 @@ const statusColors: Record<string, string> = {
 export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
+  // Tracked separately: the two requests land independently, and one panel
+  // should not sit blank waiting on the other's response.
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [loadingOrders, setLoadingOrders] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/dashboard").then((r) => r.json()).then(setData);
-    fetch("/api/shop/orders").then((r) => r.json()).then((d) => setOrders(d.slice(0, 5)));
+    fetch("/api/admin/dashboard")
+      .then((r) => r.json())
+      .then(setData)
+      .catch(() => {})
+      .finally(() => setLoadingStats(false));
+    fetch("/api/shop/orders")
+      .then((r) => r.json())
+      .then((d) => setOrders(d.slice(0, 5)))
+      .catch(() => {})
+      .finally(() => setLoadingOrders(false));
   }, []);
 
   const stats = data
@@ -79,10 +92,34 @@ export default function AdminDashboard() {
         <p className="text-sm text-muted-foreground mt-0.5">Overview of your portfolio business</p>
       </div>
 
-      {data && <DashboardStats stats={stats} />}
+      {loadingStats ? (
+        <LoadingRegion label="Loading dashboard figures">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => <SkeletonStat key={i} />)}
+          </div>
+        </LoadingRegion>
+      ) : (
+        data && <DashboardStats stats={stats} />
+      )}
 
       {/* Shop Funnel */}
-      {data && (
+      {loadingStats && (
+        <LoadingRegion label="Loading shop funnel">
+          <div className="bg-surface-2 border border-border rounded-xl p-5">
+            <Skeleton className="h-3 w-24 mb-4" />
+            <div className="flex items-center gap-6 flex-wrap">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="min-w-[100px] space-y-2">
+                  <Skeleton className="h-5 w-12 mx-auto" />
+                  <Skeleton className="h-3 w-20 mx-auto" />
+                  <Skeleton className="h-3 w-10 mx-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </LoadingRegion>
+      )}
+      {!loadingStats && data && (
         <motion.div
           className="bg-surface-2 border border-border rounded-xl p-5"
           initial={{ opacity: 0, y: 20 }}
@@ -123,6 +160,13 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
+        {loadingOrders ? (
+          <LoadingRegion label="Loading recent orders">
+            <SkeletonTable rows={5} cols={5} />
+          </LoadingRegion>
+        ) : orders.length === 0 ? (
+          <p className="py-8 text-center text-sm text-muted-foreground">No orders yet.</p>
+        ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -153,6 +197,7 @@ export default function AdminDashboard() {
             </tbody>
           </table>
         </div>
+        )}
       </motion.div>
     </div>
   );

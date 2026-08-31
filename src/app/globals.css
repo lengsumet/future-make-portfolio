@@ -320,3 +320,18 @@ h1, h2, h3 {
   }
   .filter-chip[data-active="true"]:hover { opacity: 0.88; }
 }
+
+/* ── Screen-reader only ──────────────────────────
+   Loading skeletons are aria-hidden — a shimmering rectangle read aloud is
+   noise — so the wait needs a text label only assistive tech sees. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

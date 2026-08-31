@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Skeleton, SkeletonStat, LoadingRegion } from "@/components/ui/Skeleton";
 import { PageViewsChart, TopPagesChart } from "@/components/admin/AnalyticsChart";
 import { AnalyticsSummary } from "@/types/analytics";
 import { motion } from "framer-motion";
@@ -9,10 +10,18 @@ export default function AdminAnalyticsPage() {
   const [data, setData] = useState<{ summary: AnalyticsSummary } | null>(null);
   const [range, setRange] = useState("7d");
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    // Reset on a range change too: the figures on screen belong to the old
+    // range, and leaving them up makes a slow request look like a fast one
+    // that returned the same numbers.
+    setLoading(true);
     fetch("/api/admin/analytics")
       .then((r) => r.json())
-      .then(setData);
+      .then(setData)
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [range]);
 
   const summary = data?.summary;
@@ -49,6 +58,13 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Overview stats */}
+      {loading ? (
+        <LoadingRegion label="Loading analytics">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => <SkeletonStat key={i} />)}
+          </div>
+        </LoadingRegion>
+      ) : (
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {overviewStats.map((stat, i) => (
           <motion.div
@@ -64,9 +80,23 @@ export default function AdminAnalyticsPage() {
           </motion.div>
         ))}
       </div>
+      )}
 
       {/* Charts */}
-      {summary && (
+      {loading && (
+        <LoadingRegion label="Loading charts">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="bg-surface-2 border border-border rounded-xl p-5">
+                <Skeleton className="h-3 w-32 mb-4" />
+                <Skeleton className="h-48 w-full" />
+              </div>
+            ))}
+          </div>
+        </LoadingRegion>
+      )}
+
+      {!loading && summary && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <PageViewsChart data={summary.dailyViews} title="Page Views (Last 7 Days)" />
           <TopPagesChart data={summary.topPages} title="Top Pages" />

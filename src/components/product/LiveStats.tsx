@@ -162,7 +162,13 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
           <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>{systemLabel} Offline</span>
         </div>
         <p className="text-sm" style={{ color: "rgba(255,255,255,0.25)" }}>
-          The {systemLabel} system is currently offline. Start the server on port {port} to see live statistics.
+          {/* A visitor to the deployed shop cannot start anything, and telling
+              them to run a server on a port reads as a broken page on a sales
+              screen. The developer instruction is kept for development, where
+              it is the useful thing to say. */}
+          {process.env.NODE_ENV === "production"
+            ? `The live ${systemLabel} demo is temporarily unreachable. Everything else on this page is unaffected.`
+            : `The ${systemLabel} system is currently offline. Start the server on port ${port} to see live statistics.`}
         </p>
       </div>
     );
