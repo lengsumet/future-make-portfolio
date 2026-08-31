@@ -1,5 +1,6 @@
 "use client";
 
+import { systemUrl } from "@/lib/system-urls";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ProductCard } from "@/components/shop/ProductCard";
@@ -33,7 +34,7 @@ export default function ShopPage() {
     ? products
     : products.filter((p) => p.category === activeCategory);
 
-  const storeUrl = process.env.NEXT_PUBLIC_STORE_URL || "http://localhost:3009";
+  const storeUrl = systemUrl(process.env.NEXT_PUBLIC_STORE_URL, "ecommerce", "3009");
 
   return (
     <div style={{ background: "var(--background)" }} className="min-h-screen">

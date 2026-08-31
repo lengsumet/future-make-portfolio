@@ -1,5 +1,6 @@
 "use client";
 
+import { systemUrl } from "@/lib/system-urls";
 import React, { useState, useEffect } from "react";
 
 interface WmsStats { totalProducts: number; totalInventoryItems: number; totalInboundOrders: number; totalOutboundOrders: number; totalWarehouses: number; totalZones: number; totalBins: number; totalUsers: number; totalPickLists: number; systemStatus: string; }
@@ -82,15 +83,15 @@ const shopStatItems = [
 ];
 
 const SYSTEM_CONFIG = {
-  wms:       { url: process.env.NEXT_PUBLIC_WMS_URL       || "http://localhost:3001", label: "WMS",       port: "3001", items: wmsStatItems },
-  pos:       { url: process.env.NEXT_PUBLIC_POS_URL       || "http://localhost:3002", label: "POS",       port: "3002", items: posStatItems },
-  crm:       { url: process.env.NEXT_PUBLIC_CRM_URL       || "http://localhost:3003", label: "CRM",       port: "3003", items: crmStatItems },
-  tms:       { url: process.env.NEXT_PUBLIC_TMS_URL       || "http://localhost:3004", label: "TMS",       port: "3004", items: tmsStatItems },
-  ims:       { url: process.env.NEXT_PUBLIC_IMS_URL       || "http://localhost:3005", label: "IMS",       port: "3005", items: imsStatItems },
-  scms:      { url: process.env.NEXT_PUBLIC_SCMS_URL      || "http://localhost:3006", label: "SCMS",      port: "3006", items: scmsStatItems },
-  pms:       { url: process.env.NEXT_PUBLIC_PMS_URL       || "http://localhost:3007", label: "PMS",       port: "3007", items: pmsStatItems },
-  dashboard: { url: process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3008", label: "Dashboard", port: "3008", items: dashStatItems },
-  ecommerce: { url: process.env.NEXT_PUBLIC_ECOMMERCE_URL || "http://localhost:3009", label: "Storefront", port: "3009", items: shopStatItems },
+  wms:       { url: systemUrl(process.env.NEXT_PUBLIC_WMS_URL, "wms", "3001"), label: "WMS",       port: "3001", items: wmsStatItems },
+  pos:       { url: systemUrl(process.env.NEXT_PUBLIC_POS_URL, "pos", "3002"), label: "POS",       port: "3002", items: posStatItems },
+  crm:       { url: systemUrl(process.env.NEXT_PUBLIC_CRM_URL, "crm", "3003"), label: "CRM",       port: "3003", items: crmStatItems },
+  tms:       { url: systemUrl(process.env.NEXT_PUBLIC_TMS_URL, "tms", "3004"), label: "TMS",       port: "3004", items: tmsStatItems },
+  ims:       { url: systemUrl(process.env.NEXT_PUBLIC_IMS_URL, "ims", "3005"), label: "IMS",       port: "3005", items: imsStatItems },
+  scms:      { url: systemUrl(process.env.NEXT_PUBLIC_SCMS_URL, "scms", "3006"), label: "SCMS",      port: "3006", items: scmsStatItems },
+  pms:       { url: systemUrl(process.env.NEXT_PUBLIC_PMS_URL, "pms", "3007"), label: "PMS",       port: "3007", items: pmsStatItems },
+  dashboard: { url: systemUrl(process.env.NEXT_PUBLIC_DASHBOARD_URL, "dashboard", "3008"), label: "Dashboard", port: "3008", items: dashStatItems },
+  ecommerce: { url: systemUrl(process.env.NEXT_PUBLIC_ECOMMERCE_URL, "ecommerce", "3009"), label: "Storefront", port: "3009", items: shopStatItems },
 };
 
 /**
