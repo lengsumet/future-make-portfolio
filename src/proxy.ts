@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import { requireSecret } from "@/lib/env";
 
-const secret = new TextEncoder().encode(
-  process.env.ADMIN_JWT_SECRET || "dev-secret-please-change-in-production"
-);
+// Resolved per request rather than at import so a missing secret fails the
+// guarded request with a clear error instead of crashing module evaluation.
+const getSecret = () => new TextEncoder().encode(requireSecret("ADMIN_JWT_SECRET"));
 
 /**
  * Admin route guard.
@@ -25,7 +26,7 @@ export async function proxy(request: NextRequest) {
     }
 
     try {
-      await jwtVerify(token, secret);
+      await jwtVerify(token, getSecret());
     } catch {
       const response = NextResponse.redirect(new URL("/admin/login", request.url));
       response.cookies.delete("admin_token");

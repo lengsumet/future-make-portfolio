@@ -11,7 +11,9 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
-    "lint:a11y": "eslint -c eslint.a11y.mjs src"
+    "lint:a11y": "eslint -c eslint.a11y.mjs src",
+    "type-check": "tsc --noEmit",
+    "db:generate": "prisma generate"
   },
   "prisma": {
     "seed": "node --import tsx prisma/seed.ts"
@@ -37,7 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"

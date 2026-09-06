@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHmac } from "crypto";
 import { signAdminToken } from "@/lib/auth/admin";
 import { timingSafeEqual } from "crypto";
+import { requireSecret } from "@/lib/env";
 
 // Simple in-memory rate limiter: max 5 attempts per IP per 15 minutes
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
@@ -21,7 +22,7 @@ function checkRateLimit(ip: string): boolean {
 // Use HMAC to produce fixed-length buffers, then timingSafeEqual to prevent
 // timing attacks that could reveal the password via response time differences.
 function safePasswordCompare(input: string, expected: string): boolean {
-  const key = process.env.ADMIN_JWT_SECRET || "dev-secret-please-change-in-production";
+  const key = requireSecret("ADMIN_JWT_SECRET");
   const inputHash = createHmac("sha256", key).update(input).digest();
   const expectedHash = createHmac("sha256", key).update(expected).digest();
   return timingSafeEqual(inputHash, expectedHash);
@@ -39,7 +40,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+    const adminPassword = requireSecret("ADMIN_PASSWORD");
 
     if (!password || typeof password !== "string" || password.length < 1) {
       return NextResponse.json({ error: "Password required" }, { status: 400 });

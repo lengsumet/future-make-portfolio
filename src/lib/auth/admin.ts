@@ -1,12 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
-import { validateEnv } from "@/lib/env";
+import { validateEnv, requireSecret } from "@/lib/env";
 
 validateEnv();
 
-const getSecret = () =>
-  new TextEncoder().encode(
-    process.env.ADMIN_JWT_SECRET || "dev-secret-please-change-in-production"
-  );
+const getSecret = () => new TextEncoder().encode(requireSecret("ADMIN_JWT_SECRET"));
 
 export async function signAdminToken(): Promise<string> {
   return await new SignJWT({ role: "admin" })

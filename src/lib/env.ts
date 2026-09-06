@@ -68,3 +68,20 @@ export function validateEnv(): void {
     }
   }
 }
+
+type RequiredSecret = "ADMIN_JWT_SECRET" | "ADMIN_PASSWORD";
+
+/**
+ * Read a required secret, throwing at first use when it is unset. There is
+ * deliberately no fallback: a known default would let anyone forge an admin
+ * token. Edge-safe (no Node-only imports) so proxy.ts can use it too.
+ */
+export function requireSecret(key: RequiredSecret): string {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(
+      `[env] Missing required env var: ${key}. Set it in .env.local before starting the app.`
+    );
+  }
+  return value;
+}

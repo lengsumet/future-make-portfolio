@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
+import { requireSecret } from "@/lib/env";
 
-const getSecret = () =>
-  new TextEncoder().encode(
-    process.env.ADMIN_JWT_SECRET || "dev-secret-please-change-in-production"
-  );
+const getSecret = () => new TextEncoder().encode(requireSecret("ADMIN_JWT_SECRET"));
 
 export async function requireAdmin(
   request: NextRequest
