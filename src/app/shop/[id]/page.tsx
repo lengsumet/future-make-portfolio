@@ -307,6 +307,23 @@ export default function ProductDetailPage() {
                   <FaExternalLinkAlt size={12} /> View Live Demo
                 </a>
               )}
+              {product.demoLogin && product.demoLogin.length > 0 && (
+                <div className="rounded-xl border border-border bg-muted/40 p-3 text-xs">
+                  <p className="mb-2 font-semibold text-foreground">Demo login</p>
+                  <p className="mb-2 text-muted-foreground">
+                    Sign in to the live demo with any of these seeded accounts. Data resets and is shared, so do not enter anything private.
+                  </p>
+                  <ul className="space-y-1.5">
+                    {product.demoLogin.map((account) => (
+                      <li key={account.email} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                        <span className="w-24 shrink-0 text-muted-foreground">{account.role}</span>
+                        <code className="rounded bg-background px-1.5 py-0.5 font-mono text-foreground">{account.email}</code>
+                        <code className="rounded bg-background px-1.5 py-0.5 font-mono text-foreground">{account.password}</code>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <div className="mt-6 pt-6 border-t border-border space-y-2 text-sm text-muted-foreground">

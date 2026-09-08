@@ -91,7 +91,24 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@wms.com",
+        "password": "admin123"
+      },
+      {
+        "role": "Manager",
+        "email": "manager@wms.com",
+        "password": "manager123"
+      },
+      {
+        "role": "Picker",
+        "email": "picker@wms.com",
+        "password": "picker123"
+      }
+    ]
   },
   {
     "id": "pos-system",
@@ -143,7 +160,24 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futurepos.com",
+        "password": "admin123"
+      },
+      {
+        "role": "Branch manager",
+        "email": "manager@futurepos.com",
+        "password": "manager123"
+      },
+      {
+        "role": "Cashier",
+        "email": "cashier@futurepos.com",
+        "password": "cashier123"
+      }
+    ]
   },
   {
     "id": "crm-system",
@@ -193,7 +227,14 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futurecrm.com",
+        "password": "admin123"
+      }
+    ]
   },
   {
     "id": "tms-system",
@@ -243,7 +284,14 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futuretms.com",
+        "password": "admin123"
+      }
+    ]
   },
   {
     "id": "ims-system",
@@ -293,7 +341,24 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futureims.com",
+        "password": "admin123"
+      },
+      {
+        "role": "Manager",
+        "email": "manager@futureims.com",
+        "password": "manager123"
+      },
+      {
+        "role": "Supervisor",
+        "email": "supervisor@futureims.com",
+        "password": "supervisor123"
+      }
+    ]
   },
   {
     "id": "scms-system",
@@ -342,7 +407,24 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futurescms.com",
+        "password": "admin123"
+      },
+      {
+        "role": "Procurement",
+        "email": "procurement@futurescms.com",
+        "password": "procurement123"
+      },
+      {
+        "role": "Planner",
+        "email": "planner@futurescms.com",
+        "password": "planner123"
+      }
+    ]
   },
   {
     "id": "pms-system",
@@ -392,7 +474,24 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futurepms.com",
+        "password": "admin123"
+      },
+      {
+        "role": "Manager",
+        "email": "manager@futurepms.com",
+        "password": "manager123"
+      },
+      {
+        "role": "Engineer",
+        "email": "engineer@futurepms.com",
+        "password": "engineer123"
+      }
+    ]
   },
   {
     "id": "dashboard-system",
@@ -440,7 +539,19 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": true
+    "featured": true,
+    "demoLogin": [
+      {
+        "role": "Admin",
+        "email": "admin@futuredash.com",
+        "password": "admin123"
+      },
+      {
+        "role": "Analyst",
+        "email": "analyst@futuredash.com",
+        "password": "analyst123"
+      }
+    ]
   },
   {
     "id": "ecommerce-suite",
@@ -486,6 +597,18 @@
       "30-day email support"
     ],
     "status": "active",
-    "featured": false
+    "featured": false,
+    "demoLogin": [
+      {
+        "role": "Shop admin",
+        "email": "admin@shop.com",
+        "password": "admin1234"
+      },
+      {
+        "role": "Customer",
+        "email": "customer@example.com",
+        "password": "test1234"
+      }
+    ]
   }
 ]

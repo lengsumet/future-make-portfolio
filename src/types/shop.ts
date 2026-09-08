@@ -12,6 +12,8 @@ export interface Product {
   thumbnail: string;
   images: string[];
   demoUrl: string;
+  /** Seeded accounts a visitor can use on the live demo. */
+  demoLogin?: { role: string; email: string; password: string }[];
   techStack: string[];
   features: string[];
   deliverables: string[];
