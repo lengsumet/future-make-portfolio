@@ -281,7 +281,7 @@ export default function ProductDetailPage() {
 
         {/* Right: Buy panel */}
         <div>
-          <div className="sticky top-8 bg-surface-2 border border-border rounded-2xl p-6">
+          <div className="sticky top-24 bg-surface-2 border border-border rounded-2xl p-6">
             <div className="text-4xl font-bold text-foreground mb-1">{priceFormatted}</div>
             <p className="text-muted-foreground text-sm mb-6">One-time payment · Lifetime access</p>
 
