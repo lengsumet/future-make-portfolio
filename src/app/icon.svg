@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SB">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PORTFOLIO">
   <rect width="64" height="64" rx="14" fill="#9333EA"/>
-  <text x="32" y="32" dy=".36em" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" font-size="26" fill="#fff" letter-spacing="-1">SB</text>
+  <path d="M12 24 H52 V50 H12 Z M24 24 V18 H40 V24 M12 36 H52 M32 33 V40" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
