@@ -527,6 +527,8 @@
       "Report generation with scheduling (Daily/Weekly/Monthly)",
       "Report recipient management",
       "KPI monitoring across all enterprise systems",
+      "Central user directory: one account signs in to every system",
+      "Error tracking: failures from every app grouped by cause, resolve/reopen",
       "RBAC: Admin / Analyst / Viewer",
       "Bilingual support (Thai/English)"
     ],
