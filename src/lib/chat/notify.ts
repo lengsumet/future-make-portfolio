@@ -1,4 +1,5 @@
 import { after } from "next/server";
+import { ownerMailbox, sendMail } from "@/lib/chat/mail";
 
 /**
  * Tells the owner a visitor is waiting.
@@ -10,17 +11,18 @@ import { after } from "next/server";
  *   CHAT_NOTIFY_WEBHOOK_URL   any JSON-POST endpoint (Discord/Slack incoming
  *                             webhook, n8n, a LINE Messaging API relay); the
  *                             body carries `text` and `content`.
- *   RESEND_API_KEY +          email through Resend's REST API.
- *   CHAT_NOTIFY_EMAIL
+ *   email                     through whichever sender mail.ts has (Gmail or
+ *                             Resend), to CHAT_NOTIFY_EMAIL, else to the
+ *                             Gmail account itself. Reply-To is the visitor
+ *                             when they left an email.
  *
- * Runs after the response, capped at 5 s per channel, and never throws: a
- * failed ping must not lose the visitor's message.
+ * Runs after the response, capped per channel, and never throws: a failed
+ * ping must not lose the visitor's message.
  */
 export function notifyOwner(input: { name?: string | null; email?: string | null; body: string; conversationId: string; isNew: boolean }) {
   const webhook = process.env.CHAT_NOTIFY_WEBHOOK_URL;
-  const resendKey = process.env.RESEND_API_KEY;
-  const to = process.env.CHAT_NOTIFY_EMAIL;
-  if (!webhook && !(resendKey && to)) return;
+  const mailbox = ownerMailbox();
+  if (!webhook && !mailbox) return;
 
   const who = input.name || input.email || "A visitor";
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";
@@ -37,29 +39,24 @@ export function notifyOwner(input: { name?: string | null; email?: string | null
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ text, content: text }),
           signal: AbortSignal.timeout(5000),
+        }).then((r) => {
+          if (!r.ok) console.warn(`[chat] owner webhook answered HTTP ${r.status}`);
         }),
       );
     }
-    if (resendKey && to) {
+    if (mailbox) {
       jobs.push(
-        fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { authorization: `Bearer ${resendKey}`, "content-type": "application/json" },
-          body: JSON.stringify({
-            from: process.env.CHAT_NOTIFY_FROM ?? "Portfolio chat <onboarding@resend.dev>",
-            to: to.split(",").map((s) => s.trim()).filter(Boolean),
-            subject: `${input.isNew ? "New chat" : "New message"} from ${who}`,
-            text,
-            ...(input.email ? { reply_to: input.email } : {}),
-          }),
-          signal: AbortSignal.timeout(5000),
+        sendMail({
+          to: mailbox,
+          subject: `${input.isNew ? "New chat" : "New message"} from ${who}`,
+          text,
+          ...(input.email ? { replyTo: input.email } : {}),
         }),
       );
     }
     const results = await Promise.allSettled(jobs);
     for (const r of results) {
       if (r.status === "rejected") console.warn("[chat] owner notification failed:", r.reason instanceof Error ? r.reason.message : r.reason);
-      else if (r.value instanceof Response && !r.value.ok) console.warn(`[chat] owner notification answered HTTP ${r.value.status}`);
     }
   };
 
