@@ -20,7 +20,78 @@ import { FaArrowUp, FaComments, FaTimes, FaEnvelope } from "react-icons/fa";
 type Message = { id: string; sender: "visitor" | "owner"; body: string; createdAt: string; pending?: boolean; failed?: boolean };
 
 const TOKEN_KEY = "sb-chat-token";
-const QUICK = ["I need a custom system", "A question about a product", "Hiring / job opportunity"];
+const LANG_KEY = "sb-chat-lang";
+type Lang = "th" | "en";
+
+const T = {
+  en: {
+    chatWith: "Chat with Sumet",
+    openWithUnread: (n: number) => `Open chat, ${n} new message${n > 1 ? "s" : ""}`,
+    close: "Close chat",
+    replies: "Usually replies within a few hours",
+    greeting: "Hi! 👋 I'm Sumet. Ask me anything — a custom system, one of the products, pricing, or a role you're hiring for.",
+    quick: ["I need a custom system", "A question about a product", "Hiring / job opportunity"],
+    sending: "Sending…",
+    notSent: "Not sent",
+    sent: (email: string | null) => `Sent. I'll reply here${email ? ` and to ${email}` : ""}.`,
+    leaveEmail: "Leave your email so I can reply if you close this page",
+    save: "Save",
+    name: "Name (optional)",
+    email: "Email (optional)",
+    nameLabel: "Your name (optional)",
+    emailLabel: "Your email (optional)",
+    first: "Write your first message…",
+    next: "Write a message…",
+    message: "Message",
+    send: "Send message",
+    hint: "Enter to send · Shift+Enter for a new line",
+    tooFast: "You're sending messages too quickly. Please wait a moment.",
+    tooMany: "Too many new chats. Please try again later.",
+    failed: "Couldn't send. Check your connection and try again.",
+    badEmail: "That email doesn't look right.",
+    switchTo: "ภาษาไทย",
+    switchLabel: "เปลี่ยนเป็นภาษาไทย",
+  },
+  th: {
+    chatWith: "แชทกับสุเมธ",
+    openWithUnread: (n: number) => `เปิดแชท มีข้อความใหม่ ${n} ข้อความ`,
+    close: "ปิดแชท",
+    replies: "ตอบกลับภายในไม่กี่ชั่วโมง",
+    greeting: "สวัสดีครับ 👋 ผมสุเมธ ถามได้ทุกเรื่องเลยครับ — อยากให้ทำระบบ สอบถามสินค้า ราคา หรือติดต่อเรื่องงาน",
+    quick: ["อยากให้ทำระบบให้", "สอบถามเรื่องสินค้า", "ติดต่อเรื่องงาน / จ้างงาน"],
+    sending: "กำลังส่ง…",
+    notSent: "ส่งไม่สำเร็จ",
+    sent: (email: string | null) => `ส่งแล้วครับ ผมจะตอบกลับที่นี่${email ? ` และทาง ${email}` : ""}`,
+    leaveEmail: "ฝากอีเมลไว้ได้นะครับ ถ้าปิดหน้านี้ไปแล้วผมจะตอบกลับทางอีเมล",
+    save: "บันทึก",
+    name: "ชื่อ (ไม่บังคับ)",
+    email: "อีเมล (ไม่บังคับ)",
+    nameLabel: "ชื่อของคุณ (ไม่บังคับ)",
+    emailLabel: "อีเมลของคุณ (ไม่บังคับ)",
+    first: "พิมพ์ข้อความแรกได้เลย…",
+    next: "พิมพ์ข้อความ…",
+    message: "ข้อความ",
+    send: "ส่งข้อความ",
+    hint: "Enter เพื่อส่ง · Shift+Enter ขึ้นบรรทัดใหม่",
+    tooFast: "ส่งข้อความถี่เกินไป รอสักครู่แล้วลองใหม่นะครับ",
+    tooMany: "เริ่มแชทใหม่หลายครั้งเกินไป ลองใหม่ภายหลังนะครับ",
+    failed: "ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง",
+    badEmail: "รูปแบบอีเมลไม่ถูกต้อง",
+    switchTo: "English",
+    switchLabel: "Switch to English",
+  },
+} as const;
+
+// Saved choice first, then the browser language; Thai browsers get Thai.
+const readLang = (): Lang => {
+  try {
+    const saved = localStorage.getItem(LANG_KEY);
+    if (saved === "th" || saved === "en") return saved;
+  } catch {
+    /* storage blocked: fall through to the browser language */
+  }
+  return navigator.language?.toLowerCase().startsWith("th") ? "th" : "en";
+};
 
 const readToken = () => {
   try {
@@ -38,12 +109,15 @@ const writeToken = (t: string | null) => {
   }
 };
 
-const time = (iso: string) => new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+const time = (iso: string, lang: Lang) =>
+  new Date(iso).toLocaleTimeString(lang === "th" ? "th-TH" : "en-GB", { hour: "2-digit", minute: "2-digit" });
 
 export default function ChatWidget() {
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const [open, setOpen] = useState(false);
+  const [lang, setLang] = useState<Lang>("en");
+  const t = T[lang];
   const [token, setToken] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [contact, setContact] = useState<{ name: string | null; email: string | null }>({ name: null, email: null });
@@ -60,7 +134,20 @@ export default function ChatWidget() {
   const lastActivity = useRef(Date.now());
   const cursor = useRef<string | null>(null);
 
-  useEffect(() => setToken(readToken()), []);
+  useEffect(() => {
+    setToken(readToken());
+    setLang(readLang());
+  }, []);
+
+  const toggleLang = () => {
+    const next: Lang = lang === "th" ? "en" : "th";
+    setLang(next);
+    try {
+      localStorage.setItem(LANG_KEY, next);
+    } catch {
+      /* not remembered, still switched for this page view */
+    }
+  };
 
   const merge = useCallback((incoming: Message[], countUnread: boolean) => {
     if (incoming.length === 0) return;
@@ -161,7 +248,7 @@ export default function ChatWidget() {
           body: JSON.stringify({ message: body, name: name || undefined, email: email || undefined, page: pathname, website: honeypot || undefined }),
         });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error ?? "Could not send");
+        if (!res.ok) throw new Error(res.status === 429 ? t.tooMany : t.failed);
         writeToken(data.token);
         setContact({ name: name || null, email: email || null });
         setMessages(data.messages);
@@ -174,13 +261,14 @@ export default function ChatWidget() {
           body: JSON.stringify({ body }),
         });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error ?? "Could not send");
+        if (!res.ok) throw new Error(res.status === 429 ? t.tooFast : t.failed);
         setMessages((prev) => prev.map((m) => (m.id === temp.id ? data.message : m)));
         cursor.current = data.message.createdAt;
       }
     } catch (err) {
       setMessages((prev) => prev.map((m) => (m.id === temp.id ? { ...m, pending: false, failed: true } : m)));
-      setError(err instanceof Error && err.message !== "Invalid request" ? err.message : "Couldn't send. Check your connection and try again.");
+      // Errors we threw above are already worded; a network failure is not.
+      setError(err instanceof Error && (err.message === t.tooMany || err.message === t.tooFast) ? err.message : t.failed);
       setDraft(body);
     } finally {
       setSending(false);
@@ -199,7 +287,7 @@ export default function ChatWidget() {
       setContact(data.contact);
       setEmailPrompt("");
     } else {
-      setError("That email doesn't look right.");
+      setError(t.badEmail);
     }
   };
 
@@ -215,7 +303,8 @@ export default function ChatWidget() {
           <motion.section
             key="panel"
             role="dialog"
-            aria-label="Chat with Sumet"
+            aria-label={t.chatWith}
+            lang={lang}
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.97 }}
@@ -235,13 +324,22 @@ export default function ChatWidget() {
                   Sumet Buarod
                 </p>
                 <p className="text-xs" style={{ color: "var(--text-3)" }}>
-                  Usually replies within a few hours
+                  {t.replies}
                 </p>
               </div>
               <button
                 type="button"
+                onClick={toggleLang}
+                aria-label={t.switchLabel}
+                lang={lang === "th" ? "en" : "th"}
+                className="rounded-full border border-[var(--border-mid)] px-2.5 py-1 text-2xs font-medium text-[var(--text-2)] transition-colors hover:border-[var(--accent-border)] hover:text-[var(--text-1)]"
+              >
+                {t.switchTo}
+              </button>
+              <button
+                type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Close chat"
+                aria-label={t.close}
                 className="flex h-8 w-8 items-center justify-center rounded-full text-[var(--text-3)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-1)]"
               >
                 <FaTimes size={12} />
@@ -250,11 +348,11 @@ export default function ChatWidget() {
 
             {/* Messages */}
             <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-5" aria-live="polite">
-              <Bubble sender="owner" body={"Hi! 👋 I'm Sumet. Ask me anything — a custom system, one of the products, pricing, or a role you're hiring for. สอบถามเป็นภาษาไทยได้เลยครับ"} />
+              <Bubble sender="owner" body={t.greeting} />
 
               {!started && (
                 <div className="flex flex-wrap gap-2 pl-1 pt-1">
-                  {QUICK.map((q) => (
+                  {t.quick.map((q) => (
                     <button
                       key={q}
                       type="button"
@@ -271,12 +369,12 @@ export default function ChatWidget() {
               )}
 
               {messages.map((m) => (
-                <Bubble key={m.id} sender={m.sender} body={m.body} at={m.pending ? "Sending…" : m.failed ? "Not sent" : time(m.createdAt)} failed={m.failed} />
+                <Bubble key={m.id} sender={m.sender} body={m.body} at={m.pending ? t.sending : m.failed ? t.notSent : time(m.createdAt, lang)} failed={m.failed} />
               ))}
 
               {started && !ownerReplied && (
                 <p className="px-2 text-center font-mono text-2xs" style={{ color: "var(--text-4)" }}>
-                  Sent. I&apos;ll reply here{contact.email ? ` and to ${contact.email}` : ""}.
+                  {t.sent(contact.email)}
                 </p>
               )}
 
@@ -290,7 +388,7 @@ export default function ChatWidget() {
                 >
                   <label htmlFor="chat-email-later" className="flex items-center gap-2 text-xs" style={{ color: "var(--text-2)" }}>
                     <FaEnvelope size={11} aria-hidden="true" className="text-[var(--accent-3)]" />
-                    Leave your email so I can reply if you close this page
+                    {t.leaveEmail}
                   </label>
                   <div className="mt-2 flex gap-2">
                     <input
@@ -302,7 +400,7 @@ export default function ChatWidget() {
                       className="min-w-0 flex-1 rounded-full border border-[var(--border-mid)] bg-[var(--surface-2)] px-3 py-1.5 text-xs text-[var(--text-1)] outline-none focus:border-[var(--accent)]"
                     />
                     <button type="submit" className="rounded-full bg-[var(--text-1)] px-3 py-1.5 text-xs font-medium text-[var(--background)]">
-                      Save
+                      {t.save}
                     </button>
                   </div>
                 </form>
@@ -320,19 +418,19 @@ export default function ChatWidget() {
               {!started && (
                 <div className="mb-2 grid grid-cols-2 gap-2">
                   <input
-                    aria-label="Your name (optional)"
+                    aria-label={t.nameLabel}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Name (optional)"
+                    placeholder={t.name}
                     maxLength={80}
                     className="min-w-0 rounded-full border border-[var(--border-mid)] bg-[var(--surface-2)] px-3 py-1.5 text-xs text-[var(--text-1)] outline-none focus:border-[var(--accent)]"
                   />
                   <input
-                    aria-label="Your email (optional)"
+                    aria-label={t.emailLabel}
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email (optional)"
+                    placeholder={t.email}
                     maxLength={160}
                     className="min-w-0 rounded-full border border-[var(--border-mid)] bg-[var(--surface-2)] px-3 py-1.5 text-xs text-[var(--text-1)] outline-none focus:border-[var(--accent)]"
                   />
@@ -358,21 +456,21 @@ export default function ChatWidget() {
                   }}
                   rows={1}
                   maxLength={2000}
-                  placeholder={started ? "Write a message…" : "Write your first message…"}
-                  aria-label="Message"
+                  placeholder={started ? t.next : t.first}
+                  aria-label={t.message}
                   className="max-h-32 min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm text-[var(--text-1)] outline-none placeholder:text-[var(--text-4)]"
                 />
                 <button
                   type="submit"
                   disabled={!draft.trim() || sending}
-                  aria-label="Send message"
+                  aria-label={t.send}
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--text-1)] text-[var(--background)] transition-opacity disabled:opacity-30"
                 >
                   <FaArrowUp size={12} />
                 </button>
               </div>
               <p className="mt-2 px-1 font-mono text-2xs" style={{ color: "var(--text-4)" }}>
-                Enter to send · Shift+Enter for a new line
+                {t.hint}
               </p>
             </form>
           </motion.section>
@@ -383,7 +481,7 @@ export default function ChatWidget() {
       <motion.button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        aria-label={open ? "Close chat" : unread > 0 ? `Open chat, ${unread} new message${unread > 1 ? "s" : ""}` : "Chat with Sumet"}
+        aria-label={open ? t.close : unread > 0 ? t.openWithUnread(unread) : t.chatWith}
         aria-expanded={open}
         whileHover={reduce ? undefined : { scale: 1.06 }}
         whileTap={reduce ? undefined : { scale: 0.95 }}
