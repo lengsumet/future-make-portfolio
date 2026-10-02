@@ -3,11 +3,9 @@ import React from "react";
 /**
  * Placeholder blocks shown while data is on its way.
  *
- * Uses the .skeleton-luxury sweep already defined in globals.css, which
- * nothing had been using — every loading state in the app had rolled its own
- * animate-pulse box, so they shimmered differently from one screen to the
- * next, and the screens that fetch without one showed an empty table as though
- * there were nothing to see.
+ * A faint cream wash with a highlight sweeping across it, reusing the
+ * `skeleton-sweep` keyframes from globals.css so every loading state in the
+ * app shimmers the same way.
  *
  * The sweep stops under prefers-reduced-motion; globals.css handles that.
  */
@@ -16,8 +14,17 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
 }
 
-export function Skeleton({ className = "", ...props }: SkeletonProps) {
-  return <div aria-hidden className={`skeleton-luxury ${className}`} {...props} />;
+const sweep: React.CSSProperties = {
+  backgroundImage: "linear-gradient(90deg, transparent 25%, rgba(255, 248, 240, 0.06) 50%, transparent 75%)",
+  backgroundSize: "200% 100%",
+  animation: "skeleton-sweep 1.6s ease-in-out infinite",
+};
+
+export function Skeleton({ className = "", style, ...props }: SkeletonProps) {
+  // Default corner only when the caller has not chosen one: two radius
+  // utilities on one element resolve by stylesheet order, not class order.
+  const radius = /\brounded/.test(className) ? "" : "rounded-lg";
+  return <div aria-hidden className={`${radius} bg-white/[0.05] ${className}`} style={{ ...sweep, ...style }} {...props} />;
 }
 
 /** A run of text lines, the last one short so it reads as a paragraph. */
@@ -34,12 +41,13 @@ export function SkeletonText({ lines = 3, className = "" }: { lines?: number; cl
 /** Stand-in for a metric card: small caption over a big number. */
 export function SkeletonStat({ className = "" }: { className?: string }) {
   return (
-    <div
-      className={`rounded-xl p-4 ${className}`}
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
-    >
-      <Skeleton className="h-3 w-20 mb-3" />
-      <Skeleton className="h-7 w-24" />
+    <div className={`rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 ${className}`}>
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-3 w-20" />
+        <Skeleton className="h-8 w-8 rounded-xl" />
+      </div>
+      <Skeleton className="mt-6 h-9 w-28" />
+      <Skeleton className="mt-3 h-3 w-16" />
     </div>
   );
 }
@@ -51,13 +59,13 @@ export function SkeletonStat({ className = "" }: { className?: string }) {
 export function SkeletonTable({ rows = 5, cols = 4 }: { rows?: number; cols?: number }) {
   return (
     <div className="w-full">
-      <div className="flex gap-4 px-4 py-3">
+      <div className="flex gap-4 px-6 py-3.5">
         {Array.from({ length: cols }).map((_, i) => (
-          <Skeleton key={i} className="h-3 flex-1" />
+          <Skeleton key={i} className="h-2.5 flex-1" />
         ))}
       </div>
       {Array.from({ length: rows }).map((_, r) => (
-        <div key={r} className="flex gap-4 px-4 py-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+        <div key={r} className="flex gap-4 border-t border-[var(--border)] px-6 py-4">
           {Array.from({ length: cols }).map((_, c) => (
             <Skeleton key={c} className="h-4 flex-1" />
           ))}

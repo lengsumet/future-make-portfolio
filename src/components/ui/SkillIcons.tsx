@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   SiReact, SiNextdotjs, SiVuedotjs, SiTypescript, SiTailwindcss,
   SiSharp, SiDotnet, SiPython, SiFastapi, SiGo, SiPostgresql,
@@ -11,11 +11,16 @@ import {
   FaAws, FaCode, FaNetworkWired, FaSync, FaDatabase,
 } from "react-icons/fa";
 import { Skill } from "@/types/types";
+import { LevelBar } from "./SkillBar";
 
 type IconEntry = {
   icon: React.ReactNode;
+  /** Shown on hover only: real brand colours for real brands, caramel for ideas. */
   color: string;
 };
+
+const CONCEPT = "var(--accent-3)";
+const NEUTRAL = "var(--text-1)";
 
 const SKILL_ICON_MAP: Record<string, IconEntry> = {
   // Frontend
@@ -34,18 +39,18 @@ const SKILL_ICON_MAP: Record<string, IconEntry> = {
   "AWS (S3, ECS, Lambda, API Gateway, CloudWatch)": { icon: <FaAws />, color: "#FF9900" },
   "Docker / Containerization":  { icon: <SiDocker />,       color: "#2496ED" },
   // Engineering Concepts
-  "Distributed Systems / System Design": { icon: <FaNetworkWired />, color: "#9333ea" },
-  "SOLID Principles / OOP":     { icon: <FaCode />,         color: "#10B981" },
-  "Agile / Feature-Driven Development (FDD)": { icon: <FaSync />, color: "#F59E0B" },
+  "Distributed Systems / System Design": { icon: <FaNetworkWired />, color: CONCEPT },
+  "SOLID Principles / OOP":     { icon: <FaCode />,         color: CONCEPT },
+  "Agile / Feature-Driven Development (FDD)": { icon: <FaSync />, color: CONCEPT },
 };
 
 // Fallbacks for unmatched names
-function getIconEntry(name: string): IconEntry {
+export function getIconEntry(name: string): IconEntry {
   if (SKILL_ICON_MAP[name]) return SKILL_ICON_MAP[name];
   // fuzzy match by keyword
   const lower = name.toLowerCase();
   if (lower.includes("react"))      return { icon: <SiReact />,       color: "#61DAFB" };
-  if (lower.includes("next"))       return { icon: <SiNextdotjs />,   color: "#FFFFFF" };
+  if (lower.includes("next"))       return { icon: <SiNextdotjs />,   color: NEUTRAL };
   if (lower.includes("vue"))        return { icon: <SiVuedotjs />,    color: "#4FC08D" };
   if (lower.includes("typescript")) return { icon: <SiTypescript />,  color: "#3178C6" };
   if (lower.includes("tailwind"))   return { icon: <SiTailwindcss />, color: "#06B6D4" };
@@ -55,7 +60,7 @@ function getIconEntry(name: string): IconEntry {
                                     return { icon: <SiSharp />,       color: "#239120" };
   if (lower.includes("python"))     return { icon: <SiPython />,      color: "#3776AB" };
   if (lower.includes("fastapi"))    return { icon: <SiFastapi />,     color: "#009688" };
-  if (lower.includes("flask"))      return { icon: <SiFlask />,       color: "#FFFFFF" };
+  if (lower.includes("flask"))      return { icon: <SiFlask />,       color: NEUTRAL };
   if (lower.includes("go") || lower.includes("golang"))
                                     return { icon: <SiGo />,          color: "#00ADD8" };
   if (lower.includes("postgres") || lower.includes("sql"))
@@ -66,92 +71,66 @@ function getIconEntry(name: string): IconEntry {
                                     return { icon: <FaAws />,         color: "#FF9900" };
   if (lower.includes("docker"))     return { icon: <SiDocker />,      color: "#2496ED" };
   if (lower.includes("agile") || lower.includes("scrum"))
-                                    return { icon: <FaSync />,        color: "#F59E0B" };
+                                    return { icon: <FaSync />,        color: CONCEPT };
   if (lower.includes("solid") || lower.includes("oop"))
-                                    return { icon: <FaCode />,        color: "#10B981" };
+                                    return { icon: <FaCode />,        color: CONCEPT };
   if (lower.includes("distributed") || lower.includes("system"))
-                                    return { icon: <FaNetworkWired />, color: "#9333ea" };
-  return { icon: <FaDatabase />, color: "#6B7280" };
+                                    return { icon: <FaNetworkWired />, color: CONCEPT };
+  return { icon: <FaDatabase />, color: CONCEPT };
+}
+
+/** "AWS (S3, ECS, …)" reads as a name and a detail line; nothing is dropped. */
+function splitName(name: string): { main: string; detail: string | null } {
+  const match = name.match(/^(.*?)\s*\((.+)\)$/);
+  return match ? { main: match[1], detail: match[2] } : { main: name, detail: null };
 }
 
 interface SkillIconsProps {
   skills: Skill[];
+  /** Layout of the list, e.g. two columns inside a wide card. */
+  className?: string;
 }
 
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
-};
-
-const item = {
-  hidden: { opacity: 0, scale: 0.7, y: 10 },
-  show: { opacity: 1, scale: 1, y: 0, transition: { type: "spring" as const, stiffness: 200, damping: 18 } },
-};
-
-const SkillIcons: React.FC<SkillIconsProps> = ({ skills }) => {
+const SkillIcons: React.FC<SkillIconsProps> = ({ skills, className = "grid gap-y-5" }) => {
+  const reduce = useReducedMotion();
   return (
-    <motion.div
-      className="flex flex-wrap gap-4"
-      variants={container}
-      initial="hidden"
-      animate="show"
-    >
-      {skills.map((skill) => {
+    <ul className={className}>
+      {skills.map((skill, i) => {
         const { icon, color } = getIconEntry(skill.name);
+        const { main, detail } = splitName(skill.name);
         return (
-          <motion.div
+          <motion.li
             key={skill.name}
-            className="group flex flex-col items-center gap-2 cursor-default"
-            variants={item}
-            whileHover={{ scale: 1.12 }}
-            title={skill.name}
+            className="group/skill flex items-start gap-3.5"
+            initial={reduce ? false : { opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: i * 0.05 }}
           >
-            {/* Icon circle */}
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center bg-surface-2 border border-border group-hover:border-opacity-80 transition-all duration-200"
-              style={{
-                boxShadow: `0 0 0 0 ${color}33`,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 16px 4px ${color}40`;
-                (e.currentTarget as HTMLDivElement).style.borderColor = `${color}60`;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 0 0 ${color}33`;
-                (e.currentTarget as HTMLDivElement).style.borderColor = "";
-              }}
+            <span
+              aria-hidden="true"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--border-mid)] bg-white/[0.03] text-base text-[var(--text-2)] transition-colors duration-300 group-hover/skill:border-[var(--accent-border)] group-hover/skill:text-[var(--brand)]"
+              style={{ ["--brand" as string]: color }}
             >
-              <span className="text-2xl" style={{ color }}>
-                {icon}
-              </span>
-            </div>
-
-            {/* Skill name */}
-            <span className="text-xs text-muted-foreground text-center max-w-[72px] leading-tight group-hover:text-ink-2 transition-colors line-clamp-2">
-              {/* Shorten long names for display */}
-              {skill.name
-                .replace(" (Web API, Microservices)", "")
-                .replace(" (Concurrency / Goroutines)", "")
-                .replace(" (Performance Tuning)", "")
-                .replace(" (FastAPI / Flask)", "")
-                .replace(" / Feature-Driven Development (FDD)", "")
-                .replace(" / Containerization", "")
-                .replace(" (S3, ECS, Lambda, API Gateway, CloudWatch)", "")
-                .replace(" / Material UI", "")
-                .replace(" / Next.js", " /\nNext.js")
-                .replace(" (Android)", "")}
+              {icon}
             </span>
-
-            {/* Level badge on hover */}
-            {skill.level && (
-              <span className="opacity-0 group-hover:opacity-100 text-2xs font-semibold text-primary transition-opacity">
-                {skill.level}%
-              </span>
-            )}
-          </motion.div>
+            <div className="min-w-0 flex-1 pt-0.5">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-sm font-medium text-[var(--text-1)]">{main}</span>
+                {skill.level ? (
+                  <span className="font-mono text-2xs tabular-nums text-[var(--text-3)]">
+                    <span className="sr-only">proficiency </span>
+                    {skill.level}%
+                  </span>
+                ) : null}
+              </div>
+              {detail && <p className="mt-0.5 text-xs leading-snug text-[var(--text-3)]">{detail}</p>}
+              {skill.level ? <LevelBar level={skill.level} delay={0.15 + i * 0.06} className="mt-2.5" /> : null}
+            </div>
+          </motion.li>
         );
       })}
-    </motion.div>
+    </ul>
   );
 };
 

@@ -14,72 +14,72 @@ interface ShopStats { products: number; activeProducts: number; lowStockProducts
 interface DashStats { metricSnapshots: number; totalAlerts: number; activeAlerts: number; reports: number; status: string; }
 
 const wmsStatItems = [
-  { key: "totalProducts", label: "Products", icon: "📦" },
-  { key: "totalInventoryItems", label: "Inventory Items", icon: "🏷️" },
-  { key: "totalInboundOrders", label: "Inbound Orders", icon: "📥" },
-  { key: "totalOutboundOrders", label: "Outbound Orders", icon: "📤" },
-  { key: "totalWarehouses", label: "Warehouses", icon: "🏭" },
-  { key: "totalZones", label: "Zones", icon: "📍" },
-  { key: "totalBins", label: "Storage Bins", icon: "🗄️" },
-  { key: "totalUsers", label: "Users", icon: "👤" },
-  { key: "totalPickLists", label: "Pick Lists", icon: "📋" },
+  { key: "totalProducts", label: "Products" },
+  { key: "totalInventoryItems", label: "Inventory Items" },
+  { key: "totalInboundOrders", label: "Inbound Orders" },
+  { key: "totalOutboundOrders", label: "Outbound Orders" },
+  { key: "totalWarehouses", label: "Warehouses" },
+  { key: "totalZones", label: "Zones" },
+  { key: "totalBins", label: "Storage Bins" },
+  { key: "totalUsers", label: "Users" },
+  { key: "totalPickLists", label: "Pick Lists" },
 ];
 const posStatItems = [
-  { key: "totalProducts", label: "Products", icon: "☕" },
-  { key: "totalCategories", label: "Categories", icon: "📂" },
-  { key: "totalTransactions", label: "Transactions", icon: "🧾" },
-  { key: "totalCustomers", label: "Customers", icon: "👥" },
-  { key: "todaySales", label: "Today Sales (฿)", icon: "💰" },
-  { key: "todayTransactions", label: "Today Orders", icon: "📊" },
+  { key: "totalProducts", label: "Products" },
+  { key: "totalCategories", label: "Categories" },
+  { key: "totalTransactions", label: "Transactions" },
+  { key: "totalCustomers", label: "Customers" },
+  { key: "todaySales", label: "Today Sales (฿)" },
+  { key: "todayTransactions", label: "Today Orders" },
 ];
 const crmStatItems = [
-  { key: "totalContacts", label: "Contacts", icon: "👤" },
-  { key: "totalCompanies", label: "Companies", icon: "🏢" },
-  { key: "totalDeals", label: "Total Deals", icon: "🤝" },
-  { key: "activeDeals", label: "Active Deals", icon: "📈" },
-  { key: "pipelineValue", label: "Pipeline Value (฿)", icon: "💰" },
-  { key: "wonThisMonth", label: "Won This Month", icon: "🏆" },
+  { key: "totalContacts", label: "Contacts" },
+  { key: "totalCompanies", label: "Companies" },
+  { key: "totalDeals", label: "Total Deals" },
+  { key: "activeDeals", label: "Active Deals" },
+  { key: "pipelineValue", label: "Pipeline Value (฿)" },
+  { key: "wonThisMonth", label: "Won This Month" },
 ];
 const tmsStatItems = [
-  { key: "totalVehicles", label: "Vehicles", icon: "🚛" },
-  { key: "totalDrivers", label: "Drivers", icon: "👨‍✈️" },
-  { key: "totalRoutes", label: "Routes", icon: "🗺️" },
-  { key: "activeShipments", label: "Active Shipments", icon: "📦" },
-  { key: "totalDeliveries", label: "Deliveries", icon: "✅" },
-  { key: "onTimeRate", label: "On-Time Rate (%)", icon: "⏱️" },
+  { key: "totalVehicles", label: "Vehicles" },
+  { key: "totalDrivers", label: "Drivers" },
+  { key: "totalRoutes", label: "Routes" },
+  { key: "activeShipments", label: "Active Shipments" },
+  { key: "totalDeliveries", label: "Deliveries" },
+  { key: "onTimeRate", label: "On-Time Rate (%)" },
 ];
 const imsStatItems = [
-  { key: "products", label: "Products", icon: "📦" },
-  { key: "movements", label: "Stock Movements", icon: "🔄" },
-  { key: "warehouses", label: "Warehouses", icon: "🏭" },
+  { key: "products", label: "Products" },
+  { key: "movements", label: "Stock Movements" },
+  { key: "warehouses", label: "Warehouses" },
 ];
 const scmsStatItems = [
-  { key: "suppliers", label: "Suppliers", icon: "🏢" },
-  { key: "purchaseOrders", label: "Purchase Orders", icon: "📋" },
-  { key: "orders", label: "Sales Orders", icon: "🛒" },
-  { key: "risks", label: "Active Risks", icon: "⚠️" },
+  { key: "suppliers", label: "Suppliers" },
+  { key: "purchaseOrders", label: "Purchase Orders" },
+  { key: "orders", label: "Sales Orders" },
+  { key: "risks", label: "Active Risks" },
 ];
 const pmsStatItems = [
-  { key: "workOrders", label: "Work Orders", icon: "📝" },
-  { key: "activeWorkOrders", label: "Active WOs", icon: "🔧" },
-  { key: "productionLines", label: "Prod. Lines", icon: "🏭" },
-  { key: "machines", label: "Machines", icon: "⚙️" },
-  { key: "ncrs", label: "Open NCRs", icon: "🔴" },
+  { key: "workOrders", label: "Work Orders" },
+  { key: "activeWorkOrders", label: "Active WOs" },
+  { key: "productionLines", label: "Prod. Lines" },
+  { key: "machines", label: "Machines" },
+  { key: "ncrs", label: "Open NCRs" },
 ];
 const dashStatItems = [
-  { key: "metricSnapshots", label: "Metrics (30d)", icon: "📊" },
-  { key: "totalAlerts", label: "Total Alerts", icon: "🔔" },
-  { key: "activeAlerts", label: "Active Alerts", icon: "🚨" },
-  { key: "reports", label: "Reports", icon: "📄" },
+  { key: "metricSnapshots", label: "Metrics (30d)" },
+  { key: "totalAlerts", label: "Total Alerts" },
+  { key: "activeAlerts", label: "Active Alerts" },
+  { key: "reports", label: "Reports" },
 ];
 
 const shopStatItems = [
-  { key: "products", label: "Products", icon: "🛍️" },
-  { key: "activeProducts", label: "On Sale", icon: "✅" },
-  { key: "lowStockProducts", label: "Low Stock", icon: "⚠️" },
-  { key: "orders", label: "Orders", icon: "🧾" },
-  { key: "customers", label: "Customers", icon: "👥" },
-  { key: "revenue", label: "Revenue (฿)", icon: "💰" },
+  { key: "products", label: "Products" },
+  { key: "activeProducts", label: "On Sale" },
+  { key: "lowStockProducts", label: "Low Stock" },
+  { key: "orders", label: "Orders" },
+  { key: "customers", label: "Customers" },
+  { key: "revenue", label: "Revenue (฿)" },
 ];
 
 const SYSTEM_CONFIG = {
@@ -111,7 +111,7 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
   const config = SYSTEM_CONFIG[system];
   const { url: apiUrl, label: systemLabel, port, items: statItems } = config;
 
-  const [stats, setStats] = useState<WmsStats | PosStats | CrmStats | TmsStats | ImsStats | ScmsStats | PmsStats | DashStats | null>(null);
+  const [stats, setStats] = useState<WmsStats | PosStats | CrmStats | TmsStats | ImsStats | ScmsStats | PmsStats | DashStats | ShopStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [offline, setOffline] = useState(false);
 
@@ -135,18 +135,21 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const shell = "relative overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--surface)]";
+  const cols = statItems.length % 3 === 0 || statItems.length > 6 ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2";
+
   if (loading) {
     return (
-      <div className="rounded-xl p-6 my-6" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse" />
-          <span className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>Connecting to {systemLabel}...</span>
+      <div className={shell} aria-busy="true">
+        <div className="flex items-center gap-2 border-b border-[var(--border)] px-5 py-3.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] motion-safe:animate-pulse" aria-hidden="true" />
+          <span className="font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-3)]">Connecting to {systemLabel}…</span>
         </div>
-        <div className="grid grid-cols-3 gap-3">
+        <div className={`grid gap-px bg-[var(--border)] ${cols}`}>
           {Array.from({ length: statItems.length }).map((_, i) => (
-            <div key={i} className="rounded-lg p-3 animate-pulse" style={{ background: "rgba(255,255,255,0.03)" }}>
-              <div className="h-3 rounded w-16 mb-2" style={{ background: "rgba(255,255,255,0.06)" }} />
-              <div className="h-5 rounded w-10" style={{ background: "rgba(255,255,255,0.06)" }} />
+            <div key={i} className="bg-[var(--surface)] px-5 py-4" aria-hidden="true">
+              <div className="skeleton-luxury mb-2.5 h-3 w-16 rounded" />
+              <div className="skeleton-luxury h-6 w-12 rounded" />
             </div>
           ))}
         </div>
@@ -156,12 +159,12 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
 
   if (offline) {
     return (
-      <div className="rounded-xl p-6 my-6" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="flex items-center gap-2 mb-2">
-          <div className="h-2 w-2 rounded-full bg-red-400" />
-          <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>{systemLabel} Offline</span>
+      <div className={`${shell} px-5 py-5`}>
+        <div className="mb-2 flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--text-4)]" aria-hidden="true" />
+          <span className="font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-2)]">{systemLabel} offline</span>
         </div>
-        <p className="text-sm" style={{ color: "rgba(255,255,255,0.25)" }}>
+        <p className="text-sm leading-relaxed text-[var(--text-3)]">
           {/* A visitor to the deployed shop cannot start anything, and telling
               them to run a server on a port reads as a broken page on a sales
               screen. The developer instruction is kept for development, where
@@ -174,21 +177,23 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
     );
   }
 
+  const statusText = system === "wms" && (stats as WmsStats)?.systemStatus === "operational" ? "Operational" : system !== "wms" ? "Online" : "";
+
   return (
-    <div className="rounded-xl p-6 my-6" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="flex items-center justify-between mb-4">
+    <div className={shell}>
+      <div className="absolute inset-x-[20%] top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent" aria-hidden="true" />
+      <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-3.5">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full animate-pulse" style={{ background: "#E0A878" }} />
-          <span className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.5)" }}>
-            Live {systemLabel} Statistics
+          <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-[var(--green)] opacity-60 motion-safe:animate-ping" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--green)]" />
           </span>
+          <span className="font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-2)]">Live {systemLabel} statistics</span>
         </div>
-        <span className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
-          {system === "wms" && (stats as WmsStats)?.systemStatus === "operational" ? "Operational" : system !== "wms" ? "Online" : ""}
-        </span>
+        {statusText && <span className="font-mono text-2xs text-[var(--green)]">{statusText}</span>}
       </div>
-      <div className="grid grid-cols-3 gap-3">
-        {(statItems as { key: string; label: string; icon: string }[]).map(({ key, label, icon }) => {
+      <dl className={`grid gap-px bg-[var(--border)] ${cols}`}>
+        {(statItems as { key: string; label: string }[]).map(({ key, label }) => {
           const value = (stats as unknown as Record<string, unknown>)?.[key];
           const displayValue =
             typeof value === "number"
@@ -199,22 +204,13 @@ export default function LiveStats({ system = "wms" }: LiveStatsProps) {
                   : value.toLocaleString()
               : "0";
           return (
-            <div
-              key={key}
-              className="rounded-lg p-3 transition-colors duration-150"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(192, 133, 82,0.06)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)"}
-            >
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="text-sm">{icon}</span>
-                <span className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>{label}</span>
-              </div>
-              <p className="text-lg font-bold text-foreground">{displayValue}</p>
+            <div key={key} className="flex flex-col-reverse bg-[var(--surface)] px-5 py-4 transition-colors duration-150 hover:bg-[var(--surface-2)]">
+              <dt className="mt-1.5 font-mono text-2xs text-[var(--text-3)]">{label}</dt>
+              <dd className="display text-silver pb-[0.06em] text-2xl tabular-nums">{displayValue}</dd>
             </div>
           );
         })}
-      </div>
+      </dl>
     </div>
   );
 }

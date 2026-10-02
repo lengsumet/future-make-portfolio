@@ -1,15 +1,23 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useLoading } from '@/contexts/LoadingContext';
 import { LOADING_CONFIG } from '@/config/loadingConfig';
 
 const DISPLAY_NAME = "Sumet Buarod";
 const DISPLAY_TITLE = "Software Engineer";
+const ease = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Minimal loader in the site's language: near-black ground, fading dot grid,
+ * a caramel "SB" mark, the name in the silver fill, a thin caramel progress
+ * line and a shiny "Loading". When it shows and hides is owned entirely by
+ * LoadingContext; this component only draws.
+ */
 const LoadingScreen: React.FC = () => {
   const { isLoading } = useLoading();
+  const reduce = useReducedMotion();
   const [showSub, setShowSub] = useState(false);
 
   useEffect(() => {
@@ -25,94 +33,78 @@ const LoadingScreen: React.FC = () => {
     <AnimatePresence mode="wait">
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ background: "#0a0a0f" }}
+          role="status"
+          aria-live="polite"
+          className="fixed inset-0 z-[70] flex items-center justify-center overflow-hidden bg-[var(--background)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 0.97 }}
           transition={{
             duration: LOADING_CONFIG.CONTAINER_FADE_DURATION / 1000,
-            ease: "easeOut" as const,
+            ease,
           }}
         >
-          {/* Aurora bg */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full opacity-20"
-              style={{
-                background: "radial-gradient(ellipse, #C08552 0%, #8C5A3C 40%, transparent 70%)",
-                filter: "blur(80px)",
-              }}
-            />
-          </div>
-
-          {/* Subtle grid */}
+          <div className="dot-grid absolute inset-0" aria-hidden="true" />
           <div
-            className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-              backgroundSize: "60px 60px",
-            }}
+            className="absolute left-1/2 top-[30%] h-72 w-[min(36rem,90vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--accent)] opacity-[0.12] blur-3xl"
+            aria-hidden="true"
           />
 
-          {/* Center content */}
-          <div className="relative flex flex-col items-center justify-center gap-6">
-            {/* Name — letter-by-letter reveal */}
-            <motion.h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-              {DISPLAY_NAME.split('').map((char, index) => (
-                <motion.span
-                  key={index}
-                  className="inline-block"
-                  style={{
-                    background: "linear-gradient(135deg, #C08552, #8C5A3C, #E0A878)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    display: 'inline-block',
-                    ...(char === ' ' ? { marginRight: '0.3em' } : {}),
-                  }}
-                  initial={{ opacity: 0, y: 24, rotateX: -90 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                  transition={{
-                    delay: 0.2 + index * (LOADING_CONFIG.LETTER_STAGGER_DELAY / 1000),
-                    type: "spring",
-                    stiffness: LOADING_CONFIG.SPRING_STIFFNESS,
-                    damping: LOADING_CONFIG.SPRING_DAMPING,
-                  }}
-                >
-                  {char === ' ' ? '\u00A0' : char}
-                </motion.span>
-              ))}
-            </motion.h1>
-
-            {/* Underline */}
+          <div className="relative flex flex-col items-center">
+            {/* Mark */}
             <motion.div
-              className="h-px rounded-full"
-              style={{ background: "linear-gradient(90deg, transparent, #C08552, #8C5A3C, transparent)" }}
-              initial={{ width: 0 }}
-              animate={{ width: '200px' }}
-              transition={{
-                duration: LOADING_CONFIG.UNDERLINE_DURATION / 1000,
-                delay: LOADING_CONFIG.UNDERLINE_DELAY / 1000,
-                ease: "easeOut" as const,
-              }}
-            />
+              aria-hidden="true"
+              className="relative flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-[var(--accent-fg)] via-[var(--accent)] to-[var(--accent-2)] shadow-[0_0_60px_-8px_rgba(224,168,120,0.65)]"
+              initial={reduce ? false : { opacity: 0, scale: 0.85, filter: "blur(8px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.7, ease, delay: 0.1 }}
+            >
+              <span className="display text-2xl text-[var(--background)]">SB</span>
+              <span className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-white/25" />
+            </motion.div>
+
+            {/* Name */}
+            <motion.p
+              className="display text-silver mt-7 pb-[0.08em] text-2xl md:text-3xl"
+              initial={reduce ? false : { opacity: 0, y: 8, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.7, ease, delay: 0.25 }}
+            >
+              {DISPLAY_NAME}
+            </motion.p>
+
+            {/* Progress line */}
+            <div className="mt-6 h-px w-48 overflow-hidden rounded-full bg-white/[0.08]" aria-hidden="true">
+              <motion.div
+                className="h-full w-full origin-left bg-gradient-to-r from-[var(--accent-2)] via-[var(--accent-3)] to-[var(--text-1)]"
+                initial={reduce ? false : { scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{
+                  duration: (LOADING_CONFIG.INITIAL_LOAD_DURATION - 300) / 1000,
+                  ease,
+                  delay: 0.15,
+                }}
+              />
+            </div>
+
+            <span className="shiny mt-4 font-mono text-2xs uppercase tracking-[0.18em]">Loading</span>
 
             {/* Subtitle */}
-            <AnimatePresence>
-              {showSub && (
-                <motion.p
-                  className="text-sm font-medium tracking-widest uppercase"
-                  style={{ color: "rgba(255,255,255,0.3)" }}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {DISPLAY_TITLE}
-                </motion.p>
-              )}
-            </AnimatePresence>
+            <div className="mt-1.5 h-4">
+              <AnimatePresence>
+                {showSub && (
+                  <motion.p
+                    className="font-mono text-2xs uppercase tracking-[0.18em] text-[var(--text-4)]"
+                    initial={reduce ? false : { opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4, ease }}
+                  >
+                    {DISPLAY_TITLE}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </motion.div>
       )}

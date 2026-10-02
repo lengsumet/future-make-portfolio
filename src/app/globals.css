@@ -167,7 +167,10 @@ h1, h2, h3 {
 ::selection { background: var(--accent-bg); color: var(--accent-soft); }
 
 /* ── Focus ───────────────────────────────────────── */
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+/* Focus ring follows the element's own shape: setting a radius here (outside
+   any layer) used to override Tailwind's rounding and square off every pill
+   and rounded card the moment it was focused by keyboard. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ── Luxury card (shop/showcase) ─────────────────── */
 .card-luxury {

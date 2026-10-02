@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { Product } from "@/types/shop";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaExternalLinkAlt, FaStar } from "react-icons/fa";
+import { Skeleton, LoadingRegion } from "@/components/ui/Skeleton";
+import { PageHeader, StatusPill } from "@/components/admin/AdminKit";
 
 export default function AdminProductsPage() {
+  const reduce = useReducedMotion();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,85 +19,96 @@ export default function AdminProductsPage() {
       .then((d) => { setProducts(d); setLoading(false); });
   }, []);
 
-  const categoryBadge: Record<string, string> = {
-    template: "bg-emerald-500/20 text-emerald-300",
-    service: "bg-blue-500/20 text-blue-300",
-    saas: "bg-green-500/20 text-green-300",
-    api: "bg-orange-500/20 text-orange-300",
-    fullstack: "bg-primary/20 text-accent-soft",
-  };
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Products</h1>
-          <p className="text-sm text-muted-foreground">{products.length} products</p>
-        </div>
-        <div className="text-xs text-muted-foreground bg-surface-2 px-3 py-1.5 rounded-lg">
-          Edit via public/data/products.json
-        </div>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="02 — Catalogue"
+        title="Products"
+        description={
+          <>
+            <span className="font-mono" style={{ color: "var(--text-2)" }}>{products.length}</span> products listed in the shop
+          </>
+        }
+        actions={
+          <span className="inline-flex items-center rounded-full border border-[var(--border-mid)] bg-white/[0.03] px-3.5 py-1.5 font-mono text-xs" style={{ color: "var(--text-3)" }}>
+            Edit via public/data/products.json
+          </span>
+        }
+      />
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-surface-2 rounded-xl h-32 animate-pulse" />
-          ))}
-        </div>
+        <LoadingRegion label="Loading products">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-44 rounded-[20px]" />
+            ))}
+          </div>
+        </LoadingRegion>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {products.map((product, i) => (
-            <motion.div
+            <motion.li
               key={product.id}
-              className="bg-surface-2 border border-border rounded-xl p-4"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex flex-col rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 transition-colors hover:border-[var(--border-mid)]"
+              initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: Math.min(i, 8) * 0.04 }}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className={`text-xs px-2 py-0.5 rounded-full capitalize ${categoryBadge[product.category]}`}>
-                      {product.category}
-                    </span>
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="eyebrow">{product.category}</span>
+                    <StatusPill status={product.status} />
                     {product.featured && (
-                      <span className="text-xs bg-yellow-500/20 text-yellow-300 px-2 py-0.5 rounded-full">
-                        Featured
+                      <span className="inline-flex items-center gap-1 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 text-xs text-[var(--accent-3)]">
+                        <FaStar size={8} aria-hidden="true" /> Featured
                       </span>
                     )}
                   </div>
-                  <h3 className="font-semibold text-foreground truncate">{product.title}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{product.shortDescription}</p>
+                  <h2 className="mt-3 text-lg font-medium leading-snug" style={{ color: "var(--text-1)" }}>
+                    {product.title}
+                  </h2>
+                  <p className="mt-1 line-clamp-2 text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+                    {product.shortDescription}
+                  </p>
                 </div>
-                <div className="text-right flex-shrink-0">
-                  <p className="text-lg font-bold text-foreground">
+                <div className="shrink-0 text-right">
+                  <p className="font-mono text-lg tabular-nums" style={{ color: "var(--text-1)" }}>
                     ฿{product.price.toLocaleString()}
                   </p>
                   <Link
                     href={`/shop/${product.slug}`}
                     target="_blank"
-                    className="text-xs text-emerald-400 hover:underline flex items-center gap-1 justify-end mt-1"
+                    rel="noopener noreferrer"
+                    className="mt-1.5 inline-flex items-center gap-1.5 text-xs text-[var(--accent-3)] transition-colors hover:text-[var(--text-1)]"
                   >
-                    View <FaExternalLinkAlt size={9} />
+                    View <FaExternalLinkAlt size={8} aria-hidden="true" />
+                    <span className="sr-only">{product.title} (opens in a new tab)</span>
                   </Link>
                 </div>
               </div>
-              <div className="mt-3 flex flex-wrap gap-1">
+              <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
                 {product.techStack.slice(0, 4).map((t) => (
-                  <span key={t} className="text-xs bg-surface-3 text-muted-foreground px-1.5 py-0.5 rounded">
+                  <span
+                    key={t}
+                    className="rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-2xs"
+                    style={{ color: "var(--text-3)" }}
+                  >
                     {t}
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       )}
 
-      <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 text-sm text-blue-300">
+      <div className="rounded-[20px] border border-[var(--accent-border)] bg-[var(--accent-bg)] px-6 py-4 text-sm" style={{ color: "var(--text-2)" }}>
         To add or edit products, update{" "}
-        <code className="bg-blue-900/30 px-1 rounded">public/data/products.json</code>. Changes will reflect immediately.
+        <code className="rounded-md bg-white/[0.06] px-1.5 py-0.5 font-mono text-xs" style={{ color: "var(--accent-fg)" }}>
+          public/data/products.json
+        </code>
+        . Changes will reflect immediately.
       </div>
     </div>
   );

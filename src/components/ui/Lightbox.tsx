@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 interface LightboxProps {
@@ -25,6 +25,7 @@ interface LightboxProps {
  */
 const Lightbox: React.FC<LightboxProps> = ({ images, index, alt, onIndexChange, onClose }) => {
   const [mounted, setMounted] = useState(false);
+  const reduce = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
   const restoreFocusRef = useRef<Element | null>(null);
 
@@ -76,30 +77,43 @@ const Lightbox: React.FC<LightboxProps> = ({ images, index, alt, onIndexChange, 
   */
   const navButton =
     "absolute z-10 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center " +
-    "text-white/60 bg-white/5 border border-white/10 backdrop-blur transition-all duration-150 " +
-    "hover:text-white hover:bg-white/12 hover:border-white/25 hover:scale-105 active:scale-95";
+    "text-[var(--text-2)] bg-[var(--surface)]/80 border border-[var(--border-mid)] backdrop-blur transition-all duration-150 " +
+    "hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] hover:border-[var(--accent-border)] motion-safe:hover:scale-105 motion-safe:active:scale-95";
 
   return createPortal(
     <AnimatePresence>
       <motion.div
         key="lightbox"
         className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-10"
-        style={{ background: "rgba(6,6,10,0.94)", backdropFilter: "blur(6px)" }}
+        style={{ background: "rgba(12,9,8,0.94)", backdropFilter: "blur(6px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.18 }}
-        onClick={onClose}
         role="dialog"
         aria-modal="true"
         aria-label={`${alt} — enlarged image ${index + 1} of ${count}`}
       >
+        {/*
+          The backdrop is a real button under everything, so a click anywhere
+          outside the controls dismisses — the image above it ignores the
+          pointer. Out of the tab order: the labelled Close button is the
+          keyboard path, and Escape works too.
+        */}
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-label="Close enlarged image"
+          onClick={onClose}
+          className="absolute inset-0 h-full w-full cursor-zoom-out"
+        />
+
         <button
           ref={closeRef}
           type="button"
           onClick={onClose}
           aria-label="Close enlarged image"
-          className="absolute z-10 top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full flex items-center justify-center text-white/60 bg-white/5 border border-white/10 transition-all duration-150 hover:text-white hover:bg-white/12 hover:border-white/25 hover:rotate-90"
+          className="absolute z-10 top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-2)] bg-[var(--surface)]/80 border border-[var(--border-mid)] transition-all duration-150 hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] hover:border-[var(--accent-border)] motion-safe:hover:rotate-90"
         >
           <FaTimes size={16} />
         </button>
@@ -129,16 +143,15 @@ const Lightbox: React.FC<LightboxProps> = ({ images, index, alt, onIndexChange, 
           object-contain, not cover: the point of opening this is to see the
           whole screenshot rather than a crop of its middle.
 
-          Deliberately no stopPropagation here. `fill` makes this box cover the
-          whole overlay, so guarding it would have left only the 40px padding
-          ring closable — the dark bands beside a letterboxed screenshot, the
-          obvious place to click to dismiss, would have been dead. Clicking
-          anywhere closes; the nav and close buttons guard themselves.
+          pointer-events-none: `fill` makes this box cover the whole overlay,
+          and the clicks have to fall through to the backdrop button so the
+          dark bands beside a letterboxed screenshot — the obvious place to
+          click to dismiss — still close it.
         */}
         <motion.div
           key={images[index]}
-          className="relative w-full h-full"
-          initial={{ opacity: 0, scale: 0.97 }}
+          className="pointer-events-none relative w-full h-full"
+          initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
         >
@@ -153,11 +166,8 @@ const Lightbox: React.FC<LightboxProps> = ({ images, index, alt, onIndexChange, 
         </motion.div>
 
         {count > 1 && (
-          <span
-            className="absolute z-10 bottom-5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs tabular-nums text-white/55"
-            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
-          >
-            {index + 1} / {count}
+          <span className="absolute z-10 bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-[var(--border-mid)] bg-[var(--surface)]/80 px-3 py-1 font-mono text-2xs tabular-nums text-[var(--text-2)]">
+            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
           </span>
         )}
       </motion.div>

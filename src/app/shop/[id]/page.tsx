@@ -1,16 +1,118 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Container from "@/components/layout/Container";
-import { Button } from "@/components/ui/Button";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Product } from "@/types/shop";
 import { useTracking, usePageView } from "@/hooks/useTracking";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaCheck, FaExternalLinkAlt, FaArrowLeft, FaTimes } from "react-icons/fa";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { FaCheck, FaArrowRight, FaArrowLeft, FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 import LiveStats from "@/components/product/LiveStats";
 import ProductGallery from "@/components/product/ProductGallery";
+import { splitTitle, formatTHB } from "@/components/shop/ProductCard";
 import { liveSystemFor } from "@/lib/live-systems";
+import Spotlight from "@/components/fx/Spotlight";
+import BlurText from "@/components/fx/BlurText";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const categoryLabels: Record<string, string> = {
+  template: "Template",
+  service: "Service",
+  saas: "SaaS",
+  api: "API",
+  fullstack: "Enterprise system",
+};
+
+const primaryPill =
+  "group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3.5 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgba(255,248,240,0.6)] transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-50";
+const ghostPill =
+  "inline-flex w-full items-center justify-center gap-2 rounded-full border border-[var(--border-mid)] px-6 py-3.5 text-sm font-medium text-[var(--text-2)] transition-colors hover:border-[var(--accent-border)] hover:bg-white/[0.04] hover:text-[var(--text-1)]";
+const field =
+  "w-full rounded-xl border border-[var(--border-strong-visible)] bg-[var(--surface-2)] px-4 py-2.5 text-[var(--text-1)] placeholder:text-[var(--text-4)] transition-colors focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/40";
+
+/** A caramel check, the bullet for every list on this page. */
+function Check({ small = false }: { small?: boolean }) {
+  return (
+    <span
+      className={`mt-0.5 inline-flex shrink-0 items-center justify-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent-3)] ${small ? "h-4 w-4" : "h-5 w-5"}`}
+      aria-hidden="true"
+    >
+      <FaCheck size={small ? 7 : 8} />
+    </span>
+  );
+}
+
+/**
+ * The dialog shell shared by checkout and success: a real backdrop button to
+ * dismiss, Escape to close, focus moved in on open and back out on close.
+ */
+function Dialog({
+  labelledBy,
+  onClose,
+  children,
+  className = "",
+}: {
+  labelledBy: string;
+  onClose: () => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  const panelRef = useRef<HTMLDivElement>(null);
+  // Held in a ref so a new closure from the parent does not re-run the effect
+  // below — that would pull focus back to the first field on every render.
+  const closeRef = useRef(onClose);
+  useEffect(() => {
+    closeRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    const restore = document.activeElement as HTMLElement | null;
+    const panel = panelRef.current;
+    (panel?.querySelector<HTMLElement>("input") ?? panel?.querySelector<HTMLElement>("button"))?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeRef.current();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      restore?.focus?.();
+    };
+  }, []);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-label="Close dialog"
+        onClick={onClose}
+        className="absolute inset-0 h-full w-full cursor-default bg-black/70 backdrop-blur-sm"
+      />
+      <motion.div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={labelledBy}
+        className={`relative isolate w-full max-w-md overflow-hidden rounded-[24px] border border-[var(--border-mid)] bg-[var(--surface)] shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)] ${className}`}
+        initial={reduce ? { opacity: 0 } : { scale: 0.95, opacity: 0, y: 8 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={reduce ? { opacity: 0 } : { scale: 0.95, opacity: 0, y: 8 }}
+        transition={{ duration: 0.3, ease }}
+      >
+        <div className="absolute inset-x-[15%] top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent" aria-hidden="true" />
+        <div className="absolute left-1/2 top-0 -z-10 h-24 w-2/3 -translate-x-1/2 rounded-full bg-[var(--accent)] opacity-15 blur-3xl" aria-hidden="true" />
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
 
 function CheckoutModal({
   product,
@@ -26,11 +128,7 @@ function CheckoutModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const priceFormatted = new Intl.NumberFormat("th-TH", {
-    style: "currency",
-    currency: "THB",
-    minimumFractionDigits: 0,
-  }).format(product.price);
+  const priceFormatted = formatTHB(product.price);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,118 +159,115 @@ function CheckoutModal({
   };
 
   return (
-    <motion.div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <motion.div
-        className="bg-background border border-border rounded-2xl w-full max-w-md p-6"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-foreground">Complete Purchase</h2>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
-            <FaTimes />
-          </button>
+    <Dialog labelledBy="checkout-title" onClose={onClose} className="p-6 md:p-7">
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <p className="eyebrow">Checkout</p>
+          <h2 id="checkout-title" className="display text-silver mt-2 pb-[0.06em] text-3xl">
+            Complete <span className="accent-serif">purchase</span>
+          </h2>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close checkout"
+          className="rounded-full border border-[var(--border-mid)] p-2.5 text-[var(--text-3)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-1)]"
+        >
+          <FaTimes size={12} />
+        </button>
+      </div>
+
+      <div className="mb-6 flex items-end justify-between gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-4">
+        <p className="text-sm text-[var(--text-3)]">{product.title}</p>
+        <p className="display text-silver shrink-0 pb-[0.06em] text-2xl">{priceFormatted}</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="full-name" className="mb-1.5 block font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-3)]">Full Name *</label>
+          <input
+            id="full-name"
+            type="text"
+            required
+            value={form.buyerName}
+            onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
+            className={field}
+            placeholder="John Doe"
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="mb-1.5 block font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-3)]">Email *</label>
+          <input
+            id="email"
+            type="email"
+            required
+            value={form.buyerEmail}
+            onChange={(e) => setForm({ ...form, buyerEmail: e.target.value })}
+            className={field}
+            placeholder="you@example.com"
+          />
+        </div>
+        <div>
+          <label htmlFor="notes-optional" className="mb-1.5 block font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-3)]">Notes (optional)</label>
+          <textarea
+            id="notes-optional"
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            className={`${field} resize-none`}
+            rows={2}
+            placeholder="Any specific requirements..."
+          />
         </div>
 
-        <div className="bg-surface-2 rounded-xl p-4 mb-6">
-          <p className="text-sm text-muted-foreground">{product.title}</p>
-          <p className="text-2xl font-bold text-foreground mt-1">{priceFormatted}</p>
+        {error && (
+          <p role="alert" className="text-sm text-red-300">
+            {error}
+          </p>
+        )}
+
+        <div className="rounded-xl border border-[var(--accent-border)] bg-[var(--accent-bg)] p-3.5 text-sm leading-relaxed text-[var(--accent-fg)]">
+          After placing order, transfer via PromptPay <span className="whitespace-nowrap font-mono">095-803-9303</span> and email the slip to{" "}
+          <span className="font-mono">sumet.buarod@gmail.com</span>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="full-name" className="block text-sm text-muted-foreground mb-1">Full Name *</label>
-            <input id="full-name"
-              type="text"
-              required
-              value={form.buyerName}
-              onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
-              className="w-full bg-surface-2 border border-input rounded-lg px-4 py-2.5 text-foreground focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
-              placeholder="John Doe"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm text-muted-foreground mb-1">Email *</label>
-            <input id="email"
-              type="email"
-              required
-              value={form.buyerEmail}
-              onChange={(e) => setForm({ ...form, buyerEmail: e.target.value })}
-              className="w-full bg-surface-2 border border-input rounded-lg px-4 py-2.5 text-foreground focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div>
-            <label htmlFor="notes-optional" className="block text-sm text-muted-foreground mb-1">Notes (optional)</label>
-            <textarea id="notes-optional"
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full bg-surface-2 border border-input rounded-lg px-4 py-2.5 text-foreground focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60 resize-none"
-              rows={2}
-              placeholder="Any specific requirements..."
-            />
-          </div>
-
-          {error && <p className="text-red-400 text-sm">{error}</p>}
-
-          <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 text-sm text-blue-300">
-            After placing order, transfer via PromptPay 095-803-9303 and email the slip to sumet.buarod@gmail.com
-          </div>
-
-          <Button variant="primary" size="lg" disabled={loading} type="submit">
-            {loading ? "Placing Order..." : `Place Order — ${priceFormatted}`}
-          </Button>
-        </form>
-      </motion.div>
-    </motion.div>
+        <button type="submit" disabled={loading} className={primaryPill}>
+          {loading ? "Placing Order..." : `Place Order — ${priceFormatted}`}
+        </button>
+      </form>
+    </Dialog>
   );
 }
 
 function SuccessModal({ orderNumber, onClose }: { orderNumber: string; onClose: () => void }) {
   return (
-    <motion.div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <motion.div
-        className="bg-background border border-green-500/40 rounded-2xl w-full max-w-md p-8 text-center"
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-      >
-        <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <FaCheck className="text-green-400 text-2xl" />
-        </div>
-        <h2 className="text-2xl font-bold text-foreground mb-2">Order Placed!</h2>
-        <p className="text-muted-foreground mb-4">Your order number is:</p>
-        <p className="text-xl font-mono text-green-400 bg-surface-2 rounded-lg px-4 py-2 mb-6">
-          {orderNumber}
-        </p>
-        <p className="text-muted-foreground text-sm mb-6">
-          Transfer via PromptPay <strong className="text-foreground">095-803-9303</strong> and email
-          the slip to <strong className="text-foreground">sumet.buarod@gmail.com</strong> with your
-          order number. Delivery within 24 hours.
-        </p>
-        <Button variant="primary" onClick={onClose}>Done</Button>
-      </motion.div>
-    </motion.div>
+    <Dialog labelledBy="success-title" onClose={onClose} className="p-8 text-center">
+      <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-[var(--accent-border)] bg-[var(--green-bg)] text-[var(--green)]">
+        <FaCheck size={20} aria-hidden="true" />
+      </div>
+      <h2 id="success-title" className="display text-silver pb-[0.06em] text-3xl">
+        Order <span className="accent-serif">placed!</span>
+      </h2>
+      <p className="mt-3 text-sm text-[var(--text-3)]">Your order number is:</p>
+      <p className="mt-2 rounded-xl border border-[var(--border-mid)] bg-[var(--surface-2)] px-4 py-2.5 font-mono text-lg text-[var(--green)]">
+        {orderNumber}
+      </p>
+      <p className="mt-5 text-sm leading-relaxed text-[var(--text-3)]">
+        Transfer via PromptPay <strong className="font-medium text-[var(--text-1)]">095-803-9303</strong> and email
+        the slip to <strong className="font-medium text-[var(--text-1)]">sumet.buarod@gmail.com</strong> with your
+        order number. Delivery within 24 hours.
+      </p>
+      <button type="button" onClick={onClose} className={`${primaryPill} mt-7`}>
+        Done
+      </button>
+    </Dialog>
   );
 }
 
 export default function ProductDetailPage() {
   usePageView();
   const { track } = useTracking();
+  const reduce = useReducedMotion();
   const params = useParams();
-  const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCheckout, setShowCheckout] = useState(false);
@@ -191,165 +286,238 @@ export default function ProductDetailPage() {
   }, [params.id, track]);
 
   const liveSystem = liveSystemFor(product?.slug);
+  const priceFormatted = product ? formatTHB(product.price) : "";
 
-  const priceFormatted = product
-    ? new Intl.NumberFormat("th-TH", {
-        style: "currency",
-        currency: "THB",
-        minimumFractionDigits: 0,
-      }).format(product.price)
-    : "";
+  const fade = (delay: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.7, ease, delay },
+  });
+
+  const backLink = (
+    <Link
+      href="/shop"
+      className="group inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-3.5 py-1.5 font-mono text-2xs uppercase tracking-[0.12em] text-[var(--text-3)] transition-colors hover:border-[var(--border-mid)] hover:text-[var(--text-1)]"
+    >
+      <FaArrowLeft size={9} className="transition-transform group-hover:-translate-x-0.5" aria-hidden="true" />
+      Back to Shop
+    </Link>
+  );
 
   if (loading)
     return (
-      <Container className="py-24 text-center">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
-      </Container>
+      <div className="mx-auto box-content max-w-[1200px] px-5 py-16 md:px-10" aria-busy="true">
+        <span className="sr-only">Loading product</span>
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]" aria-hidden="true">
+          <div>
+            <div className="skeleton-luxury h-6 w-40 rounded-full" />
+            <div className="skeleton-luxury mt-6 h-16 w-3/4" />
+            <div className="skeleton-luxury mt-10 aspect-[16/10] w-full rounded-[22px]" />
+          </div>
+          <div className="skeleton-luxury h-[28rem] rounded-[24px]" />
+        </div>
+      </div>
     );
+
   if (!product)
     return (
-      <Container className="py-24 text-center">
-        <p className="text-muted-foreground">Product not found.</p>
-      </Container>
+      <div className="relative isolate overflow-hidden px-5 py-28 text-center md:px-10">
+        <div className="dot-grid absolute inset-0 -z-10" aria-hidden="true" />
+        <p className="eyebrow">404 · Shop</p>
+        <h1 className="display text-silver mx-auto mt-4 max-w-xl pb-[0.06em] text-5xl">
+          Product <span className="accent-serif">not found.</span>
+        </h1>
+        <p className="mt-4 text-sm text-[var(--text-3)]">Product not found.</p>
+        <div className="mt-8 flex justify-center">{backLink}</div>
+      </div>
     );
 
+  const { name, expansion } = splitTitle(product.title);
+  const hasDemo = product.demoUrl !== "#";
+
   return (
-    <Container className="py-16">
-      <button
-        onClick={() => router.push('/shop')}
-        className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors"
-      >
-        <FaArrowLeft size={12} /> Back to Shop
-      </button>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Left: Info */}
-        <div>
-          <div className="mb-8">
-            <ProductGallery images={product.images} title={product.title} />
-          </div>
-
-          <div className="flex items-center gap-2 mb-4">
-            <span className="bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full capitalize">
-              {product.category}
+    <div className="bg-[var(--background)]">
+      {/* Header */}
+      <section className="relative isolate overflow-hidden px-5 pb-10 pt-10 md:-mt-20 md:px-10 md:pb-12 md:pt-32">
+        <div className="dot-grid absolute inset-0 -z-10" aria-hidden="true" />
+        <Spotlight className="-z-10" />
+        <div className="mx-auto max-w-[1200px]">
+          <motion.div {...fade(0)} className="flex flex-wrap items-center gap-2">
+            {backLink}
+            <span className="rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 font-mono text-2xs text-[var(--accent-fg)]">
+              {categoryLabels[product.category] ?? product.category}
             </span>
             {product.featured && (
-              <span className="bg-accent/20 text-yellow-300 text-xs font-semibold px-3 py-1 rounded-full">
+              <span className="rounded-full border border-[var(--border-mid)] px-2.5 py-0.5 font-mono text-2xs text-[var(--text-2)]">
                 Featured
               </span>
             )}
-          </div>
-          <h1 className="display text-4xl md:text-6xl text-foreground mb-5">{product.title}</h1>
-          <p className="text-ink-2 text-lg mb-8 leading-relaxed">{product.longDescription}</p>
+          </motion.div>
 
-          <h3 className="text-lg font-semibold text-foreground mb-4">What is Included</h3>
-          <ul className="space-y-2 mb-8">
-            {product.features.map((f) => (
-              <li key={f} className="flex items-start gap-3 text-ink-2">
-                <FaCheck className="text-green-400 mt-1 flex-shrink-0" size={12} />
-                {f}
-              </li>
-            ))}
-          </ul>
-
-          <h3 className="text-lg font-semibold text-foreground mb-3">Tech Stack</h3>
-          <div className="flex flex-wrap gap-2 mb-8">
-            {product.techStack.map((t) => (
-              <span key={t} className="bg-surface-3 text-ink-2 text-sm px-3 py-1 rounded-lg">
-                {t}
+          <h1 className="display mt-7 max-w-4xl text-[clamp(2.75rem,7vw,5.75rem)]">
+            <BlurText text={name} wordClassName="text-silver pb-[0.08em]" />
+            {expansion && (
+              <span className="mt-2 block text-[clamp(1.5rem,3.5vw,2.875rem)]">
+                <BlurText text={expansion} delay={0.2} wordClassName="accent-serif pb-[0.1em]" />
               </span>
-            ))}
-          </div>
-
-          {liveSystem && (
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-3">Live System Stats</h3>
-              <LiveStats system={liveSystem} />
-            </div>
-          )}
-
-          <h3 className="text-lg font-semibold text-foreground mb-3">Deliverables</h3>
-          <ul className="space-y-2">
-            {product.deliverables.map((d) => (
-              <li key={d} className="flex items-start gap-3 text-muted-foreground text-sm">
-                <FaCheck className="text-primary mt-1 flex-shrink-0" size={11} />
-                {d}
-              </li>
-            ))}
-          </ul>
+            )}
+          </h1>
+          <motion.p {...fade(0.35)} className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--text-2)] md:text-lg">
+            {product.longDescription}
+          </motion.p>
         </div>
+      </section>
 
-        {/* Right: Buy panel */}
-        <div>
-          <div className="sticky top-24 bg-surface-2 border border-border rounded-2xl p-6">
-            <div className="text-4xl font-bold text-foreground mb-1">{priceFormatted}</div>
-            <p className="text-muted-foreground text-sm mb-6">One-time payment · Lifetime access</p>
+      <div className="mx-auto box-content grid max-w-[1200px] gap-x-12 gap-y-14 px-5 pb-24 md:px-10 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        {/* Gallery */}
+        <motion.div {...fade(0.45)} className="lg:col-start-1 lg:row-start-1">
+          <ProductGallery images={product.images} title={product.title} />
+        </motion.div>
 
-            <div className="space-y-3">
-              <Button
-                variant="primary"
-                size="lg"
+        {/* Buy panel: sticky, on a lit card. Placed second so it follows the
+            gallery on a phone instead of sitting below every section. */}
+        <aside className="lg:col-start-2 lg:row-span-2 lg:row-start-1" aria-label="Purchase">
+          <motion.div
+            {...fade(0.55)}
+            className="relative isolate overflow-hidden rounded-[24px] border border-[var(--border-mid)] bg-[var(--surface)] p-6 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] md:p-7 lg:sticky lg:top-24"
+          >
+            <div className="dot-grid absolute inset-0 -z-10 opacity-60" aria-hidden="true" />
+            <div className="absolute inset-x-[12%] top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent" aria-hidden="true" />
+            <div className="absolute left-1/2 top-0 -z-10 h-28 w-3/4 -translate-x-1/2 rounded-full bg-[var(--accent)] opacity-20 blur-3xl" aria-hidden="true" />
+
+            <p className="eyebrow">Full source licence</p>
+            <p className="display text-silver mt-3 pb-[0.06em] text-[clamp(2.75rem,5vw,3.75rem)]">{priceFormatted}</p>
+            <p className="mt-1 text-sm text-[var(--text-3)]">One-time payment · Lifetime access</p>
+
+            <div className="mt-6 space-y-3">
+              <button
+                type="button"
+                className={primaryPill}
                 onClick={() => {
                   track("checkout_start", product.id);
                   setShowCheckout(true);
                 }}
               >
                 Buy Now
-              </Button>
-              {product.demoUrl !== "#" && (
+                <FaArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+              </button>
+              {hasDemo && (
                 <a
                   href={product.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full border border-input text-ink-2 hover:text-foreground rounded-xl py-3 text-sm font-medium transition-colors"
+                  className={ghostPill}
                   onClick={() => track("demo_click", product.id)}
                 >
-                  <FaExternalLinkAlt size={12} /> View Live Demo
+                  <FaExternalLinkAlt size={11} aria-hidden="true" /> View Live Demo
                 </a>
               )}
-              {product.demoLogin && product.demoLogin.length > 0 && (
-                <div className="rounded-xl border border-border bg-muted/40 p-3 text-xs">
-                  <p className="mb-2 font-semibold text-foreground">Demo login</p>
-                  <p className="mb-2 text-muted-foreground">
+            </div>
+
+            {product.demoLogin && product.demoLogin.length > 0 && (
+              <div className="mt-5 overflow-hidden rounded-2xl border border-[var(--border-mid)] bg-[var(--background)] font-mono text-2xs">
+                <div className="flex items-center gap-1.5 border-b border-[var(--border)] px-3.5 py-2.5" aria-hidden="true">
+                  <span className="h-2 w-2 rounded-full bg-[var(--surface-3)]" />
+                  <span className="h-2 w-2 rounded-full bg-[var(--surface-3)]" />
+                  <span className="h-2 w-2 rounded-full bg-[var(--surface-3)]" />
+                  <span className="ml-2 text-[var(--text-4)]">demo-credentials</span>
+                </div>
+                <div className="px-3.5 py-3">
+                  <p className="font-semibold uppercase tracking-[0.12em] text-[var(--accent-3)]">Demo login</p>
+                  <p className="mt-1.5 font-sans text-xs leading-relaxed text-[var(--text-3)]">
                     Sign in to the live demo with any of these seeded accounts. Data resets and is shared, so do not enter anything private.
                   </p>
-                  <ul className="space-y-1.5">
+                  <ul className="mt-3 space-y-2">
                     {product.demoLogin.map((account) => (
-                      <li key={account.email} className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                        <span className="w-24 shrink-0 text-muted-foreground">{account.role}</span>
-                        <code className="rounded bg-background px-1.5 py-0.5 font-mono text-foreground">{account.email}</code>
-                        <code className="rounded bg-background px-1.5 py-0.5 font-mono text-foreground">{account.password}</code>
+                      <li key={account.email} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span className="w-20 shrink-0 text-[var(--text-3)]">{account.role}</span>
+                        <code className="rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-1.5 py-0.5 text-[var(--text-1)]">{account.email}</code>
+                        <code className="rounded-md border border-[var(--border)] bg-[var(--surface-2)] px-1.5 py-0.5 text-[var(--accent-fg)]">{account.password}</code>
                       </li>
                     ))}
                   </ul>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
-            <div className="mt-6 pt-6 border-t border-border space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <FaCheck className="text-green-400" size={11} /> Source code included
-              </div>
-              <div className="flex items-center gap-2">
-                <FaCheck className="text-green-400" size={11} /> Setup documentation
-              </div>
-              <div className="flex items-center gap-2">
-                <FaCheck className="text-green-400" size={11} /> Email support after purchase
-              </div>
-            </div>
+            <ul className="mt-6 space-y-2.5 border-t border-[var(--border)] pt-6 text-sm text-[var(--text-2)]">
+              <li className="flex items-center gap-2.5"><Check small /> Source code included</li>
+              <li className="flex items-center gap-2.5"><Check small /> Setup documentation</li>
+              <li className="flex items-center gap-2.5"><Check small /> Email support after purchase</li>
+            </ul>
 
-            <div className="mt-6 pt-6 border-t border-border text-sm text-muted-foreground">
-              <p className="mb-1 font-medium text-muted-foreground">Payment via PromptPay</p>
-              <p>095-803-9303 · Sumet B.</p>
-              <p className="mt-1">After payment, email slip to sumet.buarod@gmail.com</p>
+            <div className="mt-6 rounded-2xl border border-[var(--border)] bg-white/[0.02] p-4 text-sm">
+              <p className="eyebrow">Payment via PromptPay</p>
+              <p className="mt-2 font-mono text-[var(--text-1)]">095-803-9303 · Sumet B.</p>
+              <p className="mt-1 text-[var(--text-3)]">After payment, email slip to sumet.buarod@gmail.com</p>
             </div>
-          </div>
+          </motion.div>
+        </aside>
+
+        {/* Sections */}
+        <div className="space-y-14 lg:col-start-1 lg:row-start-2">
+          <section aria-labelledby="included-title">
+            <p className="eyebrow rule">01 · Included</p>
+            <h2 id="included-title" className="display text-silver mt-4 pb-[0.06em] text-3xl md:text-4xl">
+              What is <span className="accent-serif">included</span>
+            </h2>
+            <ul className="mt-6 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              {product.features.map((f) => (
+                <li key={f} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--text-2)]">
+                  <Check />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section aria-labelledby="stack-title">
+            <p className="eyebrow rule">02 · Stack</p>
+            <h2 id="stack-title" className="display text-silver mt-4 pb-[0.06em] text-3xl md:text-4xl">
+              Tech <span className="accent-serif">stack</span>
+            </h2>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {product.techStack.map((t) => (
+                <li key={t} className="rounded-full border border-[var(--border-mid)] bg-white/[0.02] px-3 py-1 font-mono text-xs text-[var(--text-2)]">
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {liveSystem && (
+            <section aria-labelledby="live-title">
+              <p className="eyebrow rule">03 · Live</p>
+              <h2 id="live-title" className="display text-silver mt-4 pb-[0.06em] text-3xl md:text-4xl">
+                Live system <span className="accent-serif">stats</span>
+              </h2>
+              <div className="mt-6">
+                <LiveStats system={liveSystem} />
+              </div>
+            </section>
+          )}
+
+          <section aria-labelledby="deliverables-title">
+            <p className="eyebrow rule">{liveSystem ? "04" : "03"} · Deliverables</p>
+            <h2 id="deliverables-title" className="display text-silver mt-4 pb-[0.06em] text-3xl md:text-4xl">
+              What you <span className="accent-serif">receive</span>
+            </h2>
+            <ul className="mt-6 space-y-3">
+              {product.deliverables.map((d) => (
+                <li key={d} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--text-2)]">
+                  <Check small />
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
       </div>
 
       <AnimatePresence>
         {showCheckout && (
           <CheckoutModal
+            key="checkout"
             product={product}
             onClose={() => setShowCheckout(false)}
             onSuccess={(num) => {
@@ -360,11 +528,12 @@ export default function ProductDetailPage() {
         )}
         {orderNumber && (
           <SuccessModal
+            key="success"
             orderNumber={orderNumber}
             onClose={() => setOrderNumber("")}
           />
         )}
       </AnimatePresence>
-    </Container>
+    </div>
   );
 }

@@ -1,56 +1,98 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import SpotlightCard from "@/components/fx/SpotlightCard";
 
-interface TimelineItem {
+export interface TimelineItem {
   title: string;
   subtitle: string;
   period: string;
   description: string;
+  /** Optional mono label, e.g. "Work" or "Education". */
+  tag?: string;
 }
 
 interface TimelineProps {
   items: TimelineItem[];
 }
 
-const Timeline: React.FC<TimelineProps> = ({ items }) => {
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  };
+const ease = [0.22, 1, 0.36, 1] as const;
 
-  const itemVariant = {
-    hidden: { opacity: 0, x: -50 },
-    show: { opacity: 1, x: 0 },
-  };
+/** A long description reads better as its sentences; every word is kept. */
+function sentences(text: string): string[] {
+  const parts = text.split(/\.\s+(?=[A-Z])/);
+  return parts.map((s, i) => (i < parts.length - 1 ? `${s}.` : s)).filter(Boolean);
+}
+
+/**
+ * Vertical timeline whose rail fills with a glowing caramel line as the
+ * section scrolls past (Aceternity "Timeline"). Period on the left at md+,
+ * above the card on mobile; each entry is a SpotlightCard.
+ *
+ * Rail geometry: the rail, its fill and every dot share one centre line,
+ * 12.5px from the left on mobile and 220.5px at md+.
+ */
+const Timeline: React.FC<TimelineProps> = ({ items }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 70%", "end 55%"] });
+  const fill = useSpring(scrollYProgress, { stiffness: 140, damping: 28, restDelta: 0.001 });
 
   return (
-    <motion.div 
-        className="relative border-l-2 border-primary/30 ml-6"
-        variants={container}
-        initial="hidden"
-        animate="show"
-    >
-      {items.map((item, index) => (
-        <motion.div key={index} className="mb-10 ml-10" variants={itemVariant}>
-            <span className="absolute flex items-center justify-center w-8 h-8 bg-primary rounded-full -left-4 ring-8 ring-background">
-                <svg className="w-4 h-4 text-accent-fg" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"></path></svg>
+    <div ref={ref} className="relative">
+      <div aria-hidden="true" className="absolute bottom-2 left-[12px] top-2 w-px bg-[var(--border-mid)] md:left-[220px]" />
+      <motion.div
+        aria-hidden="true"
+        className="absolute bottom-2 left-[11.5px] top-2 w-[2px] origin-top rounded-full bg-gradient-to-b from-[var(--accent-fg)] via-[var(--accent)] to-[var(--accent-2)] shadow-[0_0_14px_2px_rgba(224,168,120,0.45)] md:left-[219.5px]"
+        style={{ scaleY: reduce ? 1 : fill }}
+      />
+
+      <ol className="space-y-12 md:space-y-16">
+        {items.map((item) => (
+          <li key={`${item.title}-${item.period}`} className="relative grid md:grid-cols-[220px_1fr]">
+            <span
+              aria-hidden="true"
+              className="absolute left-[5.5px] top-px h-[14px] w-[14px] rounded-full border border-[var(--accent-border)] bg-[var(--background)] md:left-[213.5px] md:top-[34px]"
+            >
+              <motion.span
+                className="absolute inset-[3px] rounded-full bg-[var(--accent-3)] shadow-[0_0_12px_3px_rgba(224,168,120,0.6)]"
+                initial={reduce ? false : { scale: 0, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true, margin: "0px 0px -35% 0px" }}
+                transition={{ duration: 0.5, ease }}
+              />
             </span>
-          <h3 className="flex items-center mb-1 text-lg font-semibold text-foreground">
-            {item.title}{' '}
-            <span className="text-secondary text-sm font-medium mr-2 px-2.5 py-0.5 rounded ml-3">{item.subtitle}</span>
-          </h3>
-          <time className="block mb-2 text-sm font-normal leading-none text-muted-foreground">{item.period}</time>
-          <p className="mb-4 text-base font-normal text-muted-foreground">{item.description}</p>
-        </motion.div>
-      ))}
-    </motion.div>
+
+            <div className="pl-10 md:pl-0 md:pr-10 md:pt-8 md:text-right">
+              <p className="font-mono text-xs text-[var(--accent-3)]">{item.period}</p>
+              {item.tag && <p className="eyebrow mt-1.5">{item.tag}</p>}
+            </div>
+
+            <motion.div
+              className="mt-4 pl-10 md:mt-0"
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, ease }}
+            >
+              <SpotlightCard className="p-6 md:p-8">
+                <h3 className="text-lg font-medium text-[var(--text-1)] md:text-xl">{item.title}</h3>
+                <p className="mt-1 text-sm text-[var(--accent-3)]">{item.subtitle}</p>
+                <ul className="mt-5 space-y-2.5">
+                  {sentences(item.description).map((line) => (
+                    <li key={line} className="flex gap-3 text-sm leading-relaxed text-[var(--text-2)]">
+                      <span aria-hidden="true" className="mt-[0.7em] h-px w-3 shrink-0 bg-[var(--accent)]" />
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </SpotlightCard>
+            </motion.div>
+          </li>
+        ))}
+      </ol>
+    </div>
   );
 };
 

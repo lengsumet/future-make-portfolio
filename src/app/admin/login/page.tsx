@@ -3,11 +3,14 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiLock, FiEye, FiEyeOff, FiArrowLeft, FiAlertCircle } from "react-icons/fi";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { FiEye, FiEyeOff, FiArrowLeft, FiAlertCircle } from "react-icons/fi";
+import Spotlight from "@/components/fx/Spotlight";
+import SpotlightCard from "@/components/fx/SpotlightCard";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const reduce = useReducedMotion();
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
@@ -59,171 +62,117 @@ export default function AdminLoginPage() {
     }
   };
 
+  const shake = shakeKey > 0 && !reduce;
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
-      style={{ background: "var(--background, #0a0a0f)" }}
-    >
-      {/* Aurora bg */}
-      <div className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full opacity-25"
-          style={{
-            background: "radial-gradient(ellipse, #6366f1 0%, #8b5cf6 40%, transparent 70%)",
-            filter: "blur(80px)",
-          }}
-        />
-      </div>
+    <div className="relative isolate flex min-h-screen items-center justify-center overflow-hidden bg-[var(--background)] p-4">
+      <div className="dot-grid absolute inset-0 -z-10" aria-hidden="true" />
+      <Spotlight className="-z-10" />
 
       <motion.div
         key={shakeKey}
         className="relative w-full max-w-sm"
-        initial={{ opacity: shakeKey === 0 ? 0 : 1, y: shakeKey === 0 ? 28 : 0, scale: shakeKey === 0 ? 0.97 : 1 }}
-        animate={shakeKey > 0
-          ? { x: [0, -10, 10, -8, 8, -4, 4, 0] }
-          : { opacity: 1, y: 0, scale: 1 }
-        }
-        transition={shakeKey > 0
-          ? { duration: 0.45, ease: "easeInOut" }
-          : { type: "spring", stiffness: 100, damping: 20 }
-        }
+        initial={shakeKey === 0 && !reduce ? { opacity: 0, y: 20 } : false}
+        animate={shake ? { x: [0, -10, 10, -8, 8, -4, 4, 0] } : { opacity: 1, y: 0 }}
+        transition={shake ? { duration: 0.45, ease: "easeInOut" } : { duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Card */}
-        <div
-          className="rounded-2xl p-8"
-          style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            backdropFilter: "blur(16px)",
-          }}
-        >
-          {/* Icon */}
-          <div className="flex justify-center mb-6">
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center"
-              style={{
-                background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2))",
-                border: "1px solid rgba(99,102,241,0.35)",
-              }}
-            >
-              <FiLock size={22} style={{ color: "#a5b4fc" }} />
-            </div>
-          </div>
+        {/* a soft caramel glow under the card */}
+        <div className="pointer-events-none absolute -inset-x-10 -top-16 h-48 rounded-full bg-[var(--accent)] opacity-20 blur-3xl" aria-hidden="true" />
 
-          {/* Heading */}
-          <div className="text-center mb-8">
-            <h1
-              className="text-2xl font-bold mb-1"
-              style={{ color: "#fff" }}
-            >
-              Admin Panel
-            </h1>
-            <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
-              Sumet Buarod Portfolio
+        {/* a lit hairline along the card's top edge, as on the site nav */}
+        <span className="pointer-events-none absolute inset-x-10 top-0 z-10 h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent" aria-hidden="true" />
+
+        <SpotlightCard className="p-8 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]">
+          <div className="flex flex-col items-center text-center">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--accent-fg)] to-[var(--accent-2)] text-sm font-bold text-[var(--background)] shadow-[0_0_40px_-8px_rgba(224,168,120,0.6)]">
+              SB
+            </span>
+            <p className="eyebrow mt-6">Back office</p>
+            <h1 className="display text-silver mt-3 pb-[0.06em] text-4xl">Sign in</h1>
+            <p className="mt-2 text-sm" style={{ color: "var(--text-3)" }}>
+              Sumet Buarod — portfolio admin
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-            {/* Password field */}
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4" noValidate>
             <div>
-              <label htmlFor="password"
-                className="block text-xs mb-2 tracking-wide"
-                style={{ color: "rgba(255,255,255,0.4)" }}
-              >
+              <label htmlFor="password" className="mb-2 block text-xs" style={{ color: "var(--text-2)" }}>
                 Password
               </label>
               <div className="relative">
-                <input id="password"
+                <input
+                  id="password"
                   type={showPw ? "text" : "password"}
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); if (error) setError(""); }}
-                  className="w-full rounded-xl px-4 py-3 pr-11 text-sm transition-all duration-200 outline-none"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px solid ${error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.08)"}`,
-                    color: "#fff",
-                  }}
+                  autoComplete="current-password"
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? "login-error" : undefined}
+                  className={`w-full rounded-xl! border bg-[var(--surface-2)] px-4 py-3 pr-11 text-sm text-[var(--text-1)] transition-colors placeholder:text-[var(--text-4)] focus:border-[var(--accent)] ${
+                    error ? "border-red-400/50" : "border-[var(--border-mid)]"
+                  }`}
                   placeholder="Enter admin password"
-                  onFocus={e => (e.currentTarget.style.borderColor = "rgba(99,102,241,0.6)")}
-                  onBlur={e => (e.currentTarget.style.borderColor = error ? "rgba(239,68,68,0.5)" : "rgba(255,255,255,0.08)")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors duration-150"
-                  style={{ color: "rgba(255,255,255,0.25)" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.25)")}
+                  aria-label={showPw ? "Hide password" : "Show password"}
+                  aria-pressed={showPw}
+                  className="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full! text-[var(--text-3)] transition-colors hover:text-[var(--text-1)]"
                 >
-                  {showPw ? <FiEyeOff size={15} /> : <FiEye size={15} />}
+                  {showPw ? <FiEyeOff size={15} aria-hidden="true" /> : <FiEye size={15} aria-hidden="true" />}
                 </button>
               </div>
             </div>
 
-            {/* Error */}
             <AnimatePresence>
               {error && (
                 <motion.div
-                  className="flex items-start gap-2 rounded-xl px-3 py-2.5"
-                  style={{
-                    background: "rgba(239,68,68,0.1)",
-                    border: "1px solid rgba(239,68,68,0.25)",
-                  }}
-                  initial={{ opacity: 0, y: -6, height: 0 }}
+                  id="login-error"
+                  role="alert"
+                  className="flex items-start gap-2 rounded-xl border border-red-400/25 bg-red-500/10 px-3 py-2.5 text-red-300"
+                  initial={reduce ? false : { opacity: 0, y: -6, height: 0 }}
                   animate={{ opacity: 1, y: 0, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <FiAlertCircle size={14} className="mt-0.5 shrink-0" style={{ color: "#f87171" }} />
-                  <p className="text-xs leading-snug" style={{ color: "#f87171" }}>
-                    {error}
-                  </p>
+                  <FiAlertCircle size={14} className="mt-0.5 shrink-0" aria-hidden="true" />
+                  <p className="text-xs leading-snug">{error}</p>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Submit */}
-            <motion.button
+            <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl text-sm font-semibold transition-opacity duration-150 disabled:opacity-50"
-              style={{
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                color: "#fff",
-                boxShadow: "0 0 24px rgba(99,102,241,0.35)",
-              }}
-              whileHover={{ opacity: 0.88 }}
-              whileTap={{ scale: 0.98 }}
+              className="flex w-full items-center justify-center gap-2 rounded-full! bg-[var(--text-1)] py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_40px_-12px_rgba(255,248,240,0.5)] transition-[opacity,transform] hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? (
-                <span className="flex items-center justify-center gap-2">
+                <>
                   <motion.span
-                    className="w-3.5 h-3.5 rounded-full border-2 border-white/30 border-t-white"
-                    animate={{ rotate: 360 }}
+                    className="inline-block h-3.5 w-3.5 rounded-full border-2 border-[rgba(12,9,8,0.25)] border-t-[var(--background)]"
+                    animate={reduce ? undefined : { rotate: 360 }}
                     transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
-                    style={{ display: "inline-block" }}
+                    aria-hidden="true"
                   />
-                  Logging in...
-                </span>
-              ) : "Login"}
-            </motion.button>
+                  Signing in…
+                </>
+              ) : (
+                "Sign in"
+              )}
+            </button>
           </form>
 
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs transition-colors duration-150"
-              style={{ color: "rgba(255,255,255,0.25)" }}
-              onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
-              onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.25)")}
+              className="inline-flex items-center gap-1.5 text-xs text-[var(--text-3)] transition-colors hover:text-[var(--text-1)]"
             >
-              <FiArrowLeft size={12} />
+              <FiArrowLeft size={12} aria-hidden="true" />
               Back to site
             </Link>
           </div>
-
-
-        </div>
+        </SpotlightCard>
       </motion.div>
     </div>
   );

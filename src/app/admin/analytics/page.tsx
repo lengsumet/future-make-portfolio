@@ -1,14 +1,31 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { FaUsers, FaFileAlt, FaClock, FaBullseye } from "react-icons/fa";
+import { motion, useReducedMotion } from "framer-motion";
 import { Skeleton, SkeletonStat, LoadingRegion } from "@/components/ui/Skeleton";
 import { PageViewsChart, TopPagesChart } from "@/components/admin/AnalyticsChart";
+import { DashboardStats, type StatCard } from "@/components/admin/DashboardStats";
+import { PageHeader, Panel, Segmented } from "@/components/admin/AdminKit";
 import { AnalyticsSummary } from "@/types/analytics";
-import { motion } from "framer-motion";
+
+type Range = "7d" | "30d" | "90d";
+
+/**
+ * The endpoint sends avgTimeOnSite (seconds) and conversionRate (percent) as
+ * plain numbers although the type says string. Read either, so a number
+ * shows with its unit and a preformatted string shows as sent.
+ */
+function measure(raw: string | number, suffix: string): Pick<StatCard, "value" | "suffix"> {
+  const n = typeof raw === "number" ? raw : Number(String(raw).replace(suffix, "").trim());
+  if (!Number.isFinite(n) || (typeof raw === "string" && raw.trim() === "")) return { value: String(raw) };
+  return { value: Number.isInteger(n) ? n : n.toFixed(1), suffix };
+}
 
 export default function AdminAnalyticsPage() {
+  const reduce = useReducedMotion();
   const [data, setData] = useState<{ summary: AnalyticsSummary } | null>(null);
-  const [range, setRange] = useState("7d");
+  const [range, setRange] = useState<Range>("7d");
 
   const [loading, setLoading] = useState(true);
 
@@ -26,70 +43,53 @@ export default function AdminAnalyticsPage() {
 
   const summary = data?.summary;
 
-  const overviewStats = summary
+  const overviewStats: StatCard[] = summary
     ? [
-        { label: "Total Visitors", value: summary.totalVisitors.toLocaleString(), icon: "👥" },
-        { label: "Page Views", value: summary.totalPageViews.toLocaleString(), icon: "📄" },
-        { label: "Avg Time on Site", value: summary.avgTimeOnSite, icon: "⏱️" },
-        { label: "Conversion Rate", value: summary.conversionRate, icon: "🎯" },
+        { label: "Visitors", value: summary.totalVisitors, icon: FaUsers, sub: "Unique sessions" },
+        { label: "Page views", value: summary.totalPageViews, icon: FaFileAlt, sub: "All tracked pages" },
+        { label: "Avg time on site", ...measure(summary.avgTimeOnSite, "s"), icon: FaClock, sub: "Per session" },
+        { label: "Conversion", ...measure(summary.conversionRate, "%"), icon: FaBullseye, sub: "Views → purchase" },
       ]
     : [];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Analytics</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Usage data and visitor behavior</p>
-        </div>
-        <div className="flex gap-2">
-          {["7d", "30d", "90d"].map((r) => (
-            <button
-              key={r}
-              onClick={() => setRange(r)}
-              className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
-                range === r ? "bg-emerald-600 text-foreground" : "bg-surface-2 text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {r}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="04 — Insight"
+        title="Analytics"
+        description="Usage data and visitor behaviour."
+        actions={
+          <Segmented<Range>
+            label="Date range"
+            value={range}
+            onChange={setRange}
+            options={(["7d", "30d", "90d"] as const).map((r) => ({
+              value: r,
+              label: <span className="font-mono text-xs">{r}</span>,
+            }))}
+          />
+        }
+      />
 
       {/* Overview stats */}
       {loading ? (
         <LoadingRegion label="Loading analytics">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 4 }).map((_, i) => <SkeletonStat key={i} />)}
           </div>
         </LoadingRegion>
       ) : (
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {overviewStats.map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            className="bg-surface-2 border border-border rounded-xl p-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
-          >
-            <span className="text-2xl">{stat.icon}</span>
-            <p className="text-xl font-bold text-foreground mt-2">{stat.value}</p>
-            <p className="text-xs text-muted-foreground">{stat.label}</p>
-          </motion.div>
-        ))}
-      </div>
+        <DashboardStats stats={overviewStats} />
       )}
 
       {/* Charts */}
       {loading && (
         <LoadingRegion label="Loading charts">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             {Array.from({ length: 2 }).map((_, i) => (
-              <div key={i} className="bg-surface-2 border border-border rounded-xl p-5">
-                <Skeleton className="h-3 w-32 mb-4" />
-                <Skeleton className="h-48 w-full" />
+              <div key={i} className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6">
+                <Skeleton className="mb-6 h-3 w-32" />
+                <Skeleton className="h-52 w-full" />
               </div>
             ))}
           </div>
@@ -97,65 +97,67 @@ export default function AdminAnalyticsPage() {
       )}
 
       {!loading && summary && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <PageViewsChart data={summary.dailyViews} title="Page Views (Last 7 Days)" />
-          <TopPagesChart data={summary.topPages} title="Top Pages" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <PageViewsChart data={summary.dailyViews} title="Page views — last 7 days" />
+          <TopPagesChart data={summary.topPages} title="Top pages" />
         </div>
       )}
 
-      {/* Shop Funnel */}
+      {/* Shop funnel */}
       {summary && (
         <motion.div
-          className="bg-surface-2 border border-border rounded-xl p-5"
-          initial={{ opacity: 0, y: 20 }}
+          initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
         >
-          <h2 className="text-sm font-semibold text-ink-2 mb-5">Shop Conversion Funnel</h2>
-          <div className="space-y-3">
-            {[
-              {
-                label: "Product Views",
-                value: summary.shopFunnel.productViews,
-                pct: 100,
-                color: "bg-emerald-500",
-              },
-              {
-                label: "Checkout Starts",
-                value: summary.shopFunnel.checkoutStarts,
-                pct:
-                  summary.shopFunnel.productViews > 0
-                    ? Math.round((summary.shopFunnel.checkoutStarts / summary.shopFunnel.productViews) * 100)
-                    : 0,
-                color: "bg-blue-500",
-              },
-              {
-                label: "Purchases Completed",
-                value: summary.shopFunnel.purchases,
-                pct:
-                  summary.shopFunnel.productViews > 0
-                    ? Math.round((summary.shopFunnel.purchases / summary.shopFunnel.productViews) * 100)
-                    : 0,
-                color: "bg-green-500",
-              },
-            ].map((step) => (
-              <div key={step.label} className="flex items-center gap-4">
-                <div className="w-36 text-sm text-muted-foreground flex-shrink-0">{step.label}</div>
-                <div className="flex-1 bg-surface-3 rounded-full h-2.5">
-                  <motion.div
-                    className={`${step.color} h-2.5 rounded-full`}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${step.pct}%` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                  />
-                </div>
-                <div className="w-20 text-right text-sm">
-                  <span className="text-foreground font-medium">{step.value}</span>
-                  <span className="text-muted-foreground ml-1">({step.pct}%)</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Panel title="Shop conversion funnel">
+            <ol className="space-y-5">
+              {[
+                {
+                  label: "Product views",
+                  value: summary.shopFunnel.productViews,
+                  pct: 100,
+                  color: "bg-[var(--accent-3)]",
+                },
+                {
+                  label: "Checkout starts",
+                  value: summary.shopFunnel.checkoutStarts,
+                  pct:
+                    summary.shopFunnel.productViews > 0
+                      ? Math.round((summary.shopFunnel.checkoutStarts / summary.shopFunnel.productViews) * 100)
+                      : 0,
+                  color: "bg-[var(--accent)]",
+                },
+                {
+                  label: "Purchases completed",
+                  value: summary.shopFunnel.purchases,
+                  pct:
+                    summary.shopFunnel.productViews > 0
+                      ? Math.round((summary.shopFunnel.purchases / summary.shopFunnel.productViews) * 100)
+                      : 0,
+                  color: "bg-[var(--accent-2)]",
+                },
+              ].map((step, i) => (
+                <li key={step.label} className="grid grid-cols-[minmax(0,9rem)_1fr_auto] items-center gap-4 sm:grid-cols-[11rem_1fr_7rem]">
+                  <span className="text-sm" style={{ color: "var(--text-2)" }}>
+                    {step.label}
+                  </span>
+                  <div className="h-2 overflow-hidden rounded-full bg-white/[0.05]">
+                    <motion.div
+                      className={`${step.color} h-full rounded-full`}
+                      initial={reduce ? false : { width: 0 }}
+                      animate={{ width: `${step.pct}%` }}
+                      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.25 + i * 0.08 }}
+                    />
+                  </div>
+                  <span className="text-right font-mono text-sm tabular-nums">
+                    <span style={{ color: "var(--text-1)" }}>{step.value.toLocaleString()}</span>
+                    <span className="ml-1.5 text-xs" style={{ color: "var(--text-3)" }}>{step.pct}%</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </Panel>
         </motion.div>
       )}
     </div>

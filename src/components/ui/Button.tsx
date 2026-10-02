@@ -1,7 +1,16 @@
-import React from 'react';
-import { motion, type HTMLMotionProps } from 'framer-motion';
+"use client";
 
-type Variant = 'primary' | 'secondary' | 'ghost';
+import React from 'react';
+import { motion, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
+
+/**
+ * Pill button in the site's vocabulary.
+ *   primary   — cream pill on the dark ground, the one main action
+ *   secondary — ghost pill with a hairline, for the action beside it
+ *   ghost     — no outline until hovered, for tertiary actions
+ *   accent    — caramel pill, for the rare action that should glow
+ */
+type Variant = 'primary' | 'secondary' | 'ghost' | 'accent';
 type Size = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends HTMLMotionProps<'button'> {
@@ -9,23 +18,15 @@ export interface ButtonProps extends HTMLMotionProps<'button'> {
   size?: Size;
 }
 
-const styles: Record<Variant, React.CSSProperties> = {
-  primary: {
-    background: 'linear-gradient(135deg, #C08552, #8C5A3C)',
-    color: '#fff',
-    border: 'none',
-    boxShadow: '0 0 24px rgba(192, 133, 82,0.3)',
-  },
-  secondary: {
-    background: 'rgba(255,255,255,0.04)',
-    color: 'rgba(255,255,255,0.75)',
-    border: '1px solid rgba(255,255,255,0.1)',
-  },
-  ghost: {
-    background: 'transparent',
-    color: 'rgba(255,255,255,0.5)',
-    border: '1px solid transparent',
-  },
+const variants: Record<Variant, string> = {
+  primary:
+    'bg-[var(--text-1)] text-[var(--background)] border border-transparent shadow-[0_0_40px_-12px_rgba(255,248,240,0.45)] hover:opacity-90',
+  secondary:
+    'bg-white/[0.03] text-[var(--text-1)] border border-[var(--border-mid)] hover:bg-white/[0.06] hover:border-[var(--border-strong-visible)]',
+  ghost:
+    'bg-transparent text-[var(--text-2)] border border-transparent hover:bg-white/[0.05] hover:text-[var(--text-1)]',
+  accent:
+    'bg-[var(--accent)] text-[var(--background)] border border-transparent shadow-[0_0_40px_-10px_rgba(224,168,120,0.6)] hover:bg-[var(--accent-3)]',
 };
 
 const sizes: Record<Size, string> = {
@@ -35,18 +36,16 @@ const sizes: Record<Size, string> = {
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', style, disabled, ...props }, ref) => {
-    // A disabled button that still lifts under the cursor reads as clickable.
-    const interaction = disabled
-      ? {}
-      : { whileHover: { scale: 1.03, opacity: 0.9 }, whileTap: { scale: 0.97 } };
+  ({ className = '', variant = 'primary', size = 'md', disabled, ...props }, ref) => {
+    const reduce = useReducedMotion();
+    // A disabled button that still reacts to the pointer reads as clickable.
+    const interaction = disabled || reduce ? {} : { whileTap: { scale: 0.98 } };
 
     return (
       <motion.button
         ref={ref}
         disabled={disabled}
-        className={`inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 ${sizes[size]} ${disabled ? 'cursor-not-allowed opacity-45' : ''} ${className}`}
-        style={{ ...styles[variant], ...style }}
+        className={`inline-flex items-center justify-center gap-2 rounded-full! font-medium transition-[background-color,border-color,color,opacity] duration-200 ${variants[variant]} ${sizes[size]} ${disabled ? 'cursor-not-allowed opacity-45 hover:opacity-45' : ''} ${className}`}
         {...interaction}
         {...props}
       />
