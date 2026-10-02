@@ -171,6 +171,10 @@ h1, h2, h3 {
    any layer) used to override Tailwind's rounding and square off every pill
    and rounded card the moment it was focused by keyboard. */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+/* A bare field inside a wrapper that draws the focus itself (focus-within):
+   without this the field adds its own square ring inside the rounded one.
+   Unlayered on purpose — Tailwind's outline-none sits in a layer and loses. */
+.field-bare:focus-visible { outline: none; }
 
 /* ── Luxury card (shop/showcase) ─────────────────── */
 .card-luxury {

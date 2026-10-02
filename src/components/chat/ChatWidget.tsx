@@ -628,7 +628,7 @@ export default function ChatWidget() {
                   {error}
                 </p>
               )}
-              <div className="flex items-end gap-2 rounded-[18px] border border-[var(--border-mid)] bg-[var(--surface-2)] p-1.5 focus-within:border-[var(--accent)]">
+              <div className="flex items-end gap-2 rounded-[18px] border border-[var(--border-mid)] bg-[var(--surface-2)] p-1.5 transition-shadow focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent)]/25">
                 <textarea
                   ref={inputRef}
                   value={draft}
@@ -643,7 +643,7 @@ export default function ChatWidget() {
                   maxLength={2000}
                   placeholder={started ? t.next : t.first}
                   aria-label={t.message}
-                  className="max-h-32 min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm text-[var(--text-1)] outline-none placeholder:text-[var(--text-4)]"
+                  className="field-bare max-h-32 min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm text-[var(--text-1)] outline-none placeholder:text-[var(--text-4)]"
                 />
                 <button
                   type="submit"

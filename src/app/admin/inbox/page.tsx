@@ -310,7 +310,7 @@ function Inbox() {
                     {error}
                   </p>
                 )}
-                <div className="flex items-end gap-2 rounded-[18px] border border-[var(--border-mid)] bg-[var(--surface-2)] p-1.5 focus-within:border-[var(--accent)]">
+                <div className="flex items-end gap-2 rounded-[18px] border border-[var(--border-mid)] bg-[var(--surface-2)] p-1.5 transition-shadow focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent)]/25">
                   <textarea
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
@@ -324,7 +324,7 @@ function Inbox() {
                     maxLength={2000}
                     placeholder="Write a reply…"
                     aria-label="Reply"
-                    className="max-h-40 min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm text-[var(--text-1)] outline-none placeholder:text-[var(--text-4)]"
+                    className="field-bare max-h-40 min-h-[2.25rem] flex-1 resize-none bg-transparent px-2.5 py-2 text-sm text-[var(--text-1)] outline-none placeholder:text-[var(--text-4)]"
                   />
                   <button
                     type="submit"
