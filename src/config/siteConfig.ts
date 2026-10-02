@@ -12,7 +12,7 @@ export const siteConfig = {
     title: "Sumet Buarod | Software Engineer",
     description:
       "Software Engineer specializing in high-performance distributed systems and cloud-native architecture. Expert in C#, .NET Core, Python, Golang, and React/Next.js.",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://sumetbuarod.dev",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.sumet-buarod.com",
   },
   social: {
     github: "https://github.com/lengsumet",
