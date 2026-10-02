@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { LIMITS, badRequest, conversationForToken, messageSchema, messagesAfter, readJson, serializeMessage } from "@/lib/chat/core";
+import { LIMITS, badRequest, contactView, conversationForToken, messageSchema, messagesAfter, readJson, serializeMessage } from "@/lib/chat/core";
 import { notifyOwner } from "@/lib/chat/notify";
 
 /**
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     status: conversation.status,
     messages,
-    contact: { name: conversation.name, email: conversation.email },
+    contact: contactView(conversation),
   });
 }
 

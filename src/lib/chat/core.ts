@@ -22,6 +22,10 @@ export const LIMITS = {
   messagesPerFiveMinutes: 20,
   /** Messages returned per poll. */
   pageSize: 50,
+  /** How long a "continue this chat" email link works. */
+  linkTtlMinutes: 30,
+  /** Minimum gap between two link emails for one conversation. */
+  linkCooldownMinutes: 5,
 } as const;
 
 export const TOKEN_HEADER = "x-chat-token";
@@ -48,9 +52,19 @@ export const startSchema = z.object({
 export const messageSchema = z.object({ body });
 export const contactSchema = z.object({ name, email });
 export const statusSchema = z.object({ status: z.enum(["open", "closed"]) });
+export const linkSchema = z.object({
+  email: z.string().trim().min(1).max(LIMITS.emailMax).regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+  lang: z.enum(["th", "en"]).optional(),
+});
+export const verifySchema = z.object({ token: z.string().regex(/^[0-9a-f]{64}$/) });
 
 export function newVisitorToken(): string {
   return randomBytes(32).toString("hex");
+}
+
+/** Link tokens are stored hashed, so a database read alone can't open a chat. */
+export function hashLinkToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
 }
 
 /** A salted hash of the caller's address: enough to rate-limit, not enough to identify. */
@@ -80,8 +94,13 @@ export async function conversationForToken(request: NextRequest) {
   if (!token || !/^[0-9a-f]{64}$/.test(token)) return null;
   return db.chatConversation.findUnique({
     where: { visitorToken: token },
-    select: { id: true, status: true, name: true, email: true, unreadByVisitor: true },
+    select: { id: true, status: true, name: true, email: true, emailVerifiedAt: true, linkSentAt: true, unreadByVisitor: true },
   });
+}
+
+/** What the widget shows about the visitor's own contact details. */
+export function contactView(c: { name: string | null; email: string | null; emailVerifiedAt: Date | null }) {
+  return { name: c.name, email: c.email, emailVerified: !!c.emailVerifiedAt };
 }
 
 export function serializeMessage(m: { id: string; sender: string; body: string; createdAt: Date }) {

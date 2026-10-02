@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
         id: true,
         name: true,
         email: true,
+        emailVerifiedAt: true,
         page: true,
         status: true,
         unreadByAdmin: true,
@@ -41,8 +42,9 @@ export async function GET(request: NextRequest) {
   ]);
 
   return NextResponse.json({
-    data: rows.map(({ messages, lastMessageAt, createdAt, ...c }) => ({
+    data: rows.map(({ messages, lastMessageAt, createdAt, emailVerifiedAt, ...c }) => ({
       ...c,
+      emailVerified: !!emailVerifiedAt,
       lastMessageAt: lastMessageAt.toISOString(),
       createdAt: createdAt.toISOString(),
       last: messages[0] ? { sender: messages[0].sender, body: messages[0].body.slice(0, 140) } : null,

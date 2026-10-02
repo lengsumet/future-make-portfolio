@@ -97,11 +97,18 @@ model ChatConversation {
   lastMessageAt   DateTime      @default(now())
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+  /// Set when the visitor opened a link mailed to `email`; cleared if the email changes.
+  emailVerifiedAt DateTime?
+  /// sha256 of the one-time "continue this chat" link token; the raw token only ever lives in the email.
+  linkTokenHash   String?       @unique
+  linkExpiresAt   DateTime?
+  linkSentAt      DateTime?
 
   messages ChatMessage[]
 
   @@index([status, lastMessageAt])
   @@index([ipHash, createdAt])
+  @@index([email])
 }
 
 model ChatMessage {

@@ -18,6 +18,8 @@ import { FaArrowUp, FaComments, FaTimes, FaEnvelope } from "react-icons/fa";
  */
 
 type Message = { id: string; sender: "visitor" | "owner"; body: string; createdAt: string; pending?: boolean; failed?: boolean };
+type Contact = { name: string | null; email: string | null; emailVerified: boolean };
+type LinkState = "idle" | "sending" | "sent" | "tooSoon" | "failed";
 
 const TOKEN_KEY = "sb-chat-token";
 const LANG_KEY = "sb-chat-lang";
@@ -51,6 +53,18 @@ const T = {
     badEmail: "That email doesn't look right.",
     switchTo: "ภาษาไทย",
     switchLabel: "เปลี่ยนเป็นภาษาไทย",
+    resumeAsk: "Chatted before? Continue with your email",
+    resumeHint: "I'll email a link that opens your earlier chat on this device.",
+    resumeEmailLabel: "Email you chatted with",
+    resumeSent: "If a chat used that email, a link is on its way. It works for 30 minutes.",
+    sendLink: "Send link",
+    cancel: "Cancel",
+    linkCard: (email: string) => `Continue on another device: I'll email a link to ${email}`,
+    linkSent: (email: string) => `Link sent to ${email}. Open it on any device within 30 minutes.`,
+    linkTooSoon: "A link went out a few minutes ago. Check your inbox, or try again shortly.",
+    linkFailed: "Couldn't send the email. Try again in a moment.",
+    linkOk: "Welcome back. Your chat is here and your email is verified.",
+    linkExpired: "That link has expired or was already used. You can ask for a new one.",
   },
   th: {
     chatWith: "แชทกับสุเมธ",
@@ -79,6 +93,18 @@ const T = {
     badEmail: "รูปแบบอีเมลไม่ถูกต้อง",
     switchTo: "English",
     switchLabel: "Switch to English",
+    resumeAsk: "เคยคุยไว้แล้ว? คุยต่อด้วยอีเมล",
+    resumeHint: "ผมจะส่งลิงก์ไปที่อีเมล กดแล้วแชทเดิมจะเปิดขึ้นบนเครื่องนี้",
+    resumeEmailLabel: "อีเมลที่เคยใช้คุย",
+    resumeSent: "ถ้ามีแชทที่ใช้อีเมลนี้ ลิงก์กำลังส่งไปครับ ใช้ได้ภายใน 30 นาที",
+    sendLink: "ส่งลิงก์",
+    cancel: "ยกเลิก",
+    linkCard: (email: string) => `คุยต่อบนเครื่องอื่น: ผมจะส่งลิงก์ไปที่ ${email}`,
+    linkSent: (email: string) => `ส่งลิงก์ไปที่ ${email} แล้ว เปิดจากเครื่องไหนก็ได้ภายใน 30 นาที`,
+    linkTooSoon: "เพิ่งส่งลิงก์ไปเมื่อไม่กี่นาทีก่อน ลองเช็กอีเมล หรือรอสักครู่แล้วขอใหม่",
+    linkFailed: "ส่งอีเมลไม่สำเร็จ ลองใหม่อีกครั้งนะครับ",
+    linkOk: "ยินดีต้อนรับกลับครับ แชทเดิมอยู่ตรงนี้ และยืนยันอีเมลแล้ว",
+    linkExpired: "ลิงก์หมดอายุหรือถูกใช้ไปแล้ว ขอลิงก์ใหม่ได้ครับ",
   },
 } as const;
 
@@ -120,7 +146,7 @@ export default function ChatWidget() {
   const t = T[lang];
   const [token, setToken] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [contact, setContact] = useState<{ name: string | null; email: string | null }>({ name: null, email: null });
+  const [contact, setContact] = useState<Contact>({ name: null, email: null, emailVerified: false });
   const [unread, setUnread] = useState(0);
   const [draft, setDraft] = useState("");
   const [name, setName] = useState("");
@@ -129,15 +155,74 @@ export default function ChatWidget() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [emailPrompt, setEmailPrompt] = useState("");
+  const [linkAvailable, setLinkAvailable] = useState(false);
+  const [linkState, setLinkState] = useState<LinkState>("idle");
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const [resumeEmail, setResumeEmail] = useState("");
+  const [flash, setFlash] = useState<"linkOk" | "linkExpired" | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const lastActivity = useRef(Date.now());
   const cursor = useRef<string | null>(null);
+  const checkedLink = useRef(false);
 
+  // Arriving from an emailed link (#chat-link=…) swaps this browser onto that chat.
   useEffect(() => {
-    setToken(readToken());
     setLang(readLang());
+    const match = window.location.hash.match(/^#chat-link=([0-9a-f]{64})$/);
+    if (!match) {
+      setToken(readToken());
+      return;
+    }
+    // Single-use: take it out of the address bar and history straight away.
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    setOpen(true);
+    void (async () => {
+      try {
+        const res = await fetch("/api/chat/link/verify", {
+          method: "POST",
+          headers: { "content-type": "application/json", "x-no-progress": "1" },
+          body: JSON.stringify({ token: match[1] }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = (await res.json()) as { token: string };
+        writeToken(data.token);
+        setToken(data.token);
+        setFlash("linkOk");
+      } catch {
+        setToken(readToken());
+        setFlash("linkExpired");
+      }
+    })();
   }, []);
+
+  // Ask once, on first open, whether email links are switched on.
+  useEffect(() => {
+    if (!open || checkedLink.current) return;
+    checkedLink.current = true;
+    fetch("/api/chat/link", { headers: { "x-no-progress": "1" } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { available?: boolean } | null) => setLinkAvailable(!!d?.available))
+      .catch(() => setLinkAvailable(false));
+  }, [open]);
+
+  const requestLink = async (address: string) => {
+    setLinkState("sending");
+    try {
+      const res = await fetch("/api/chat/link", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-no-progress": "1", ...(token ? { "x-chat-token": token } : {}) },
+        body: JSON.stringify({ email: address, lang }),
+      });
+      if (res.status === 429) return setLinkState("tooSoon");
+      if (!res.ok) return setLinkState("failed");
+      const data = (await res.json()) as { contact?: Contact };
+      if (data.contact) setContact(data.contact);
+      setLinkState("sent");
+    } catch {
+      setLinkState("failed");
+    }
+  };
 
   const toggleLang = () => {
     const next: Lang = lang === "th" ? "en" : "th";
@@ -250,7 +335,8 @@ export default function ChatWidget() {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(res.status === 429 ? t.tooMany : t.failed);
         writeToken(data.token);
-        setContact({ name: name || null, email: email || null });
+        setContact({ name: name || null, email: email || null, emailVerified: false });
+        setLinkState("idle");
         setMessages(data.messages);
         cursor.current = data.messages.at(-1)?.createdAt ?? null;
         setToken(data.token);
@@ -350,6 +436,15 @@ export default function ChatWidget() {
             <div ref={listRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-5" aria-live="polite">
               <Bubble sender="owner" body={t.greeting} />
 
+              {flash && (
+                <p
+                  role="status"
+                  className={`px-2 text-center font-mono text-2xs ${flash === "linkOk" ? "text-[var(--green)]" : "text-red-300"}`}
+                >
+                  {t[flash]}
+                </p>
+              )}
+
               {!started && (
                 <div className="flex flex-wrap gap-2 pl-1 pt-1">
                   {t.quick.map((q) => (
@@ -367,6 +462,65 @@ export default function ChatWidget() {
                   ))}
                 </div>
               )}
+
+              {/* Returning visitor on a new device: mail a link to their earlier chat. */}
+              {!started && linkAvailable &&
+                (!resumeOpen ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setResumeOpen(true);
+                      setLinkState("idle");
+                    }}
+                    className="pl-1 text-xs text-[var(--accent-3)] underline-offset-4 hover:underline"
+                  >
+                    {t.resumeAsk}
+                  </button>
+                ) : linkState === "sent" ? (
+                  <p role="status" className="rounded-2xl border border-[var(--border)] bg-white/[0.02] p-3 text-xs" style={{ color: "var(--text-2)" }}>
+                    {t.resumeSent}
+                  </p>
+                ) : (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (resumeEmail.trim()) void requestLink(resumeEmail.trim());
+                    }}
+                    className="rounded-2xl border border-[var(--border)] bg-white/[0.02] p-3"
+                  >
+                    <p className="flex items-center gap-2 text-xs" style={{ color: "var(--text-2)" }}>
+                      <FaEnvelope size={11} aria-hidden="true" className="text-[var(--accent-3)]" />
+                      {t.resumeHint}
+                    </p>
+                    <div className="mt-2 flex gap-2">
+                      <input
+                        type="email"
+                        required
+                        aria-label={t.resumeEmailLabel}
+                        value={resumeEmail}
+                        onChange={(e) => setResumeEmail(e.target.value)}
+                        placeholder="you@company.com"
+                        maxLength={160}
+                        className="min-w-0 flex-1 rounded-full border border-[var(--border-mid)] bg-[var(--surface-2)] px-3 py-1.5 text-xs text-[var(--text-1)] outline-none focus:border-[var(--accent)]"
+                      />
+                      <button
+                        type="submit"
+                        disabled={linkState === "sending"}
+                        className="rounded-full bg-[var(--text-1)] px-3 py-1.5 text-xs font-medium text-[var(--background)] disabled:opacity-50"
+                      >
+                        {t.sendLink}
+                      </button>
+                    </div>
+                    {linkState === "failed" && (
+                      <p role="alert" className="mt-2 text-xs text-red-300">
+                        {t.linkFailed}
+                      </p>
+                    )}
+                    <button type="button" onClick={() => setResumeOpen(false)} className="mt-2 text-2xs text-[var(--text-3)] hover:text-[var(--text-1)]">
+                      {t.cancel}
+                    </button>
+                  </form>
+                ))}
 
               {messages.map((m) => (
                 <Bubble key={m.id} sender={m.sender} body={m.body} at={m.pending ? t.sending : m.failed ? t.notSent : time(m.createdAt, lang)} failed={m.failed} />
@@ -404,6 +558,37 @@ export default function ChatWidget() {
                     </button>
                   </div>
                 </form>
+              )}
+
+              {/* Email given but unproven: one click mails a link that verifies it and opens the chat anywhere. */}
+              {started && contact.email && !contact.emailVerified && linkAvailable && (
+                <div className="rounded-2xl border border-[var(--border)] bg-white/[0.02] p-3">
+                  {linkState === "sent" ? (
+                    <p role="status" className="text-xs" style={{ color: "var(--text-2)" }}>
+                      {t.linkSent(contact.email)}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="flex items-center gap-2 text-xs" style={{ color: "var(--text-2)" }}>
+                        <FaEnvelope size={11} aria-hidden="true" className="shrink-0 text-[var(--accent-3)]" />
+                        {t.linkCard(contact.email)}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => contact.email && void requestLink(contact.email)}
+                        disabled={linkState === "sending"}
+                        className="mt-2 rounded-full bg-[var(--text-1)] px-3 py-1.5 text-xs font-medium text-[var(--background)] disabled:opacity-50"
+                      >
+                        {t.sendLink}
+                      </button>
+                      {(linkState === "tooSoon" || linkState === "failed") && (
+                        <p role="alert" className="mt-2 text-xs text-red-300">
+                          {linkState === "tooSoon" ? t.linkTooSoon : t.linkFailed}
+                        </p>
+                      )}
+                    </>
+                  )}
+                </div>
               )}
             </div>
 

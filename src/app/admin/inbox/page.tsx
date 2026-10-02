@@ -24,7 +24,7 @@ type Row = {
   last: { sender: string; body: string } | null;
 };
 type Message = { id: string; sender: "visitor" | "owner"; body: string; createdAt: string };
-type Thread = { id: string; name: string | null; email: string | null; page: string | null; status: string; createdAt: string };
+type Thread = { id: string; name: string | null; email: string | null; emailVerified: boolean; page: string | null; status: string; createdAt: string };
 
 const label = (r: { name: string | null; email: string | null; id: string }) => r.name || r.email || `Visitor ${r.id.slice(-5)}`;
 const ago = (iso: string) => {
@@ -242,7 +242,16 @@ function Inbox() {
                     {label(thread)}
                   </p>
                   <p className="truncate font-mono text-2xs" style={{ color: "var(--text-4)" }}>
-                    {thread.email ?? "no email left"} · started {stamp(thread.createdAt)}
+                    {thread.email ?? "no email left"}
+                    {thread.email && (
+                      <span
+                        className={thread.emailVerified ? "text-[var(--green)]" : undefined}
+                        title={thread.emailVerified ? "The visitor opened a link sent to this address" : "Typed by the visitor, not confirmed"}
+                      >
+                        {thread.emailVerified ? " ✓ verified" : " (unverified)"}
+                      </span>
+                    )}{" "}
+                    · started {stamp(thread.createdAt)}
                     {thread.page ? ` on ${thread.page}` : ""}
                   </p>
                 </div>

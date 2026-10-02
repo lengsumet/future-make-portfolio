@@ -14,7 +14,7 @@ type Ctx = { params: Promise<{ id: string }> };
 async function load(id: string) {
   return db.chatConversation.findUnique({
     where: { id },
-    select: { id: true, name: true, email: true, page: true, status: true, unreadByAdmin: true, createdAt: true },
+    select: { id: true, name: true, email: true, emailVerifiedAt: true, page: true, status: true, unreadByAdmin: true, createdAt: true },
   });
 }
 
@@ -29,9 +29,9 @@ export async function GET(request: NextRequest, { params }: Ctx) {
   if (conversation.unreadByAdmin > 0) {
     await db.chatConversation.update({ where: { id }, data: { unreadByAdmin: 0 } });
   }
-  const { createdAt, unreadByAdmin: _unread, ...rest } = conversation;
+  const { createdAt, emailVerifiedAt, unreadByAdmin: _unread, ...rest } = conversation;
   void _unread;
-  return NextResponse.json({ conversation: { ...rest, createdAt: createdAt.toISOString() }, messages });
+  return NextResponse.json({ conversation: { ...rest, emailVerified: !!emailVerifiedAt, createdAt: createdAt.toISOString() }, messages });
 }
 
 export async function POST(request: NextRequest, { params }: Ctx) {
