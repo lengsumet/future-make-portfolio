@@ -96,7 +96,7 @@ export default function ShopPage() {
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ ...spring, delay: 0.1 }} className="mb-10">
           <p className="text-2xs uppercase tracking-[0.22em] mb-3" style={{ color: "rgba(255,255,255,0.2)" }}>Shop</p>
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 text-foreground">Templates &amp; Systems</h1>
+          <h1 className="display text-5xl md:text-7xl mb-4 text-foreground">Templates &amp; Systems</h1>
           <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
             Production-ready code built with real-world enterprise experience.
           </p>

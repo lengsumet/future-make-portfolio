@@ -127,7 +127,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
             </motion.div>
           </div>
 
-          <h1 className="text-4xl font-bold text-foreground mb-2">{introduction.name}</h1>
+          <h1 className="display text-5xl md:text-7xl text-foreground mb-3">{introduction.name}</h1>
           <p className="text-lg mb-5" style={{ color: "#F2C9A0" }}>{introduction.title}</p>
         </motion.div>
 

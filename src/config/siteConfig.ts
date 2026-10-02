@@ -15,7 +15,7 @@ export const siteConfig = {
     url: process.env.NEXT_PUBLIC_SITE_URL || "https://sumetbuarod.dev",
   },
   social: {
-    github: "https://github.com/sumetbuarod",
+    github: "https://github.com/lengsumet",
     linkedin: "https://linkedin.com/in/sumetbuarod",
     email: "mailto:sumet.buarod@gmail.com",
   },

@@ -1,169 +1,135 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import {
-  FaHome, FaUser, FaShoppingBag, FaCog,
-} from "react-icons/fa";
+import { FaHome, FaUser, FaShoppingBag, FaCog } from "react-icons/fa";
+import LocalClock from "@/components/home/LocalClock";
 
 const navItems = [
-  { name: "Home",     href: "/",         icon: FaHome },
-  { name: "About",    href: "/about",    icon: FaUser },
-  { name: "Shop",     href: "/shop",     icon: FaShoppingBag },
+  { name: "Home", href: "/", icon: FaHome },
+  { name: "About", href: "/about", icon: FaUser },
+  { name: "Shop", href: "/shop", icon: FaShoppingBag },
 ];
 
+/**
+ * Site navigation.
+ *
+ * Desktop: a thin full-width bar in the editorial style the godly-featured
+ * sites share — wordmark left, numbered mono links, the owner's local time
+ * right. Transparent at the top of the page, it takes a blurred espresso
+ * ground once the page scrolls so it stays legible over content.
+ * Mobile: a floating pill at the bottom, within thumb reach.
+ */
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const [, startTransition] = useTransition();
-  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
 
-  const handleNav = (href: string) => {
-    if (pathname === href) return;
-    setNavigatingTo(href);
-    startTransition(() => {
-      router.push(href);
-      setNavigatingTo(null);
-    });
-  };
-
-  React.useEffect(() => {
-    navItems.forEach((item) => router.prefetch(item.href));
+  useEffect(() => {
     router.prefetch("/admin");
   }, [router]);
 
-  const isAdminActive = !!pathname?.startsWith("/admin");
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname?.startsWith(href));
 
   return (
     <>
-      {/* ── Desktop: top floating pill ── */}
+      {/* ── Desktop: editorial top bar ── */}
       <header
-        className="hidden md:flex fixed top-5 left-1/2 -translate-x-1/2 z-50 items-center gap-1 px-2.5 py-2 rounded-2xl"
+        className="hidden md:block fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300"
         style={{
-          background: "rgba(11,11,18,0.85)",
-          border: "1px solid rgba(255,255,255,0.07)",
-          backdropFilter: "blur(24px)",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04)",
+          background: scrolled ? "rgba(46, 28, 26, 0.78)" : "transparent",
+          backdropFilter: scrolled ? "blur(18px)" : "none",
+          borderBottom: `1px solid ${scrolled ? "var(--border)" : "transparent"}`,
         }}
       >
-        {/* Logo badge */}
-        <Link
-          href="/"
-          className="w-7 h-7 rounded-lg flex items-center justify-center mr-1 flex-shrink-0 hover:opacity-80 transition-opacity duration-150"
-          style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}
-        >
-          <span className="text-2xs font-bold text-foreground tracking-wide">SB</span>
-        </Link>
+        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-10">
+          <Link href="/" className="display text-2xl tracking-[-0.02em] transition-opacity hover:opacity-80" style={{ color: "var(--text-1)" }}>
+            Sumet Buarod
+          </Link>
 
-        {/* Divider */}
-        <div className="w-px h-4 mx-1.5" style={{ background: "rgba(255,255,255,0.08)" }} />
+          <nav aria-label="Primary" className="flex items-center gap-1">
+            {navItems.map((item, i) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className="group relative flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-xs uppercase tracking-[0.1em] transition-colors"
+                  style={{ color: active ? "var(--text-1)" : "var(--text-3)" }}
+                >
+                  <span style={{ color: active ? "var(--accent-3)" : "var(--text-4)" }}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className="transition-colors group-hover:text-[var(--text-1)]">{item.name}</span>
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-x-3.5 -bottom-0.5 h-px"
+                      style={{ background: "var(--accent)" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {/* Nav items */}
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
-          const isLoading = navigatingTo === item.href;
-
-          return (
-            <button
-              key={item.href}
-              onClick={() => handleNav(item.href)}
-              className="nav-pill relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-sm font-medium transition-colors duration-150"
-              style={{
-                color: isActive ? "#fff" : "var(--nav-idle-fg)",
-                backgroundColor: isActive ? "transparent" : "var(--nav-idle-bg)",
-                opacity: isLoading ? 0.6 : 1,
-              }}
+          <div className="flex items-center gap-4 font-mono text-xs" style={{ color: "var(--text-3)" }}>
+            <span className="hidden lg:inline uppercase tracking-[0.1em]">Chum Phae, TH</span>
+            <LocalClock className="text-[var(--text-2)]" />
+            <Link
+              href="/admin"
+              aria-label="Admin"
+              className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/5 hover:text-[var(--text-1)]"
+              style={{ color: pathname?.startsWith("/admin") ? "var(--accent-3)" : "var(--text-4)" }}
             >
-              {isActive && (
-                <motion.div
-                  layoutId="nav-active-pill"
-                  className="absolute inset-0 rounded-xl"
-                  style={{
-                    background: "rgba(99,102,241,0.22)",
-                    border: "1px solid rgba(99,102,241,0.38)",
-                    boxShadow: "0 0 12px rgba(99,102,241,0.2)",
-                  }}
-                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                />
-              )}
-              <Icon size={12} className="relative z-10 flex-shrink-0" />
-              <span className="relative z-10">{item.name}</span>
-
-              {/* Loading pulse ring */}
-              {isLoading && (
-                <motion.div
-                  className="absolute inset-0 rounded-xl"
-                  style={{ border: "1px solid rgba(99,102,241,0.6)" }}
-                  animate={{ opacity: [0.4, 1, 0.4] }}
-                  transition={{ duration: 0.9, repeat: Infinity }}
-                />
-              )}
-            </button>
-          );
-        })}
-
-        {/* Divider */}
-        <div className="w-px h-4 mx-1.5" style={{ background: "rgba(255,255,255,0.08)" }} />
-
-        {/* Admin */}
-        <button
-          onClick={() => handleNav("/admin")}
-          title="Admin"
-          className="nav-cog relative flex items-center justify-center w-8 h-8 rounded-xl transition-colors duration-150"
-          style={{
-            color: isAdminActive ? "#a5b4fc" : "var(--nav-idle-fg)",
-            backgroundColor: isAdminActive ? "rgba(99,102,241,0.2)" : "var(--nav-idle-bg)",
-          }}
-        >
-          <FaCog size={13} />
-        </button>
+              <FaCog size={12} />
+            </Link>
+          </div>
+        </div>
       </header>
 
       {/* ── Mobile: bottom floating pill ── */}
       <nav
-        className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-2 py-2 rounded-2xl"
+        className="md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-2 py-2 rounded-full"
         style={{
-          background: "rgba(11,11,18,0.92)",
-          border: "1px solid rgba(255,255,255,0.07)",
-          backdropFilter: "blur(24px)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.55)",
+          background: "rgba(46, 28, 26, 0.9)",
+          border: "1px solid var(--border-mid)",
+          backdropFilter: "blur(20px)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
         }}
         aria-label="Primary navigation"
       >
         {[...navItems, { name: "Admin", href: "/admin", icon: FaCog }].map((item) => {
           const Icon = item.icon;
-          const isActive =
-            pathname === item.href ||
-            (item.href === "/admin" && pathname?.startsWith("/admin"));
-
+          const active = isActive(item.href);
           return (
-            <button
+            <Link
               key={item.href}
-              onClick={() => handleNav(item.href)}
+              href={item.href}
               aria-label={item.name}
-              className="nav-pill nav-pill-mobile relative flex items-center justify-center w-11 h-10 rounded-xl transition-colors duration-150"
-              style={{
-                color: isActive ? "#fff" : "var(--nav-idle-fg)",
-                backgroundColor: isActive ? "transparent" : "var(--nav-idle-bg)",
-              }}
+              aria-current={active ? "page" : undefined}
+              className="relative flex h-10 w-11 items-center justify-center rounded-full transition-colors"
+              style={{ color: active ? "var(--background)" : "var(--text-3)" }}
             >
-              {isActive && (
-                <motion.div
+              {active && (
+                <motion.span
                   layoutId="nav-mobile-active"
-                  className="absolute inset-0 rounded-xl"
-                  style={{
-                    background: "rgba(99,102,241,0.28)",
-                    border: "1px solid rgba(99,102,241,0.4)",
-                    boxShadow: "0 0 10px rgba(99,102,241,0.2)",
-                  }}
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: "var(--accent-3)" }}
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
                 />
               )}
               <Icon size={15} className="relative z-10" />
-            </button>
+            </Link>
           );
         })}
       </nav>

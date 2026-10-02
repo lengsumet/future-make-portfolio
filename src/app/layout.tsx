@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Prompt, Inter, Playfair_Display, Noto_Sans_Thai } from "next/font/google";
+import { Prompt, Inter, Playfair_Display, Noto_Sans_Thai, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ClientShell from "@/components/layout/ClientShell";
 import { LoadingProvider } from "@/contexts/LoadingContext";
@@ -24,6 +24,22 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700"],
 });
 
+// Editorial display face and a mono for labels: the pairing most of the
+// sites on godly.design use — a quiet serif at large sizes, a monospace for
+// indices, captions and metadata.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 const notoSansThai = Noto_Sans_Thai({
   variable: "--font-noto-thai",
   subsets: ["thai"],
@@ -42,7 +58,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${prompt.className}`}>
+      <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${prompt.className}`}>
         <MotionProvider>
           <LoadingProvider>
             <LoadingScreen />

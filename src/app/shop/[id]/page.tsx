@@ -239,7 +239,7 @@ export default function ProductDetailPage() {
               </span>
             )}
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">{product.title}</h1>
+          <h1 className="display text-4xl md:text-6xl text-foreground mb-5">{product.title}</h1>
           <p className="text-ink-2 text-lg mb-8 leading-relaxed">{product.longDescription}</p>
 
           <h3 className="text-lg font-semibold text-foreground mb-4">What is Included</h3>
