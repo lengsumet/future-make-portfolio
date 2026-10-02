@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
+import SpotlightCard from "@/components/fx/SpotlightCard";
 
 export interface WorkItem {
   slug: string;
@@ -17,137 +17,103 @@ export interface WorkItem {
 }
 
 /**
- * The work as a numbered index, the most common portfolio pattern on
- * godly.design: one row per project on hairline rules, the name set large,
- * and a screenshot that follows the cursor while a row is hovered. On touch
- * screens, where there is no hover, each row shows its thumbnail inline.
+ * The work as a grid of spotlight cards (React Bits "Spotlight Card"):
+ * each with its screenshot, which zooms slightly on hover while a light
+ * follows the pointer. The first card is wide, so the grid reads as a
+ * composed layout rather than a catalogue.
+ *
+ * The card's title link is stretched over the whole card for the pointer;
+ * the Live link sits above it with its own destination.
  */
 export default function WorkIndex({ items }: { items: WorkItem[] }) {
-  const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const [active, setActive] = useState<number | null>(null);
-  const [finePointer, setFinePointer] = useState(false);
-
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 260, damping: 30, mass: 0.6 });
-  const sy = useSpring(y, { stiffness: 260, damping: 30, mass: 0.6 });
-
-  useEffect(() => {
-    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const update = () => setFinePointer(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-
-  const onMove = (e: React.MouseEvent) => {
-    x.set(e.clientX + 28);
-    y.set(e.clientY - 120);
-  };
-
-  const preview = active !== null ? items[active] : null;
 
   return (
-    <section id="work" ref={sectionRef} className="px-5 md:px-10 py-24 md:py-32 scroll-mt-20" onMouseMove={finePointer ? onMove : undefined}>
-      <div className="mx-auto max-w-[1400px]">
+    <section id="work" className="scroll-mt-24 px-5 py-24 md:px-10 md:py-28">
+      <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="eyebrow">(02) Selected work</p>
-            <h2 className="display mt-4 text-[clamp(2.5rem,6vw,5.5rem)]" style={{ color: "var(--text-1)" }}>
-              Nine systems, <em className="italic" style={{ color: "var(--accent-3)" }}>one platform.</em>
+            <p className="eyebrow">Selected work</p>
+            <h2 className="display text-silver mt-3 text-[clamp(2.25rem,5vw,4rem)]">
+              Nine systems, <span className="accent-serif">one platform.</span>
             </h2>
           </div>
-          <p className="eyebrow max-w-xs text-right normal-case tracking-normal">
-            Each one is live, seeded with demo data, and sold with its source.
+          <p className="max-w-sm text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+            Each one is live with demo data, and sold with its full source code.
           </p>
         </div>
 
-        <ol className="mt-14 border-t" style={{ borderColor: "var(--border-mid)" }} onMouseLeave={() => setActive(null)}>
+        <ul className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item, i) => (
-            <li
+            <motion.li
               key={item.slug}
-              className="group relative border-b transition-colors duration-300 hover:bg-white/[0.025]"
-              style={{ borderColor: "var(--border-mid)" }}
-              onMouseEnter={() => setActive(i)}
-              onFocus={() => setActive(i)}
+              className={i === 0 ? "md:col-span-2" : ""}
+              initial={reduce ? false : { opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: (i % 3) * 0.06 }}
             >
-              {/* The whole row opens the project for a mouse. Hidden from
-                  keyboards and screen readers, which use the title link; it
-                  sits under the content so the Live link keeps its own target. */}
-              <Link href={`/shop/${item.slug}`} className="absolute inset-0" tabIndex={-1} aria-hidden="true" />
-              <div className="pointer-events-none relative grid grid-cols-[2.5rem_1fr] md:grid-cols-[4rem_1fr_auto] items-baseline gap-x-4 py-6 md:py-8">
-                <span className="font-mono text-xs transition-colors duration-300 group-hover:text-[var(--accent-3)]" style={{ color: "var(--text-4)" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-
-                <div className="min-w-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:translate-x-3">
-                  <h3 className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <Link href={`/shop/${item.slug}`} className="pointer-events-auto display text-[clamp(2rem,4.6vw,4rem)] focus-visible:underline" style={{ color: "var(--text-1)" }}>
-                      {item.name}
-                    </Link>
-                    {item.expansion && (
-                      <span className="text-sm md:text-base" style={{ color: "var(--text-3)" }}>
-                        {item.expansion}
-                      </span>
-                    )}
-                  </h3>
-                  <p className="mt-2 max-w-2xl text-sm leading-relaxed line-clamp-2" style={{ color: "var(--text-3)" }}>
-                    {item.description}
-                  </p>
+              <SpotlightCard className="group h-full">
+                <div className="flex h-full flex-col">
                   {item.image && (
-                    <div className="mt-4 overflow-hidden rounded-lg border md:hidden" style={{ borderColor: "var(--border-mid)" }}>
-                      <Image src={item.image} alt="" width={1440} height={900} sizes="90vw" className="h-auto w-full" />
+                    <div className="relative m-2 mb-0 aspect-[16/9] overflow-hidden rounded-[14px] border border-[var(--border)]">
+                      <Image
+                        src={item.image}
+                        alt=""
+                        fill
+                        sizes={i === 0 ? "(min-width: 1024px) 800px, 95vw" : "(min-width: 1024px) 400px, 95vw"}
+                        className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:scale-[1.04]"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--surface)] to-transparent" aria-hidden="true" />
                     </div>
                   )}
+                  <div className="flex flex-1 flex-col p-5 pt-4">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h3 className="display text-2xl" style={{ color: "var(--text-1)" }}>
+                        <span className="mr-2 font-mono text-xs font-normal tracking-normal" style={{ color: "var(--accent-3)" }} aria-hidden="true">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <Link href={`/shop/${item.slug}`} className="after:absolute after:inset-0 after:content-[''] focus-visible:underline">
+                          {item.name}
+                        </Link>
+                      </h3>
+                      <FaArrowRight size={12} className="shrink-0 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" style={{ color: "var(--accent-3)" }} aria-hidden="true" />
+                    </div>
+                    {item.expansion && (
+                      <p className="mt-1 text-sm" style={{ color: "var(--text-3)" }}>
+                        {item.expansion}
+                      </p>
+                    )}
+                    <p className="mt-3 line-clamp-2 text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+                      {item.description}
+                    </p>
+                    <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-4">
+                      {item.tags.map((tag) => (
+                        <span key={tag} className="rounded-full border border-[var(--border)] px-2.5 py-0.5 font-mono text-2xs" style={{ color: "var(--text-3)" }}>
+                          {tag}
+                        </span>
+                      ))}
+                      {item.liveUrl && (
+                        <a
+                          href={item.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="relative z-10 ml-auto inline-flex items-center gap-1.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 font-mono text-2xs transition-colors hover:bg-[rgba(192,133,82,0.2)]"
+                          style={{ color: "var(--accent-3)" }}
+                          aria-label={`Open the live ${item.name} demo`}
+                        >
+                          <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)]" aria-hidden="true" />
+                          Live ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </div>
-
-                <div className="col-span-2 md:col-span-1 mt-4 md:mt-0 flex flex-wrap items-center gap-2 md:justify-end md:self-center">
-                  {item.tags.map((tag) => (
-                    <span key={tag} className="font-mono text-2xs rounded-full border px-2.5 py-1" style={{ borderColor: "var(--border-mid)", color: "var(--text-3)" }}>
-                      {tag}
-                    </span>
-                  ))}
-                  {item.liveUrl && (
-                    <a
-                      href={item.liveUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="pointer-events-auto ml-1 inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-mono text-2xs transition-colors hover:bg-[var(--accent-bg)]"
-                      style={{ color: "var(--accent-3)" }}
-                      aria-label={`Open the live ${item.name} demo`}
-                    >
-                      Live ↗
-                    </a>
-                  )}
-                  <FaArrowRight size={12} className="ml-2 hidden md:block transition-transform duration-300 group-hover:translate-x-1" style={{ color: "var(--text-4)" }} aria-hidden="true" />
-                </div>
-              </div>
-            </li>
+              </SpotlightCard>
+            </motion.li>
           ))}
-        </ol>
+        </ul>
       </div>
-
-      {/* Cursor-following preview, decorative: the row carries the name. */}
-      {finePointer && !reduce && (
-        <motion.div className="pointer-events-none fixed left-0 top-0 z-40 hidden md:block" style={{ x: sx, y: sy }} aria-hidden="true">
-          <AnimatePresence>
-            {preview?.image && (
-              <motion.div
-                key={preview.slug}
-                initial={{ opacity: 0, scale: 0.92, rotate: -2 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="w-[400px] overflow-hidden rounded-xl border shadow-2xl"
-                style={{ borderColor: "var(--border-mid)", background: "var(--surface)" }}
-              >
-                <Image src={preview.image} alt="" width={1440} height={900} sizes="400px" className="block h-auto w-full" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      )}
     </section>
   );
 }

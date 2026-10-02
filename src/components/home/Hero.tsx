@@ -1,164 +1,138 @@
 "use client";
 
-import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { FaArrowDown, FaArrowRight, FaGithub, FaLinkedin } from "react-icons/fa";
+import { motion, useReducedMotion } from "framer-motion";
+import { FaArrowRight, FaGithub, FaLinkedin } from "react-icons/fa";
 import { siteConfig } from "@/config/siteConfig";
+import BlurText from "@/components/fx/BlurText";
+import Spotlight from "@/components/fx/Spotlight";
+import TiltCard, { TiltLayer } from "@/components/fx/TiltCard";
+import Magnetic from "@/components/fx/Magnetic";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-/** One masked line of the headline, rising into place. */
-function Line({ children, delay }: { children: React.ReactNode; delay: number }) {
-  const reduce = useReducedMotion();
-  return (
-    <span className="block overflow-hidden pb-[0.08em]">
-      <motion.span
-        className="block"
-        initial={reduce ? false : { y: "105%" }}
-        animate={{ y: "0%" }}
-        transition={{ duration: 0.9, ease, delay }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-}
-
-const SHOTS = [
-  { src: "/images/showcase/dashboard-executive.png", alt: "Executive dashboard aggregating all nine systems" },
-  { src: "/images/showcase/wms-dashboard.png", alt: "Warehouse management dashboard" },
-  { src: "/images/showcase/pos-terminal.png", alt: "Point of sale terminal" },
-];
 
 export interface ProofStat {
   value: string;
   label: string;
 }
 
+/**
+ * Hero in the language of the references: a centred sans headline on a
+ * near-black ground lit by two drifting spotlights over a fading dot grid
+ * (Aceternity), words blurring into place (React Bits), one italic serif
+ * accent word (21st.dev), a shiny availability pill, a magnetic button with
+ * a turning border, and the product itself on a card that tilts toward the
+ * pointer.
+ */
 export default function Hero({ proof }: { proof: ProofStat[] }) {
-  const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const backY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
-  const frontY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -140]);
+  const fade = (delay: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.7, ease, delay },
+  });
 
   return (
-    <section ref={ref} className="relative px-5 md:px-10 pt-10 md:pt-6 pb-16">
-      <div className="mx-auto max-w-[1400px]">
-        {/* Meta row: what, where, availability */}
-        <motion.div
-          initial={reduce ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="flex flex-wrap items-center justify-between gap-3 border-b pb-4 eyebrow"
-          style={{ borderColor: "var(--border-mid)" }}
-        >
-          <span>(01) — {siteConfig.owner.title}</span>
-          <span className="hidden md:inline">Distributed systems · Cloud-native · Enterprise</span>
-          <span className="inline-flex items-center gap-2" style={{ color: "var(--green)" }}>
-            <span className="h-1.5 w-1.5 rounded-full bg-current motion-safe:animate-pulse" aria-hidden="true" />
-            Available for work
+    <section className="relative isolate overflow-hidden px-5 pb-20 pt-16 md:-mt-20 md:px-10 md:pt-40">
+      <div className="dot-grid absolute inset-0 -z-10" aria-hidden="true" />
+      <Spotlight className="-z-10" />
+
+      <div className="mx-auto max-w-[1200px] text-center">
+        <motion.div {...fade(0)} className="flex justify-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border-mid)] bg-white/[0.03] px-3.5 py-1.5 text-xs backdrop-blur">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-[var(--green)] opacity-60 motion-safe:animate-ping" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--green)]" />
+            </span>
+            <span className="shiny font-medium">Available for work — {siteConfig.owner.location.replace(/\s+\d{5}$/, "")}</span>
           </span>
         </motion.div>
 
-        {/* Headline */}
-        <h1
-          className="display mt-8 md:mt-10 text-[clamp(3.4rem,10.2vw,10.5rem)]"
-          style={{ color: "var(--text-1)" }}
-        >
-          <Line delay={0.15}>I build the systems</Line>
-          <Line delay={0.27}>
-            a business <em className="italic" style={{ color: "var(--accent-3)" }}>runs on.</em>
-          </Line>
+        <h1 className="display mx-auto mt-8 max-w-5xl text-[clamp(2.75rem,7.4vw,6.25rem)]">
+          <BlurText text="I build the systems" wordClassName="text-silver pb-[0.08em]" />
+          <br />
+          <BlurText text="a business" delay={0.32} wordClassName="text-silver pb-[0.08em]" />{" "}
+          <BlurText text="runs on." delay={0.48} wordClassName="accent-serif pb-[0.08em]" />
         </h1>
 
-        <div className="mt-10 md:mt-12 grid gap-10 md:grid-cols-12 md:items-start">
-          {/* Introduction and actions */}
-          <motion.div
-            className="md:col-span-5 md:pt-2"
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease, delay: 0.45 }}
-          >
-            <p className="max-w-md text-base md:text-lg leading-relaxed" style={{ color: "var(--text-2)" }}>
-              I&apos;m {siteConfig.owner.name}. I design and ship enterprise software end to end —
-              warehouse, transport, production and sales systems that talk to each other through
-              signed events, share one user directory, and report into one dashboard.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href="#work"
-                className="group inline-flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-medium transition-colors"
-                style={{ background: "var(--text-1)", color: "var(--background)" }}
-              >
-                See the work
-                <FaArrowDown size={11} className="transition-transform group-hover:translate-y-0.5" aria-hidden="true" />
-              </a>
-              <Link
-                href="/shop"
-                className="group inline-flex items-center gap-2.5 rounded-full border px-5 py-3 text-sm font-medium transition-colors hover:bg-white/5"
-                style={{ borderColor: "var(--border-strong-visible)", color: "var(--text-1)" }}
-              >
-                Shop the systems
-                <FaArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-              </Link>
-              <span className="mx-1 hidden h-5 w-px sm:block" style={{ background: "var(--border-mid)" }} aria-hidden="true" />
-              <a href={siteConfig.social.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="p-2 transition-colors hover:text-[var(--text-1)]" style={{ color: "var(--text-3)" }}>
-                <FaGithub size={18} />
-              </a>
-              <a href={siteConfig.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="p-2 transition-colors hover:text-[var(--text-1)]" style={{ color: "var(--text-3)" }}>
-                <FaLinkedin size={18} />
-              </a>
-            </div>
-          </motion.div>
+        <motion.p {...fade(0.6)} className="mx-auto mt-7 max-w-2xl text-base leading-relaxed md:text-lg" style={{ color: "var(--text-2)" }}>
+          I&apos;m {siteConfig.owner.name}, a software engineer who designs and ships enterprise software end to end —
+          warehouse, transport, production and sales systems that talk through signed events, share one user
+          directory, and report into one dashboard.
+        </motion.p>
 
-          {/* Framed product imagery, inside the page margin */}
-          <motion.figure
-            className="md:col-span-7"
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease, delay: 0.35 }}
+        <motion.div {...fade(0.72)} className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Magnetic>
+            <a
+              href="#work"
+              className="border-spin group inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-medium shadow-[0_0_40px_-10px_rgba(224,168,120,0.6)]"
+              style={{ color: "var(--text-1)" }}
+            >
+              See the work
+              <FaArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </a>
+          </Magnetic>
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors hover:bg-white/[0.06]"
+            style={{ color: "var(--text-2)" }}
           >
-            <div
-              className="relative aspect-[16/11] overflow-hidden rounded-[22px] border"
-              style={{
-                borderColor: "var(--border-mid)",
-                background: "radial-gradient(120% 90% at 85% 10%, rgba(192,133,82,0.28), transparent 60%), var(--surface)",
-              }}
-            >
-              <motion.div style={{ y: backY }} className="absolute left-[6%] top-[9%] w-[72%] overflow-hidden rounded-xl border border-[var(--border-mid)] shadow-2xl">
-                <Image src={SHOTS[0].src} alt={SHOTS[0].alt} width={1440} height={900} priority sizes="(min-width: 768px) 40vw, 90vw" className="block h-auto w-full" />
-              </motion.div>
-              <motion.div style={{ y: frontY }} className="absolute right-[5%] top-[34%] w-[46%] rotate-[2deg] overflow-hidden rounded-xl border border-[var(--border-mid)] shadow-2xl">
-                <Image src={SHOTS[1].src} alt={SHOTS[1].alt} width={1440} height={900} sizes="(min-width: 768px) 26vw, 60vw" className="block h-auto w-full" />
-              </motion.div>
-              <motion.div style={{ y: frontY }} className="absolute bottom-[-6%] left-[14%] w-[38%] -rotate-[3deg] overflow-hidden rounded-xl border border-[var(--border-mid)] shadow-2xl">
-                <Image src={SHOTS[2].src} alt={SHOTS[2].alt} width={1440} height={900} sizes="(min-width: 768px) 22vw, 50vw" className="block h-auto w-full" />
-              </motion.div>
-            </div>
-            <figcaption className="eyebrow mt-3 flex justify-between gap-4 normal-case tracking-normal">
-              <span>fig. 01 — Executive dashboard, warehouse, point of sale</span>
-              <span className="hidden sm:inline">live on Vercel</span>
-            </figcaption>
-          </motion.figure>
-        </div>
-
-        {/* Proof strip: real figures, not adjectives */}
-        <dl className="mt-16 grid grid-cols-2 md:grid-cols-4 border-t" style={{ borderColor: "var(--border-mid)" }}>
-          {proof.map((p, i) => (
-            <div
-              key={p.label}
-              className={`py-6 pr-4 ${i % 2 === 1 ? "pl-4 md:pl-6" : "md:pl-6"} ${i === 0 ? "md:pl-0" : ""} ${i > 0 ? "md:border-l" : ""} ${i % 2 === 1 ? "border-l md:border-l" : ""}`}
-              style={{ borderColor: "var(--border-mid)" }}
-            >
-              <dt className="eyebrow">{p.label}</dt>
-              <dd className="display mt-2 text-5xl md:text-6xl" style={{ color: "var(--text-1)" }}>{p.value}</dd>
-            </div>
-          ))}
-        </dl>
+            Shop the systems
+          </Link>
+          <span className="mx-1 hidden h-5 w-px bg-[var(--border-mid)] sm:block" aria-hidden="true" />
+          <a href={siteConfig.social.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="rounded-full p-2.5 text-[var(--text-3)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-1)]">
+            <FaGithub size={17} />
+          </a>
+          <a href={siteConfig.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="rounded-full p-2.5 text-[var(--text-3)] transition-colors hover:bg-white/[0.06] hover:text-[var(--text-1)]">
+            <FaLinkedin size={17} />
+          </a>
+        </motion.div>
       </div>
+
+      {/* The product, on a card that tilts toward the pointer */}
+      <motion.div
+        className="relative mx-auto mt-16 max-w-[1100px] md:mt-20"
+        initial={reduce ? false : { opacity: 0, y: 40, rotateX: 18 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+        transition={{ duration: 1.1, ease, delay: 0.55 }}
+        style={{ transformPerspective: 1200 }}
+      >
+        <div className="absolute -inset-x-10 -top-10 bottom-0 -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(192,133,82,0.35),transparent)] blur-2xl" aria-hidden="true" />
+        <TiltCard className="rounded-[22px] border border-[var(--border-mid)] bg-[var(--surface)] p-2 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]" max={6}>
+          <div className="overflow-hidden rounded-[16px]">
+            <Image
+              src="/images/showcase/dashboard-executive.png"
+              alt="Executive dashboard aggregating all nine systems"
+              width={1440}
+              height={900}
+              priority
+              sizes="(min-width: 1100px) 1100px, 95vw"
+              className="block h-auto w-full"
+            />
+          </div>
+          <TiltLayer depth={60} className="absolute -bottom-8 -left-4 hidden w-[34%] md:block">
+            <div className="overflow-hidden rounded-xl border border-[var(--border-mid)] shadow-2xl">
+              <Image src="/images/showcase/pos-terminal.png" alt="Point of sale terminal" width={1440} height={900} sizes="380px" className="block h-auto w-full" />
+            </div>
+          </TiltLayer>
+          <TiltLayer depth={80} className="absolute -right-6 -top-8 hidden w-[30%] md:block">
+            <div className="overflow-hidden rounded-xl border border-[var(--border-mid)] shadow-2xl">
+              <Image src="/images/showcase/wms-dashboard.png" alt="Warehouse management dashboard" width={1440} height={900} sizes="340px" className="block h-auto w-full" />
+            </div>
+          </TiltLayer>
+        </TiltCard>
+      </motion.div>
+
+      {/* Proof strip: real figures */}
+      <dl className="mx-auto mt-20 grid max-w-[1100px] grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--border)] md:grid-cols-4">
+        {proof.map((p) => (
+          <div key={p.label} className="flex flex-col-reverse bg-[var(--background)] px-6 py-6 text-center">
+            <dt className="eyebrow mt-2">{p.label}</dt>
+            <dd className="display text-silver text-4xl md:text-5xl">{p.value}</dd>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 }

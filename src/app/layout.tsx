@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Prompt, Inter, Playfair_Display, Noto_Sans_Thai, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Prompt, Inter, Playfair_Display, Noto_Sans_Thai, Instrument_Serif, JetBrains_Mono, Geist } from "next/font/google";
 import "./globals.css";
 import ClientShell from "@/components/layout/ClientShell";
 import { LoadingProvider } from "@/contexts/LoadingContext";
@@ -34,6 +34,13 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+// Headline sans, as on React Bits.
+const geist = Geist({
+  variable: "--font-geist",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
@@ -58,7 +65,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${prompt.className}`}>
+      <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${geist.variable} ${prompt.className}`}>
         <MotionProvider>
           <LoadingProvider>
             <LoadingScreen />

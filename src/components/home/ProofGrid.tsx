@@ -1,95 +1,100 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-
-interface Cell {
-  index: string;
-  title: string;
-  body: string;
-  figure?: string;
-  span: string;
-}
+import { FaShieldAlt, FaUserCheck, FaBell, FaWifi } from "react-icons/fa";
+import SpotlightCard from "@/components/fx/SpotlightCard";
+import NumberTicker from "@/components/fx/NumberTicker";
+import EventBeams from "@/components/fx/EventBeams";
 
 /**
- * How the platform is built, as a bento grid of facts rather than a list of
- * adjectives. Every figure here is something the code actually does.
+ * How the platform is built, as an Aceternity-style bento grid: a count-up
+ * figure, the event bus drawn as live beams, and three smaller facts. Every
+ * claim here is something the code actually does.
  */
-const CELLS: Cell[] = [
+const SMALL = [
   {
-    index: "03.1",
-    figure: "1,156",
-    title: "automated tests across eight apps",
-    body: "Each app's money paths — stock, payments, approvals, shipments, work orders — run against an in-memory database. Every defect the suites found became a regression test before it was fixed.",
-    span: "md:col-span-4 md:row-span-2",
-  },
-  {
-    index: "03.2",
-    title: "Nine systems, one event bus",
-    body: "Signed webhooks and a transactional outbox. A goods receipt in the warehouse moves stock in inventory; a finished work order draws its materials.",
-    span: "md:col-span-2",
-  },
-  {
-    index: "03.3",
+    icon: FaUserCheck,
     title: "One identity",
     body: "A central user directory: one account per person, a role in each app, verified at every sign-in.",
-    span: "md:col-span-2",
   },
   {
-    index: "03.4",
+    icon: FaBell,
     title: "Errors find people",
-    body: "Every app reports failures to one hub that groups them by cause; alerts and new errors reach a webhook or an inbox.",
-    span: "md:col-span-3",
+    body: "Every app reports failures to one hub that groups them by cause; alerts reach a webhook or an inbox.",
   },
   {
-    index: "03.5",
+    icon: FaWifi,
     title: "Sells while offline",
-    body: "The point of sale queues sales in the browser when the network drops and replays them once it returns — never booking one twice.",
-    span: "md:col-span-3",
+    body: "The point of sale queues sales in the browser when the network drops and replays them — never booking one twice.",
   },
 ];
 
 export default function ProofGrid() {
   const reduce = useReducedMotion();
+  const reveal = (i: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.2 },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const, delay: i * 0.06 },
+  });
+
   return (
-    <section className="px-5 md:px-10 pb-24 md:pb-32">
-      <div className="mx-auto max-w-[1400px]">
-        <p className="eyebrow rule">(03) How it&apos;s built</p>
-        <div className="mt-10 grid gap-3 md:grid-cols-6 md:auto-rows-[minmax(13rem,auto)]">
-          {CELLS.map((cell, i) => (
-            <motion.article
-              key={cell.index}
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.06 }}
-              className={`relative flex flex-col justify-between overflow-hidden rounded-[20px] border p-6 md:p-8 ${cell.span}`}
-              style={{ borderColor: "var(--border-mid)", background: "var(--surface)" }}
-            >
-              {cell.figure && (
-                <div
-                  className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
-                  style={{ background: "var(--accent)" }}
-                  aria-hidden="true"
-                />
-              )}
-              <span className="eyebrow">{cell.index}</span>
-              <div className="relative mt-8">
-                {cell.figure && (
-                  <p className="display text-[clamp(4.5rem,11vw,10rem)]" style={{ color: "var(--text-1)" }}>
-                    {cell.figure}
-                  </p>
-                )}
-                <h3
-                  className={cell.figure ? "mt-2 text-xl md:text-2xl" : "display text-3xl md:text-4xl"}
-                  style={{ color: "var(--text-1)" }}
-                >
-                  {cell.title}
+    <section className="px-5 pb-24 md:px-10 md:pb-28">
+      <div className="mx-auto max-w-[1200px]">
+        <p className="eyebrow">How it&apos;s built</p>
+        <h2 className="display text-silver mt-3 text-[clamp(2.25rem,5vw,4rem)]">
+          Engineered, <span className="accent-serif">not assembled.</span>
+        </h2>
+
+        <div className="mt-12 grid gap-4 md:grid-cols-6">
+          <motion.div className="md:col-span-3" {...reveal(0)}>
+            <SpotlightCard className="h-full p-7 md:p-9">
+              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--accent)] opacity-25 blur-3xl" aria-hidden="true" />
+              <FaShieldAlt className="text-[var(--accent-3)]" size={18} aria-hidden="true" />
+              <p className="display text-silver mt-10 text-[clamp(4rem,9vw,7.5rem)]">
+                <NumberTicker value={1156} />
+              </p>
+              <h3 className="mt-2 text-lg font-medium" style={{ color: "var(--text-1)" }}>
+                automated tests across eight apps
+              </h3>
+              <p className="mt-2 max-w-md text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+                Stock, payments, approvals, shipments and work orders run against an in-memory database. Every defect
+                the suites found became a regression test before it was fixed.
+              </p>
+            </SpotlightCard>
+          </motion.div>
+
+          <motion.div className="md:col-span-3" {...reveal(1)}>
+            <SpotlightCard className="h-full p-7 md:p-9">
+              <div className="flex h-full flex-col">
+                <div className="-mx-2 h-56 md:h-60">
+                  <EventBeams />
+                </div>
+                <h3 className="mt-4 text-lg font-medium" style={{ color: "var(--text-1)" }}>
+                  Nine systems, one event bus
                 </h3>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
-                  {cell.body}
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+                  Signed webhooks and a transactional outbox: a goods receipt in the warehouse moves stock in
+                  inventory, a finished work order draws its materials, and everything reports to the dashboard.
                 </p>
               </div>
-            </motion.article>
+            </SpotlightCard>
+          </motion.div>
+
+          {SMALL.map(({ icon: Icon, title, body }, i) => (
+            <motion.div key={title} className="md:col-span-2" {...reveal(i + 2)}>
+              <SpotlightCard className="h-full p-7">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border-mid)] bg-white/[0.03] text-[var(--accent-3)]">
+                  <Icon size={16} aria-hidden="true" />
+                </span>
+                <h3 className="mt-6 text-lg font-medium" style={{ color: "var(--text-1)" }}>
+                  {title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+                  {body}
+                </p>
+              </SpotlightCard>
+            </motion.div>
           ))}
         </div>
       </div>

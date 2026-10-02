@@ -72,10 +72,12 @@
 
 :root {
   /* Surfaces — espresso ladder */
-  --background: #2E1C1A;
-  --surface:    #3B2523;
-  --surface-2:  #4B2E2B;
-  --surface-3:  #5C3A33;
+  /* Near-black with a warm cast: the ground Aceternity and React Bits use,
+     so spotlights and glows read, while the caramel accent keeps it ours. */
+  --background: #0C0908;
+  --surface:    #15100E;
+  --surface-2:  #1D1613;
+  --surface-3:  #271D19;
 
   /* Borders — cream-alpha hairlines */
   --border:        rgba(255, 248, 240, 0.08);
@@ -353,7 +355,8 @@ h1, h2, h3 {
    on body, not :root, because next/font attaches its --font-* variables to
    body; a var() on :root would resolve before they exist. */
 body {
-  --display-stack: var(--font-instrument), "Playfair Display", Georgia, var(--font-prompt), serif;
+  --display-stack: var(--font-geist), var(--font-inter), var(--font-prompt), system-ui, sans-serif;
+  --serif-stack: var(--font-instrument), "Playfair Display", Georgia, serif;
   --mono-stack: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
@@ -368,13 +371,77 @@ body {
   --cream-ink-2: rgba(46, 28, 26, 0.68);
 }
 
+/* Headlines: a modern sans at 600 with tracking pulled in, the way every
+   reference (Aceternity, React Bits, 21st.dev) sets them. */
 .display {
   font-family: var(--display-stack);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+/* The one italic serif word inside a sans headline (21st.dev). */
+.accent-serif {
+  font-family: var(--serif-stack);
+  font-style: italic;
   font-weight: 400;
-  /* Instrument Serif is already narrow; the -3 to -4.5% the grotesk sites
-     use would make its letters touch. */
-  letter-spacing: -0.015em;
-  line-height: 0.95;
+  letter-spacing: -0.01em;
+  padding-right: 0.06em;
+  background: linear-gradient(100deg, #F2C9A0 0%, #E0A878 40%, #C08552 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Silver-to-cream headline fill, as on Aceternity's spotlight hero. */
+.text-silver {
+  background: linear-gradient(180deg, #FFF8F0 20%, rgba(255, 248, 240, 0.55) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Shiny text: a highlight sweeping across (React Bits). */
+.shiny {
+  background: linear-gradient(110deg, var(--text-3) 35%, #FFF8F0 50%, var(--text-3) 65%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shiny 3.2s linear infinite;
+}
+@keyframes shiny {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
+
+/* Dot grid fading out from the centre (Aceternity backgrounds). */
+.dot-grid {
+  background-image: radial-gradient(rgba(255, 248, 240, 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+}
+
+/* Conic border that turns, for the primary button (uiverse / Magic UI). */
+@property --spin {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.border-spin {
+  background:
+    linear-gradient(var(--btn-bg, #0C0908), var(--btn-bg, #0C0908)) padding-box,
+    conic-gradient(from var(--spin), transparent 0 60%, #E0A878 75%, #FFF8F0 82%, transparent 95%) border-box;
+  border: 1px solid transparent;
+  animation: spin-border 3.5s linear infinite;
+}
+@keyframes spin-border {
+  to { --spin: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny, .border-spin { animation: none; }
 }
 
 /* Indices, captions, metadata. */

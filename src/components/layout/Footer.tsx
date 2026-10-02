@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
         </div>
 
         <p
-          className="display mt-12 select-none whitespace-nowrap text-[clamp(4rem,17.5vw,17rem)] leading-[0.78] -mb-[0.12em]"
+          className="display mt-12 select-none whitespace-nowrap text-[clamp(3.5rem,13.5vw,13.5rem)] leading-[0.8] tracking-[-0.06em] -mb-[0.12em]"
           style={{
             background: "linear-gradient(180deg, rgba(255,248,240,0.9) 0%, rgba(255,248,240,0.08) 100%)",
             WebkitBackgroundClip: "text",

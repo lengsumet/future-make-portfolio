@@ -56,27 +56,12 @@ const proof: ProofStat[] = [
   { value: "3+", label: "Years shipping" },
 ];
 
-const stack = [
-  "Next.js",
-  "TypeScript",
-  "C# / .NET",
-  "Go",
-  "Python",
-  "PostgreSQL",
-  "Prisma",
-  "Docker",
-  "AWS",
-  "Event-driven",
-  "Transactional outbox",
-  "RBAC",
-];
 
 export default function Home() {
   return (
     <div style={{ background: "var(--background)" }}>
-      <div className="grain-overlay" aria-hidden="true" />
       <Hero proof={proof} />
-      <Marquee items={stack} />
+      <Marquee />
       <WorkIndex items={work} />
       <ProofGrid />
       <ContactBand />
