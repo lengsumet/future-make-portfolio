@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import PageWrapper from "./PageWrapper";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         <PageWrapper>{children}</PageWrapper>
         <Footer />
       </main>
+      <ChatWidget />
     </div>
   );
 }

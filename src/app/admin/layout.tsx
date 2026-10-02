@@ -1,15 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FaChartBar, FaBoxOpen, FaShoppingCart, FaChartLine, FaSignOutAlt, FaArrowLeft } from "react-icons/fa";
+import { FaChartBar, FaBoxOpen, FaShoppingCart, FaChartLine, FaSignOutAlt, FaArrowLeft, FaComments } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const adminNav = [
   { name: "Dashboard", href: "/admin",            icon: FaChartBar },
   { name: "Products",  href: "/admin/products",   icon: FaBoxOpen },
   { name: "Orders",    href: "/admin/orders",      icon: FaShoppingCart },
+  { name: "Inbox",     href: "/admin/inbox",       icon: FaComments },
   { name: "Analytics", href: "/admin/analytics",   icon: FaChartLine },
 ];
 
@@ -24,6 +25,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
 
   const isLoginPage = pathname === "/admin/login";
+  const [unread, setUnread] = useState(0);
+
+  // Unread chat messages for the Inbox badge; refreshed while the admin is open.
+  useEffect(() => {
+    if (isLoginPage) return;
+    let alive = true;
+    const load = async () => {
+      if (document.visibilityState !== "visible") return;
+      try {
+        const res = await fetch("/api/admin/chat?status=open", { cache: "no-store", headers: { "x-no-progress": "1" } });
+        if (res.ok && alive) setUnread((await res.json()).unread ?? 0);
+      } catch {
+        /* the badge can wait for the next tick */
+      }
+    };
+    void load();
+    const id = window.setInterval(load, 30000);
+    return () => {
+      alive = false;
+      window.clearInterval(id);
+    };
+  }, [isLoginPage, pathname]);
 
   if (isLoginPage) {
     return <>{children}</>;
@@ -55,14 +78,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <span className="pointer-events-none absolute inset-x-8 -top-px h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent opacity-60" aria-hidden="true" />
             {adminNav.map((item) => {
-              const active = pathname === item.href;
+              const active = item.href === "/admin" ? pathname === item.href : !!pathname?.startsWith(item.href);
+              const badge = item.href === "/admin/inbox" && unread > 0 ? unread : 0;
               const Icon = item.icon;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  aria-label={item.name}
+                  aria-label={badge ? `${item.name}, ${badge} unread` : item.name}
                   className="relative flex h-9 items-center gap-2 rounded-full! px-3 text-sm transition-colors hover:text-[var(--text-1)] sm:px-4"
                   style={{ color: active ? "var(--text-1)" : "var(--text-3)" }}
                 >
@@ -75,6 +99,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   )}
                   <Icon size={12} className="relative" aria-hidden="true" />
                   <span className="relative hidden sm:inline">{item.name}</span>
+                  {badge > 0 && (
+                    <span className="relative flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--accent-3)] px-1 text-2xs font-bold text-[var(--background)]" aria-hidden="true">
+                      {badge > 99 ? "99+" : badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}

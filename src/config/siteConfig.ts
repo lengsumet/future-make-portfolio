@@ -16,7 +16,7 @@ export const siteConfig = {
   },
   social: {
     github: "https://github.com/lengsumet",
-    linkedin: "https://linkedin.com/in/sumetbuarod",
+    linkedin: "https://www.linkedin.com/in/sumet-buarod-56811a279/",
     email: "mailto:sumet.buarod@gmail.com",
   },
   shop: {
