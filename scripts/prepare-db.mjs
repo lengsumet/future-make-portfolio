@@ -46,8 +46,30 @@ if (!process.env.DATABASE_URL) {
   build server for no gain.
 */
 const prismaCli = createRequire(import.meta.url).resolve("prisma/build/index.js");
-const run = (args) =>
-  execFileSync(process.execPath, [prismaCli, ...args], { stdio: "inherit", env: process.env });
+const run = (args, env = process.env) =>
+  execFileSync(process.execPath, [prismaCli, ...args], { stdio: "inherit", env });
+
+/*
+  Migrations go to the database directly, not through Neon's pooler.
+  `migrate deploy` takes a session-level advisory lock; through PgBouncer in
+  transaction mode that lock stays on whichever server connection ran it, and
+  that connection goes back to the pool still holding it. Every later deploy
+  then times out waiting for the lock (P1002) until the pooled connection
+  dies. DIRECT_URL wins when set; otherwise a Neon pooler host is turned into
+  its direct twin by dropping "-pooler" from the hostname.
+*/
+function directUrl(url) {
+  try {
+    const u = new URL(url);
+    if (!u.hostname.includes("-pooler.")) return url;
+    u.hostname = u.hostname.replace("-pooler.", ".");
+    u.searchParams.delete("pgbouncer");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+const migrateEnv = { ...process.env, DATABASE_URL: process.env.DIRECT_URL || directUrl(process.env.DATABASE_URL) };
 
 console.log("[prepare-db] applying migrations");
 /*
@@ -56,7 +78,7 @@ console.log("[prepare-db] applying migrations");
   a build server, and doubly so here — this database carries another system's
   schema alongside ours.
 */
-run(["migrate", "deploy"]);
+run(["migrate", "deploy"], migrateEnv);
 
 if (!existsSync("prisma/seed.ts")) {
   console.error("[prepare-db] prisma/seed.ts is missing — refusing to build an empty catalogue");
