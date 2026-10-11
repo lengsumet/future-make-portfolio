@@ -7,9 +7,15 @@
   },
   "experience": [
     {
+      "company": "Thai Credit Bank Public Company Limited",
+      "role": "Backend Developer (.NET)",
+      "period": "Jun 2026 – Present",
+      "description": "Backend development with C# and .NET: building and maintaining APIs and services for the bank’s operations, with a focus on reliability, security and clean integration between systems."
+    },
+    {
       "company": "Ngernturbo Public Company Limited",
       "role": "Software Engineer",
-      "period": "Mar 2022 – Present",
+      "period": "Mar 2022 – May 2026",
       "description": "Architectural design & stakeholder alignment using Swimlane diagrams and flowcharting. Engineered a comprehensive insurance platform with complex business logic and real-time third-party API integrations. Developed a high-concurrency Workflow Engine for financial transaction lifecycle management ensuring atomic operations across distributed services. Built full-stack Policy Management System with real-time Monitoring Dashboard. Designed Granular Access Control (Whitelist) system and internal HR enterprise solutions. Cross-platform mobile development with Kotlin."
     }
   ],

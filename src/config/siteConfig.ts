@@ -5,7 +5,7 @@ export const siteConfig = {
     phone: "095-803-9303",
     location: "Chum Phae, Khon Kaen 40130",
     title: "Software Engineer",
-    company: "Ngernturbo Public Company Limited",
+    company: "Thai Credit Bank Public Company Limited",
   },
   site: {
     name: "Sumet Buarod",
