@@ -1,56 +1,71 @@
 import type { Metadata } from "next";
-import { Prompt, Inter, Playfair_Display, Noto_Sans_Thai, Instrument_Serif, JetBrains_Mono, Geist } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import ClientShell from "@/components/layout/ClientShell";
 import { LoadingProvider } from "@/contexts/LoadingContext";
 import LoadingScreen from "@/components/animations/LoadingScreen";
 import MotionProvider from "@/components/providers/MotionProvider";
 
-const prompt = Prompt({
+// Self-hosted (src/app/fonts, OFL): a build never downloads fonts, so a
+// Google Fonts hiccup can no longer fail the deploy. Same families, subsets,
+// weights and styles as before; the files are the ones next/font/google
+// fetched. Prompt ships static weights, the others one variable file each.
+const prompt = localFont({
   variable: "--font-prompt",
-  subsets: ["latin", "thai"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  src: [
+    { path: "./fonts/Prompt-thai-100.woff2", weight: "100", style: "normal" },
+    { path: "./fonts/Prompt-latin-100.woff2", weight: "100", style: "normal" },
+    { path: "./fonts/Prompt-thai-200.woff2", weight: "200", style: "normal" },
+    { path: "./fonts/Prompt-latin-200.woff2", weight: "200", style: "normal" },
+    { path: "./fonts/Prompt-thai-300.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/Prompt-latin-300.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/Prompt-thai-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Prompt-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Prompt-thai-500.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/Prompt-latin-500.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/Prompt-thai-600.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/Prompt-latin-600.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/Prompt-thai-700.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Prompt-latin-700.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Prompt-thai-800.woff2", weight: "800", style: "normal" },
+    { path: "./fonts/Prompt-latin-800.woff2", weight: "800", style: "normal" },
+    { path: "./fonts/Prompt-thai-900.woff2", weight: "900", style: "normal" },
+    { path: "./fonts/Prompt-latin-900.woff2", weight: "900", style: "normal" },
+  ],
+  display: "swap",
 });
 
-const inter = Inter({
+// Referenced by --display-stack in globals.css (fallback behind Geist).
+const inter = localFont({
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  src: [{ path: "./fonts/Inter-latin-var.woff2", weight: "400 700", style: "normal" }],
+  display: "swap",
 });
 
 // Editorial display face and a mono for labels: the pairing most of the
 // sites on godly.design use — a quiet serif at large sizes, a monospace for
 // indices, captions and metadata.
-const instrumentSerif = Instrument_Serif({
+const instrumentSerif = localFont({
   variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  src: [
+    { path: "./fonts/InstrumentSerif-latin-regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/InstrumentSerif-latin-italic.woff2", weight: "400", style: "italic" },
+  ],
+  display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 
 // Headline sans, as on React Bits.
-const geist = Geist({
+const geist = localFont({
   variable: "--font-geist",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  src: [{ path: "./fonts/Geist-latin-var.woff2", weight: "400 700", style: "normal" }],
+  display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const jetbrainsMono = localFont({
   variable: "--font-jetbrains",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
-
-const notoSansThai = Noto_Sans_Thai({
-  variable: "--font-noto-thai",
-  subsets: ["thai"],
-  weight: ["400", "600"],
+  src: [{ path: "./fonts/JetBrainsMono-latin-var.woff2", weight: "400 500", style: "normal" }],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -65,7 +80,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${prompt.variable} ${inter.variable} ${playfair.variable} ${notoSansThai.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${geist.variable} ${prompt.className}`}>
+      <body className={`${prompt.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${geist.variable} ${prompt.className}`}>
         <MotionProvider>
           <LoadingProvider>
             <LoadingScreen />

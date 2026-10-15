@@ -1,0 +1,17 @@
+Self-hosted web fonts (loaded with next/font/local from src/app/layout.tsx).
+Downloaded once from fonts.gstatic.com (Google Fonts) so builds never depend on
+a font download. Byte-identical to the files next/font/google served before.
+
+- Prompt-{latin,thai}-{100..900}.woff2    Prompt, latin + thai subsets, static weights 100-900
+- Inter-latin-var.woff2                   Inter, latin subset, variable weight (used 400-700)
+- Geist-latin-var.woff2                   Geist, latin subset, variable weight (used 400-700)
+- InstrumentSerif-latin-regular.woff2     Instrument Serif, latin subset, 400 normal
+- InstrumentSerif-latin-italic.woff2      Instrument Serif, latin subset, 400 italic
+- JetBrainsMono-latin-var.woff2           JetBrains Mono, latin subset, variable weight (used 400-500)
+
+Prompt: Copyright The Prompt Project Authors (Cadson Demak). Inter: Copyright
+The Inter Project Authors. Geist: Copyright The Geist Project Authors (Vercel).
+Instrument Serif: Copyright The Instrument Serif Project Authors.
+JetBrains Mono: Copyright The JetBrains Mono Project Authors.
+All are licensed under the SIL Open Font License, Version 1.1:
+https://openfontlicense.org (full text: https://scripts.sil.org/OFL)
