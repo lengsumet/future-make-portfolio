@@ -1,6 +1,6 @@
 import productsData from "../../public/data/products.json";
 import Hero, { type ProofStat } from "@/components/home/Hero";
-import Marquee from "@/components/home/Marquee";
+import StackLedger from "@/components/home/StackLedger";
 import WorkIndex, { type WorkItem } from "@/components/home/WorkIndex";
 import ProofGrid from "@/components/home/ProofGrid";
 import ContactBand from "@/components/home/ContactBand";
@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <div style={{ background: "var(--background)" }}>
       <Hero proof={proof} />
-      <Marquee />
+      <StackLedger />
       <WorkIndex items={work} />
       <ProofGrid />
       <ContactBand />
