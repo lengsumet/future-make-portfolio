@@ -19,6 +19,10 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/in/sumet-buarod-56811a279/",
     email: "mailto:sumet.buarod@gmail.com",
   },
+  proof: {
+    // vitest total across the nine apps under apps/ — recount when suites change.
+    automatedTests: 3240,
+  },
   shop: {
     currency: "THB",
     currencySymbol: "฿",

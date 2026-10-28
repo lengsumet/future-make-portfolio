@@ -5,6 +5,7 @@ import WorkIndex, { type WorkItem } from "@/components/home/WorkIndex";
 import ProofGrid from "@/components/home/ProofGrid";
 import ContactBand from "@/components/home/ContactBand";
 import CatWidget from "@/components/animations/CatWidget";
+import { siteConfig } from "@/config/siteConfig";
 
 interface ProductEntry {
   slug: string;
@@ -51,7 +52,7 @@ const work: WorkItem[] = (productsData as ProductEntry[])
 
 const proof: ProofStat[] = [
   { value: String(work.filter((w) => w.slug !== "portfolio-template").length).padStart(2, "0"), label: "Production systems" },
-  { value: "1,156", label: "Automated tests" },
+  { value: siteConfig.proof.automatedTests.toLocaleString("en-US"), label: "Automated tests" },
   { value: "10", label: "Live deployments" },
   { value: "3+", label: "Years shipping" },
 ];

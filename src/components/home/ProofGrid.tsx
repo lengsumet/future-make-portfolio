@@ -5,6 +5,7 @@ import { FaShieldAlt, FaUserCheck, FaBell, FaWifi } from "react-icons/fa";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 import NumberTicker from "@/components/fx/NumberTicker";
 import EventBeams from "@/components/fx/EventBeams";
+import { siteConfig } from "@/config/siteConfig";
 
 /**
  * How the platform is built, as an Aceternity-style bento grid: a count-up
@@ -52,10 +53,10 @@ export default function ProofGrid() {
               <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[var(--accent)] opacity-25 blur-3xl" aria-hidden="true" />
               <FaShieldAlt className="text-[var(--accent-3)]" size={18} aria-hidden="true" />
               <p className="display text-silver mt-10 text-[clamp(4rem,9vw,7.5rem)]">
-                <NumberTicker value={1156} />
+                <NumberTicker value={siteConfig.proof.automatedTests} />
               </p>
               <h3 className="mt-2 text-lg font-medium" style={{ color: "var(--text-1)" }}>
-                automated tests across eight apps
+                automated tests across nine apps
               </h3>
               <p className="mt-2 max-w-md text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
                 Stock, payments, approvals, shipments and work orders run against an in-memory database. Every defect

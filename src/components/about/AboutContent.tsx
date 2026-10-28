@@ -200,7 +200,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           <div className="flex flex-col-reverse bg-[var(--background)] px-6 py-6 text-center">
             <dt className="eyebrow mt-2">Automated tests</dt>
             <dd className="display text-silver text-4xl md:text-5xl">
-              <NumberTicker value={1156} />
+              <NumberTicker value={siteConfig.proof.automatedTests} />
             </dd>
           </div>
           <div className="flex flex-col-reverse bg-[var(--background)] px-6 py-6 text-center">
