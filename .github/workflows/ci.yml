@@ -1,0 +1,46 @@
+# Modelled on tools/ci.yml, but maintained here by hand: tools/sync-ci.mjs only
+# covers the apps/ repos, and their template runs vitest, which this site does
+# not use (tests run on node:test through `npm test`).
+#
+# The repo is private, so every minute here comes out of the account's free
+# Actions allowance. Hence: master and PRs only, a superseded run is cancelled,
+# npm is cached, and a stuck run dies at 10 min.
+name: CI
+
+on:
+  push:
+    branches: [master]
+    paths-ignore: ["**.md"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Placeholder so Prisma can load; every test stubs the database and none
+      # opens a connection. Not a real secret.
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npx prisma generate
+      - name: Types
+        run: npx tsc --noEmit -p .
+      - name: Lint
+        run: npx eslint .
+      - name: Tests
+        run: npm test
