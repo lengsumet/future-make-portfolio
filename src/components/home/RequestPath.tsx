@@ -5,6 +5,7 @@ import type { IconType } from "react-icons";
 import { SiNextdotjs, SiReact, SiZod, SiPrisma, SiPostgresql, SiDotnet, SiGo, SiPython, SiDocker } from "react-icons/si";
 import { FaAws } from "react-icons/fa";
 import { LuShieldCheck, LuRotateCw } from "react-icons/lu";
+import { useLoading } from "@/contexts/LoadingContext";
 
 type Hop = { title: string; tool: string; icon: IconType };
 
@@ -61,9 +62,12 @@ export default function RequestPath() {
     timers.current.push(window.setTimeout(() => setRunning(false), 200 + HOPS.length * STEP_MS + 400));
   }, []);
 
+  // Not while the loading screen still covers the page.
+  const { isLoading } = useLoading();
+
   useEffect(() => {
     const el = trackRef.current;
-    if (!el) return;
+    if (!el || isLoading) return;
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
@@ -78,7 +82,7 @@ export default function RequestPath() {
       io.disconnect();
       clear();
     };
-  }, [run]);
+  }, [run, isLoading]);
 
   // Centre of the hop the pulse is on, as a share of the track (desktop row).
   const pulseAt = `${((Math.max(lit, 1) - 0.5) / HOPS.length) * 100}%`;

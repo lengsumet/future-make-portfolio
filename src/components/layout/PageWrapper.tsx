@@ -10,17 +10,15 @@ export default function PageWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { isLoading } = useLoading();
+  const { isInitialLoad } = useLoading();
 
-  // Hide page content when loading
-  if (isLoading) {
-    return null;
-  }
-
+  // The page is always rendered, so the server sends its content (search
+  // engines, link previews); the loading screen is an opaque layer on top.
+  // On the first load that layer is the transition, so no fade of our own.
   return (
     <motion.div
       key={pathname}
-      initial={{ opacity: 0, y: 10 }}
+      initial={isInitialLoad ? false : { opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.3,

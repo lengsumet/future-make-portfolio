@@ -81,6 +81,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${prompt.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${geist.variable} ${prompt.className}`}>
+        {/* Without JavaScript the loading screen never leaves and entrance
+            animations never run: show the page as the server sent it. */}
+        <noscript>
+          <style>{'[data-loading-screen]{display:none!important}[style*="opacity:0"]{opacity:1!important;transform:none!important;filter:none!important}'}</style>
+        </noscript>
         <MotionProvider>
           <LoadingProvider>
             <LoadingScreen />

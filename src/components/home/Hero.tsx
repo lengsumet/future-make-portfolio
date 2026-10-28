@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
+import { useLoading } from "@/contexts/LoadingContext";
 import { FaArrowRight, FaGithub, FaLinkedin } from "react-icons/fa";
 import { siteConfig } from "@/config/siteConfig";
 import BlurText from "@/components/fx/BlurText";
@@ -27,9 +28,12 @@ export interface ProofStat {
  */
 export default function Hero({ proof }: { proof: ProofStat[] }) {
   const reduce = useReducedMotion();
+  // Held until the loading screen has gone, so the entrance is seen.
+  const { isLoading } = useLoading();
+  const ready = reduce || !isLoading;
   const fade = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 14 },
-    animate: { opacity: 1, y: 0 },
+    animate: ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 },
     transition: { duration: 0.7, ease, delay },
   });
 
@@ -94,7 +98,7 @@ export default function Hero({ proof }: { proof: ProofStat[] }) {
       <motion.div
         className="relative mx-auto mt-16 max-w-[1100px] md:mt-20"
         initial={reduce ? false : { opacity: 0, y: 40, rotateX: 18 }}
-        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+        animate={ready ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 40, rotateX: 18 }}
         transition={{ duration: 1.1, ease, delay: 0.55 }}
         style={{ transformPerspective: 1200 }}
       >

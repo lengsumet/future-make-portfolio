@@ -35,6 +35,7 @@ const LoadingScreen: React.FC = () => {
         <motion.div
           role="status"
           aria-live="polite"
+          data-loading-screen
           className="fixed inset-0 z-[70] flex items-center justify-center overflow-hidden bg-[var(--background)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
