@@ -2,6 +2,7 @@ import { test, beforeEach, mock } from "node:test";
 import assert from "node:assert/strict";
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
+import { verifyAdminToken } from "@/lib/auth/admin";
 import { POST } from "./route";
 
 // The attempt table is an in-memory stand-in: the only database is the shared
@@ -42,13 +43,15 @@ function login(password: string, ip = "203.0.113.7") {
   );
 }
 
-test("the right password sets the admin cookie", async () => {
+test("the right password sets a one-day cookie holding a valid token", async () => {
   const res = await login("right-password");
 
   assert.equal(res.status, 200);
   const cookie = res.cookies.get("admin_token");
   assert.ok(cookie, "no admin_token cookie");
+  assert.equal(cookie.maxAge, 86_400);
   assert.equal(cookie.httpOnly, true);
+  assert.equal(await verifyAdminToken(cookie.value), true);
 });
 
 test("the sixth attempt inside the window is refused, even with the right password", async () => {

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { createHmac, timingSafeEqual } from "crypto";
-import { signAdminToken } from "@/lib/auth/admin";
-import { requireSecret } from "@/lib/env";
+import { ADMIN_TOKEN_TTL_SECONDS, checkAdminPassword, signAdminToken } from "@/lib/auth/admin";
 import { ipHash } from "@/lib/request";
 
 // At most 5 attempts per address per 15 minutes, counted in the database so
@@ -28,15 +26,6 @@ async function overLimit(hash: string): Promise<boolean> {
   return recent > MAX_ATTEMPTS;
 }
 
-// Use HMAC to produce fixed-length buffers, then timingSafeEqual to prevent
-// timing attacks that could reveal the password via response time differences.
-function safePasswordCompare(input: string, expected: string): boolean {
-  const key = requireSecret("ADMIN_JWT_SECRET");
-  const inputHash = createHmac("sha256", key).update(input).digest();
-  const expectedHash = createHmac("sha256", key).update(expected).digest();
-  return timingSafeEqual(inputHash, expectedHash);
-}
-
 export async function POST(request: NextRequest) {
   const hash = ipHash(request);
 
@@ -60,7 +49,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Password required" }, { status: 400 });
     }
 
-    if (!safePasswordCompare(password, requireSecret("ADMIN_PASSWORD"))) {
+    if (!checkAdminPassword(password)) {
       return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
 
@@ -73,7 +62,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: ADMIN_TOKEN_TTL_SECONDS,
       path: "/",
     });
 
