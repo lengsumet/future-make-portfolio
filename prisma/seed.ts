@@ -8,14 +8,19 @@ async function main() {
 
   // `public/data/products.json` is the source of truth — the admin screen says
   // so in as many words. Anything in the database that is no longer in the file
-  // is gone from the catalogue, and leaving it behind is how the shop came to
+  // is gone from the catalogue, and leaving it on sale is how the shop came to
   // sell six products that the showcase had never heard of while none of the
   // ten it did show could be bought at all.
+  //
+  // Archived, not deleted: OrderItem references Product with ON DELETE
+  // RESTRICT, so deleting a product anyone has ordered throws, fails this
+  // seed and with it every build. The shop only lists `status: "active"`.
   const slugs = productsData.map((p) => p.slug);
-  const { count: removed } = await db.product.deleteMany({
-    where: { slug: { notIn: slugs } },
+  const { count: archived } = await db.product.updateMany({
+    where: { slug: { notIn: slugs }, status: { not: "archived" } },
+    data: { status: "archived" },
   });
-  if (removed > 0) console.log(`  Removed ${removed} product(s) no longer in products.json`);
+  if (archived > 0) console.log(`  Archived ${archived} product(s) no longer in products.json`);
 
   for (const p of productsData) {
     const fields = {
