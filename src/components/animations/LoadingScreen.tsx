@@ -21,12 +21,13 @@ const LoadingScreen: React.FC = () => {
   const [showSub, setShowSub] = useState(false);
 
   useEffect(() => {
-    if (isLoading) {
-      const timer = setTimeout(() => setShowSub(true), LOADING_CONFIG.SPINNER_DELAY);
-      return () => clearTimeout(timer);
-    } else {
+    if (!isLoading) return;
+    const timer = setTimeout(() => setShowSub(true), LOADING_CONFIG.SPINNER_DELAY);
+    // Reset on the way out so the next show starts without the subtitle.
+    return () => {
+      clearTimeout(timer);
       setShowSub(false);
-    }
+    };
   }, [isLoading]);
 
   return (

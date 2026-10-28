@@ -123,13 +123,13 @@ export default function RequestPath() {
                   className="grid grid-cols-[68px_minmax(0,1fr)] items-center gap-x-4 md:grid-cols-1 md:justify-items-center md:gap-y-2.5 md:text-center"
                 >
                   <span
-                    className={`relative z-[1] row-span-2 grid h-[68px] w-[68px] place-items-center rounded-[20px] border bg-[var(--surface)] text-[28px] transition-[color,border-color,box-shadow,transform] duration-300 md:row-span-1 ${
+                    className={`relative z-[1] row-span-2 grid h-[68px] w-[68px] place-items-center rounded-[20px] border bg-[var(--surface)] transition-[color,border-color,box-shadow,transform] duration-300 md:row-span-1 ${
                       on
                         ? "-translate-y-[3px] border-[var(--accent)] text-[var(--accent-3)] shadow-[0_0_0_6px_rgba(192,133,82,0.10),0_0_36px_-6px_rgba(224,168,120,0.55)]"
                         : "border-[var(--border-mid)] text-[var(--text-2)]"
                     }`}
                   >
-                    <Icon aria-hidden="true" />
+                    <Icon aria-hidden="true" size={28} />
                   </span>
                   <span className="self-end text-sm text-[var(--text-1)] md:self-auto">{title}</span>
                   <span className="self-start font-mono text-2xs text-[var(--text-3)] md:self-auto">{tool}</span>
@@ -161,7 +161,7 @@ export default function RequestPath() {
               key={name}
               className="inline-flex items-center gap-2 rounded-full border border-[var(--border-mid)] px-3 py-1.5 text-sm text-[var(--text-2)]"
             >
-              <Icon aria-hidden="true" className="text-[15px]" /> {name}
+              <Icon aria-hidden="true" size={15} /> {name}
             </span>
           ))}
         </div>
