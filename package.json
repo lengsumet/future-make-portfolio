@@ -13,7 +13,7 @@
     "db:studio": "prisma studio",
     "lint:a11y": "eslint -c eslint.a11y.mjs src",
     "type-check": "tsc --noEmit",
-    "test": "node --import tsx --test src/app/api/shop/orders/route.test.ts src/app/api/track/route.test.ts src/lib/env.test.ts",
+    "test": "node --import tsx --test src/app/api/shop/orders/route.test.ts src/app/api/track/route.test.ts src/lib/env.test.ts src/app/api/auth/admin/route.test.ts",
     "db:generate": "prisma generate"
   },
   "prisma": {

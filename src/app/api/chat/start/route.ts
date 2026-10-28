@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { LIMITS, badRequest, ipHash, newVisitorToken, readJson, serializeMessage, startSchema } from "@/lib/chat/core";
+import { LIMITS, badRequest, newVisitorToken, readJson, serializeMessage, startSchema } from "@/lib/chat/core";
+import { ipHash } from "@/lib/request";
 import { notifyOwner } from "@/lib/chat/notify";
 
 /**

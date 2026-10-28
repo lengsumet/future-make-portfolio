@@ -67,13 +67,6 @@ export function hashLinkToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
-/** A salted hash of the caller's address: enough to rate-limit, not enough to identify. */
-export function ipHash(request: NextRequest): string {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? request.headers.get("x-real-ip") ?? "unknown";
-  const salt = process.env.ADMIN_JWT_SECRET ?? "chat";
-  return createHash("sha256").update(`${salt}:${ip}`).digest("hex").slice(0, 32);
-}
-
 /** Opaque 400: never echo what failed validation back to an anonymous caller. */
 export function badRequest(where: string, issues?: unknown) {
   if (issues) console.warn(`[chat] invalid body on ${where}`, issues);

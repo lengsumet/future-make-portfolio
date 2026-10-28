@@ -111,6 +111,19 @@ model ChatConversation {
   @@index([email])
 }
 
+/// One admin login attempt, for the rate limit. Lives in the database so every
+/// server instance counts the same attempts; rows older than the window are
+/// pruned by the login route itself.
+model LoginAttempt {
+  id        Int      @id @default(autoincrement())
+  /// Salted hash of the caller's address (see ipHash in lib/request).
+  ipHash    String
+  createdAt DateTime @default(now())
+
+  @@index([ipHash, createdAt])
+  @@index([createdAt])
+}
+
 model ChatMessage {
   id             String   @id @default(cuid())
   conversationId String
