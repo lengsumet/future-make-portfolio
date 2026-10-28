@@ -1,16 +1,25 @@
-export type AnalyticsEventType =
-  | "page_view"
-  | "page_exit"
-  | "skill_hover"
-  | "timeline_view"
-  | "contact_click"
-  | "resume_download"
-  | "product_view"
-  | "demo_click"
-  | "checkout_start"
-  | "purchase_complete"
-  | "scroll_depth"
-  | "cta_click";
+/** Events a browser may report through /api/track. */
+export const CLIENT_EVENT_TYPES = [
+  "page_view",
+  "page_exit",
+  "skill_hover",
+  "timeline_view",
+  "contact_click",
+  "resume_download",
+  "product_view",
+  "demo_click",
+  "checkout_start",
+  "scroll_depth",
+  "cta_click",
+] as const;
+
+export type ClientEventType = (typeof CLIENT_EVENT_TYPES)[number];
+
+/**
+ * purchase_complete is written only by the server when an order is created:
+ * accepted from a browser, anyone could inflate the conversion figures.
+ */
+export type AnalyticsEventType = ClientEventType | "purchase_complete";
 
 export interface AnalyticsEvent {
   id: string;
