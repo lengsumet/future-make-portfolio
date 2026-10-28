@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import { AnalyticsEventType } from "@/types/analytics";
+import { ClientEventType } from "@/types/analytics";
 
-function getSessionId(): string {
+/** The analytics session; checkout sends it so the server-side purchase joins the visit. */
+export function getSessionId(): string {
   if (typeof window === "undefined") return "ssr";
   let id = sessionStorage.getItem("_sid");
   if (!id) {
@@ -15,7 +16,7 @@ function getSessionId(): string {
 
 export function useTracking() {
   const track = useCallback(
-    (event: AnalyticsEventType, element?: string, metadata?: Record<string, unknown>) => {
+    (event: ClientEventType, element?: string, metadata?: Record<string, unknown>) => {
       if (typeof window === "undefined") return;
       const payload = {
         sessionId: getSessionId(),

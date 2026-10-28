@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Product } from "@/types/shop";
-import { useTracking, usePageView } from "@/hooks/useTracking";
+import { useTracking, usePageView, getSessionId } from "@/hooks/useTracking";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FaCheck, FaArrowRight, FaArrowLeft, FaTimes, FaExternalLinkAlt } from "react-icons/fa";
 import LiveStats from "@/components/product/LiveStats";
@@ -123,7 +123,6 @@ function CheckoutModal({
   onClose: () => void;
   onSuccess: (orderNumber: string) => void;
 }) {
-  const { track } = useTracking();
   const [form, setForm] = useState({ buyerName: "", buyerEmail: "", notes: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -142,12 +141,13 @@ function CheckoutModal({
           buyerName: form.buyerName,
           buyerEmail: form.buyerEmail,
           productId: product.id,
+          sessionId: getSessionId(),
           notes: form.notes,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Order failed");
-      track("purchase_complete", product.id, { price: product.price });
+      // purchase_complete is recorded by the orders route.
       onSuccess(data.order.orderNumber);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");

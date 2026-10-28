@@ -10,6 +10,12 @@ const CheckoutSchema = z.object({
   // Only the product is the buyer's choice. Its price and title come from the
   // database: a client-sent price would let anyone order anything for ฿1.
   productId: z.string().min(1).max(64),
+  /**
+   * The visitor's analytics session, so the purchase joins their funnel. Same
+   * bound as /api/track. Only analytics depends on it, so a bad value is
+   * dropped (the purchase is keyed on the order instead), never a lost order.
+   */
+  sessionId: z.string().min(1).max(64).optional().catch(undefined),
   notes: z.string().optional(),
 });
 
@@ -26,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     const product = await db.product.findFirst({
       where: { id: validated.productId, status: "active" },
-      select: { id: true, title: true, price: true },
+      select: { id: true, slug: true, title: true, price: true },
     });
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
@@ -52,6 +58,20 @@ export async function POST(request: NextRequest) {
       },
       include: { items: true },
     });
+
+    // The funnel's last step is recorded here, not by the browser, so it counts
+    // real orders only. A failure must not fail an order that already exists.
+    await db.pageEvent
+      .create({
+        data: {
+          sessionId: validated.sessionId ?? `order:${order.id}`,
+          eventType: "purchase_complete",
+          page: `/shop/${product.slug}`,
+          element: product.id,
+          metadata: JSON.stringify({ price: product.price, orderId: order.id }),
+        },
+      })
+      .catch((error) => console.warn("[shop/orders] purchase_complete not recorded:", error));
 
     return NextResponse.json({ ok: true, order }, { status: 201 });
   } catch (error) {
