@@ -6,6 +6,8 @@ import ProofGrid from "@/components/home/ProofGrid";
 import ContactBand from "@/components/home/ContactBand";
 import CatWidget from "@/components/animations/CatWidget";
 import { siteConfig } from "@/config/siteConfig";
+import { yearsSinceFirstRole } from "@/lib/experience";
+import aboutData from "../../public/data/about.json";
 
 interface ProductEntry {
   slug: string;
@@ -54,7 +56,7 @@ const proof: ProofStat[] = [
   { value: String(work.filter((w) => w.slug !== "portfolio-template").length).padStart(2, "0"), label: "Production systems" },
   { value: siteConfig.proof.automatedTests.toLocaleString("en-US"), label: "Automated tests" },
   { value: "10", label: "Live deployments" },
-  { value: "3+", label: "Years shipping" },
+  { value: `${yearsSinceFirstRole(aboutData.experience)}+`, label: "Years shipping" },
 ];
 
 

@@ -19,6 +19,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Timeline, { type TimelineItem } from "@/components/ui/Timeline";
 import SkillIcons from "@/components/ui/SkillIcons";
 import { AboutData, Hobby, Skill } from "@/types/types";
+import { yearsSinceFirstRole } from "@/lib/experience";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -68,10 +69,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
 
   const current = experience.find((e) => /present/i.test(e.period)) ?? experience[0];
 
-  const startYears = experience
-    .map((e) => Number(e.period.match(/\d{4}/)?.[0]))
-    .filter((y) => Number.isFinite(y) && y > 0);
-  const years = startYears.length ? new Date().getFullYear() - Math.min(...startYears) : 0;
+  const years = yearsSinceFirstRole(experience);
   const gpa = education.map((e) => e.description.match(/GPA:\s*(\d+(?:\.\d+)?)/)?.[1]).find(Boolean);
 
   const groupedSkills = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
