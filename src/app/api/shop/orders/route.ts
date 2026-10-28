@@ -7,9 +7,9 @@ const CheckoutSchema = z.object({
   buyerName: z.string().min(2).max(100),
   buyerEmail: z.string().email(),
   buyerPhone: z.string().optional(),
-  productId: z.string(),
-  productTitle: z.string(),
-  price: z.number().positive(),
+  // Only the product is the buyer's choice. Its price and title come from the
+  // database: a client-sent price would let anyone order anything for ฿1.
+  productId: z.string().min(1).max(64),
   notes: z.string().optional(),
 });
 
@@ -24,20 +24,28 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = CheckoutSchema.parse(body);
 
+    const product = await db.product.findFirst({
+      where: { id: validated.productId, status: "active" },
+      select: { id: true, title: true, price: true },
+    });
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
     const order = await db.order.create({
       data: {
         orderNumber: generateOrderNumber(),
         buyerName: validated.buyerName,
         buyerEmail: validated.buyerEmail,
         buyerPhone: validated.buyerPhone,
-        totalAmount: validated.price,
+        totalAmount: product.price,
         currency: "THB",
         notes: validated.notes,
         items: {
           create: [{
-            productId: validated.productId,
-            title: validated.productTitle,
-            price: validated.price,
+            productId: product.id,
+            title: product.title,
+            price: product.price,
             quantity: 1,
           }],
         },

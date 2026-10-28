@@ -142,8 +142,6 @@ function CheckoutModal({
           buyerName: form.buyerName,
           buyerEmail: form.buyerEmail,
           productId: product.id,
-          productTitle: product.title,
-          price: product.price,
           notes: form.notes,
         }),
       });
