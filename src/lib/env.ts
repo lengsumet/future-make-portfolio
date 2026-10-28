@@ -16,6 +16,19 @@ function isInsecureDefault(value: string): boolean {
   return INSECURE_DEFAULTS.includes(value.trim());
 }
 
+type RequiredSecret = "ADMIN_JWT_SECRET" | "ADMIN_PASSWORD";
+
+/** Why a secret is unfit for production, or null. One rule for validateEnv and requireSecret. */
+function productionProblem(key: RequiredSecret, value: string): string | null {
+  if (key === "ADMIN_JWT_SECRET" && (isInsecureDefault(value) || value.length < 32)) {
+    return "ADMIN_JWT_SECRET must be at least 32 characters and not a known default value.";
+  }
+  if (key === "ADMIN_PASSWORD" && isInsecureDefault(value)) {
+    return "ADMIN_PASSWORD is using an insecure default. Set a strong password before deploying.";
+  }
+  return null;
+}
+
 export function validateEnv(): void {
   // Skip during `next build` — env vars aren't guaranteed at build time
   if (process.env.NEXT_PHASE === "phase-production-build") return;
@@ -38,23 +51,10 @@ export function validateEnv(): void {
 
   // In production, forbid insecure default values
   if (isProd) {
-    if (
-      process.env.ADMIN_PASSWORD &&
-      isInsecureDefault(process.env.ADMIN_PASSWORD)
-    ) {
-      errors.push(
-        "ADMIN_PASSWORD is using an insecure default. Set a strong password before deploying."
-      );
-    }
-
-    if (
-      process.env.ADMIN_JWT_SECRET &&
-      (isInsecureDefault(process.env.ADMIN_JWT_SECRET) ||
-        process.env.ADMIN_JWT_SECRET.length < 32)
-    ) {
-      errors.push(
-        "ADMIN_JWT_SECRET must be at least 32 characters and not a known default value."
-      );
+    for (const key of ["ADMIN_PASSWORD", "ADMIN_JWT_SECRET"] as const) {
+      const value = process.env[key];
+      const problem = value ? productionProblem(key, value) : null;
+      if (problem) errors.push(problem);
     }
   }
 
@@ -69,12 +69,13 @@ export function validateEnv(): void {
   }
 }
 
-type RequiredSecret = "ADMIN_JWT_SECRET" | "ADMIN_PASSWORD";
-
 /**
  * Read a required secret, throwing at first use when it is unset. There is
  * deliberately no fallback: a known default would let anyone forge an admin
- * token. Edge-safe (no Node-only imports) so proxy.ts can use it too.
+ * token. In production a weak or known-default value throws too — every
+ * caller, including the proxy and the admin API guard, reads the secret
+ * through here, so a weak one fails closed everywhere rather than only on the
+ * login route. Edge-safe (no Node-only imports) so proxy.ts can use it too.
  */
 export function requireSecret(key: RequiredSecret): string {
   const value = process.env[key];
@@ -82,6 +83,10 @@ export function requireSecret(key: RequiredSecret): string {
     throw new Error(
       `[env] Missing required env var: ${key}. Set it in .env.local before starting the app.`
     );
+  }
+  if (process.env.NODE_ENV === "production") {
+    const problem = productionProblem(key, value);
+    if (problem) throw new Error(`[env] ${problem}`);
   }
   return value;
 }
