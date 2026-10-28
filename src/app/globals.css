@@ -232,17 +232,38 @@ h1, h2, h3 {
 .divider-luxury { height:1px; background: linear-gradient(90deg, transparent, var(--border-mid), transparent); }
 
 /* ── Cat Widget Animations ───────────────────────── */
-@keyframes cat-tail-lazy    { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(14deg)} }
-@keyframes cat-tail-excited { 0%,100%{transform:rotate(-24deg)} 50%{transform:rotate(28deg)} }
-@keyframes cat-leg-a        { 0%,100%{transform:rotate(-18deg)} 50%{transform:rotate(18deg)} }
-@keyframes cat-leg-b        { 0%,100%{transform:rotate(18deg)}  50%{transform:rotate(-18deg)} }
-@keyframes cat-paw-wave     { 0%,100%{transform:translateY(0) rotate(-12deg)} 50%{transform:translateY(-6px) rotate(12deg)} }
+@keyframes cat-tail-lazy   { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(10deg)} }
+@keyframes cat-tail-quick  { 0%,100%{transform:rotate(-14deg)} 50%{transform:rotate(16deg)} }
+@keyframes cat-tail-twitch { 0%,78%,100%{transform:rotate(0)} 84%{transform:rotate(-12deg)} 90%{transform:rotate(7deg)} }
+@keyframes cat-leg-a       { 0%,100%{transform:rotate(-22deg)} 50%{transform:rotate(22deg)} }
+@keyframes cat-leg-b       { 0%,100%{transform:rotate(22deg)}  50%{transform:rotate(-22deg)} }
+@keyframes cat-bob         { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-1px)} }
+@keyframes cat-blink       { 0%,93%,100%{transform:scaleY(1)} 96%{transform:scaleY(0.1)} }
+@keyframes cat-ear-flick   { 0%,86%,100%{transform:rotate(0)} 90%{transform:rotate(-18deg)} 95%{transform:rotate(6deg)} }
+@keyframes cat-wiggle      { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-2.5px)} }
+@keyframes cat-purr        { 0%,100%{transform:translateY(0)} 50%{transform:translateY(0.7px)} }
+@keyframes cat-breathe     { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(1.05)} }
+@keyframes cat-lick        { 0%,100%{transform:rotate(0)} 50%{transform:rotate(-10deg)} }
+@keyframes cat-hop         { 0%{transform:translateY(0)} 45%{transform:translateY(-34px)} 100%{transform:translateY(0)} }
+@keyframes cat-hop-small   { 0%{transform:translateY(0)} 40%{transform:translateY(-16px)} 100%{transform:translateY(0)} }
+@keyframes cat-float-up    { 0%{opacity:0; transform:translate(0,0) scale(0.6)} 25%{opacity:1} 100%{opacity:0; transform:translate(var(--drift, 12px),-34px) scale(1.2)} }
 
-.cat-tail-lazy    { animation: cat-tail-lazy    2.4s ease-in-out infinite; }
-.cat-tail-excited { animation: cat-tail-excited 0.5s ease-in-out infinite; }
-.cat-leg-a        { animation: cat-leg-a        0.45s ease-in-out infinite; }
-.cat-leg-b        { animation: cat-leg-b        0.45s ease-in-out infinite; }
-.cat-paw-wave     { animation: cat-paw-wave     0.6s  ease-in-out infinite; }
+.cat-tail-lazy   { animation: cat-tail-lazy 2.6s ease-in-out infinite; }
+.cat-tail-quick  { animation: cat-tail-quick 0.45s ease-in-out infinite; }
+.cat-tail-twitch { animation: cat-tail-twitch 1.6s ease-in-out infinite; }
+.cat-leg-a       { animation: cat-leg-a 0.5s ease-in-out infinite; }
+.cat-leg-b       { animation: cat-leg-b 0.5s ease-in-out infinite; }
+.cat-fast        { animation-duration: 0.26s; }
+.cat-bob         { animation: cat-bob 0.25s ease-in-out infinite; }
+.cat-blink       { animation: cat-blink 4.2s ease-in-out infinite; }
+.cat-ear-flick   { animation: cat-ear-flick 5.5s ease-in-out infinite; }
+.cat-wiggle      { animation: cat-wiggle 0.18s ease-in-out infinite; }
+.cat-purr        { animation: cat-purr 0.12s linear infinite; }
+.cat-breathe     { animation: cat-breathe 3.2s ease-in-out infinite; }
+.cat-lick        { animation: cat-lick 0.5s ease-in-out infinite; }
+.cat-hop         { animation: cat-hop 0.55s cubic-bezier(.3,.7,.4,1) both; }
+.cat-hop-small   { animation: cat-hop-small 0.4s ease-out both; }
+.cat-float-up    { animation: cat-float-up 1.6s ease-out both; }
 
 /* ---- Reduced motion --------------------------------------------
    Honours the OS "reduce motion" setting for CSS-driven animation
