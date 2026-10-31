@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import type { IconType } from "react-icons";
 import {
@@ -14,14 +13,20 @@ import BlurText from "@/components/fx/BlurText";
 import Spotlight from "@/components/fx/Spotlight";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 import TiltCard, { TiltLayer } from "@/components/fx/TiltCard";
+import RevealPortrait from "@/components/fx/RevealPortrait";
 import NumberTicker from "@/components/fx/NumberTicker";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Timeline, { type TimelineItem } from "@/components/ui/Timeline";
 import SkillIcons from "@/components/ui/SkillIcons";
 import { AboutData, Hobby, Skill } from "@/types/types";
 import { yearsSinceFirstRole } from "@/lib/experience";
+import { setSiteTheme, useSiteTheme } from "@/lib/site-theme";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+
+/** Naga-form portrait revealed over the profile photo; revealing it fully switches the site theme. */
+const HERO_FORM_IMAGE = "/images/profile/isan-hero.jpg";
+
 
 const hobbyIcons: Record<string, React.ReactNode> = {
   camera:   <FaCamera size={18} />,
@@ -49,6 +54,7 @@ const iconLink =
 export default function AboutContent({ data }: { data: AboutData }) {
   const { introduction, education, experience, skills, hobbies } = data;
   const reduce = useReducedMotion();
+  const theme = useSiteTheme();
 
   const fade = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 14 },
@@ -95,7 +101,7 @@ export default function AboutContent({ data }: { data: AboutData }) {
           <div>
             <motion.div {...fade(0)}>
               <span className="inline-flex items-center gap-2 rounded-full border border-[var(--border-mid)] bg-white/[0.03] px-3.5 py-1.5 text-xs backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent-3)] shadow-[0_0_8px_2px_rgba(224,168,120,0.6)]" aria-hidden="true" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent-3)] shadow-[0_0_8px_2px_rgb(var(--accent-3-rgb)/0.6)]" aria-hidden="true" />
                 <span className="shiny font-medium">About me</span>
               </span>
             </motion.div>
@@ -152,19 +158,20 @@ export default function AboutContent({ data }: { data: AboutData }) {
             transition={{ duration: 1.1, ease, delay: 0.3 }}
             style={{ transformPerspective: 1200 }}
           >
-            <div className="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(192,133,82,0.42),transparent)] blur-2xl" aria-hidden="true" />
+            <div className="absolute -inset-10 -z-10 rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.42),transparent)] blur-2xl" aria-hidden="true" />
+            {/* Naga form: glow around the card that flares on entry */}
+            <div className="naga-halo" data-on={theme === "naga"} aria-hidden="true" />
             <TiltCard className="rounded-[24px] border border-[var(--border-mid)] bg-[var(--surface)] p-2 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]" max={8}>
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
-                <Image
-                  src={introduction.profileImage}
-                  alt={introduction.name}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 420px, 360px"
-                  className="object-cover object-top"
-                />
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[rgba(12,9,8,0.8)] to-transparent" aria-hidden="true" />
-              </div>
+              <RevealPortrait
+                src={introduction.profileImage}
+                revealSrc={HERO_FORM_IMAGE}
+                alt={introduction.name}
+                revealAlt={`${introduction.name} — Naga form`}
+                sizes="(min-width: 1024px) 420px, 360px"
+                revealed={theme === "naga"}
+                onToggle={() => setSiteTheme(theme === "naga" ? "caramel" : "naga")}
+              />
+              <span className="naga-rim" data-on={theme === "naga"} aria-hidden="true" />
               <div className="absolute inset-x-[18%] top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent" aria-hidden="true" />
               {current && (
                 <TiltLayer depth={60} className="absolute -bottom-6 -left-3 right-8 md:-left-8 md:right-12">

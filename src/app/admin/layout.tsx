@@ -59,7 +59,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[rgba(12,9,8,0.78)] backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[rgb(var(--bg-rgb)/0.78)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1200px] items-center gap-2 px-4 py-3 md:gap-4 md:px-10">
           <Link
             href="/admin"
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <nav
             aria-label="Admin"
-            className="relative mx-auto flex items-center gap-0.5 rounded-full border border-[var(--border-mid)] bg-[rgba(21,16,14,0.72)] p-1"
+            className="relative mx-auto flex items-center gap-0.5 rounded-full border border-[var(--border-mid)] bg-[rgb(var(--surface-rgb)/0.72)] p-1"
           >
             <span className="pointer-events-none absolute inset-x-8 -top-px h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent opacity-60" aria-hidden="true" />
             {adminNav.map((item) => {

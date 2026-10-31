@@ -42,7 +42,7 @@ export default function NotFound() {
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/"
-          className="inline-flex items-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgba(255,248,240,0.6)] transition-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgb(var(--cream-rgb)/0.6)] transition-transform hover:-translate-y-0.5"
         >
           <FaHome size={13} aria-hidden="true" />
           <span>

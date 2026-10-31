@@ -5,6 +5,7 @@ import ClientShell from "@/components/layout/ClientShell";
 import { LoadingProvider } from "@/contexts/LoadingContext";
 import LoadingScreen from "@/components/animations/LoadingScreen";
 import MotionProvider from "@/components/providers/MotionProvider";
+import { THEME_INIT_SCRIPT } from "@/lib/site-theme-init";
 
 // Self-hosted (src/app/fonts, OFL): a build never downloads fonts, so a
 // Google Fonts hiccup can no longer fail the deploy. Same families, subsets,
@@ -79,7 +80,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // suppressHydrationWarning: the init script may set data-theme before React hydrates.
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className={`${prompt.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} ${geist.variable} ${prompt.className}`}>
         {/* Without JavaScript the loading screen never leaves and entrance
             animations never run: show the page as the server sent it. */}

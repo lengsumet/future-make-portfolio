@@ -70,7 +70,7 @@ export default function Hero({ proof }: { proof: ProofStat[] }) {
           <Magnetic>
             <a
               href="#work"
-              className="border-spin group inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-medium shadow-[0_0_40px_-10px_rgba(224,168,120,0.6)]"
+              className="border-spin group inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-medium shadow-[0_0_40px_-10px_rgb(var(--accent-3-rgb)/0.6)]"
               style={{ color: "var(--text-1)" }}
             >
               See the work
@@ -102,7 +102,7 @@ export default function Hero({ proof }: { proof: ProofStat[] }) {
         transition={{ duration: 1.1, ease, delay: 0.55 }}
         style={{ transformPerspective: 1200 }}
       >
-        <div className="absolute -inset-x-10 -top-10 bottom-0 -z-10 rounded-full bg-[radial-gradient(closest-side,rgba(192,133,82,0.35),transparent)] blur-2xl" aria-hidden="true" />
+        <div className="absolute -inset-x-10 -top-10 bottom-0 -z-10 rounded-full bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.35),transparent)] blur-2xl" aria-hidden="true" />
         <TiltCard className="rounded-[22px] border border-[var(--border-mid)] bg-[var(--surface)] p-2 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]" max={6}>
           <div className="overflow-hidden rounded-[16px]">
             <Image

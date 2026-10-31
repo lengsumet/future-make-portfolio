@@ -44,7 +44,7 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
       <div aria-hidden="true" className="absolute bottom-2 left-[12px] top-2 w-px bg-[var(--border-mid)] md:left-[220px]" />
       <motion.div
         aria-hidden="true"
-        className="absolute bottom-2 left-[11.5px] top-2 w-[2px] origin-top rounded-full bg-gradient-to-b from-[var(--accent-fg)] via-[var(--accent)] to-[var(--accent-2)] shadow-[0_0_14px_2px_rgba(224,168,120,0.45)] md:left-[219.5px]"
+        className="absolute bottom-2 left-[11.5px] top-2 w-[2px] origin-top rounded-full bg-gradient-to-b from-[var(--accent-fg)] via-[var(--accent)] to-[var(--accent-2)] shadow-[0_0_14px_2px_rgb(var(--accent-3-rgb)/0.45)] md:left-[219.5px]"
         style={{ scaleY: reduce ? 1 : fill }}
       />
 
@@ -56,7 +56,7 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
               className="absolute left-[5.5px] top-px h-[14px] w-[14px] rounded-full border border-[var(--accent-border)] bg-[var(--background)] md:left-[213.5px] md:top-[34px]"
             >
               <motion.span
-                className="absolute inset-[3px] rounded-full bg-[var(--accent-3)] shadow-[0_0_12px_3px_rgba(224,168,120,0.6)]"
+                className="absolute inset-[3px] rounded-full bg-[var(--accent-3)] shadow-[0_0_12px_3px_rgb(var(--accent-3-rgb)/0.6)]"
                 initial={reduce ? false : { scale: 0, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true, margin: "0px 0px -35% 0px" }}

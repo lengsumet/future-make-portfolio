@@ -106,7 +106,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index, wide =
                   href={product.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="relative z-10 mb-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 font-mono text-2xs text-[var(--accent-3)] transition-colors hover:bg-[rgba(192,133,82,0.2)]"
+                  className="relative z-10 mb-1 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 font-mono text-2xs text-[var(--accent-3)] transition-colors hover:bg-[rgb(var(--accent-rgb)/0.2)]"
                   aria-label={`Open the live ${name} demo`}
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)]" aria-hidden="true" />

@@ -15,7 +15,7 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const sweep: React.CSSProperties = {
-  backgroundImage: "linear-gradient(90deg, transparent 25%, rgba(255, 248, 240, 0.06) 50%, transparent 75%)",
+  backgroundImage: "linear-gradient(90deg, transparent 25%, rgb(var(--cream-rgb)/0.06) 50%, transparent 75%)",
   backgroundSize: "200% 100%",
   animation: "skeleton-sweep 1.6s ease-in-out infinite",
 };

@@ -110,7 +110,7 @@ export default function RequestPath() {
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute top-[30px] z-10 hidden h-[9px] w-[9px] -translate-x-1/2 rounded-full bg-[var(--accent-3)] shadow-[0_0_14px_3px_rgba(224,168,120,0.8)] transition-[left,opacity] duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] md:block"
+            className="pointer-events-none absolute top-[30px] z-10 hidden h-[9px] w-[9px] -translate-x-1/2 rounded-full bg-[var(--accent-3)] shadow-[0_0_14px_3px_rgb(var(--accent-3-rgb)/0.8)] transition-[left,opacity] duration-[420ms] ease-[cubic-bezier(.22,1,.36,1)] md:block"
             style={{ left: pulseAt, opacity: running && lit > 0 ? 1 : 0 }}
           />
 
@@ -125,7 +125,7 @@ export default function RequestPath() {
                   <span
                     className={`relative z-[1] row-span-2 grid h-[68px] w-[68px] place-items-center rounded-[20px] border bg-[var(--surface)] transition-[color,border-color,box-shadow,transform] duration-300 md:row-span-1 ${
                       on
-                        ? "-translate-y-[3px] border-[var(--accent)] text-[var(--accent-3)] shadow-[0_0_0_6px_rgba(192,133,82,0.10),0_0_36px_-6px_rgba(224,168,120,0.55)]"
+                        ? "-translate-y-[3px] border-[var(--accent)] text-[var(--accent-3)] shadow-[0_0_0_6px_rgb(var(--accent-rgb)/0.10),0_0_36px_-6px_rgb(var(--accent-3-rgb)/0.55)]"
                         : "border-[var(--border-mid)] text-[var(--text-2)]"
                     }`}
                   >

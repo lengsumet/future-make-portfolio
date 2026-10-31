@@ -85,7 +85,7 @@ const Lightbox: React.FC<LightboxProps> = ({ images, index, alt, onIndexChange, 
       <motion.div
         key="lightbox"
         className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-10"
-        style={{ background: "rgba(12,9,8,0.94)", backdropFilter: "blur(6px)" }}
+        style={{ background: "rgb(var(--bg-rgb)/0.94)", backdropFilter: "blur(6px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

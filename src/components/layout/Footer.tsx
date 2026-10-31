@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
         <p
           className="display mt-12 select-none whitespace-nowrap text-[clamp(3.5rem,13.5vw,13.5rem)] leading-[0.8] tracking-[-0.06em] -mb-[0.12em]"
           style={{
-            background: "linear-gradient(180deg, rgba(255,248,240,0.9) 0%, rgba(255,248,240,0.08) 100%)",
+            background: "linear-gradient(180deg, rgb(var(--cream-rgb)/0.9) 0%, rgb(var(--cream-rgb)/0.08) 100%)",
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             color: "transparent",

@@ -56,7 +56,7 @@ const LoadingScreen: React.FC = () => {
             {/* Mark */}
             <motion.div
               aria-hidden="true"
-              className="relative flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-[var(--accent-fg)] via-[var(--accent)] to-[var(--accent-2)] shadow-[0_0_60px_-8px_rgba(224,168,120,0.65)]"
+              className="relative flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-[var(--accent-fg)] via-[var(--accent)] to-[var(--accent-2)] shadow-[0_0_60px_-8px_rgb(var(--accent-3-rgb)/0.65)]"
               initial={reduce ? false : { opacity: 0, scale: 0.85, filter: "blur(8px)" }}
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.7, ease, delay: 0.1 }}

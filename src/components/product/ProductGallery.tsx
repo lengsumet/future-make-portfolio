@@ -33,7 +33,7 @@ export default function ProductGallery({ images, title }: ProductGalleryProps) {
   return (
     <div>
       <div className="relative">
-        <div className="absolute inset-x-0 -top-6 bottom-0 -z-10 rounded-full md:-inset-x-6 bg-[radial-gradient(closest-side,rgba(192,133,82,0.28),transparent)] blur-2xl" aria-hidden="true" />
+        <div className="absolute inset-x-0 -top-6 bottom-0 -z-10 rounded-full md:-inset-x-6 bg-[radial-gradient(closest-side,rgb(var(--accent-rgb)/0.28),transparent)] blur-2xl" aria-hidden="true" />
         <TiltCard className="rounded-[22px] border border-[var(--border-mid)] bg-[var(--surface)] p-2 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.9)]" max={5}>
           {/*
             aspect-[16/10] with object-contain: every screenshot is 16:10, so

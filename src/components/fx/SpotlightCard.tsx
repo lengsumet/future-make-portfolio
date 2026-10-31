@@ -10,7 +10,7 @@ import { useRef } from "react";
 export default function SpotlightCard({
   children,
   className = "",
-  color = "rgba(224, 168, 120, 0.16)",
+  color = "rgb(var(--accent-3-rgb)/0.16)",
 }: {
   children: React.ReactNode;
   className?: string;

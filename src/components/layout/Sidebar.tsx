@@ -51,7 +51,7 @@ export default function Sidebar() {
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="fixed left-1/2 top-4 z-50 hidden -translate-x-1/2 md:block"
           >
-            <div className="relative flex items-center gap-1 rounded-full border border-[var(--border-mid)] bg-[rgba(21,16,14,0.72)] py-1.5 pl-2 pr-1.5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+            <div className="relative flex items-center gap-1 rounded-full border border-[var(--border-mid)] bg-[rgb(var(--surface-rgb)/0.72)] py-1.5 pl-2 pr-1.5 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] backdrop-blur-xl">
               {/* a lit hairline along the top edge */}
               <span className="pointer-events-none absolute inset-x-8 -top-px h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent opacity-70" aria-hidden="true" />
 
@@ -107,7 +107,7 @@ export default function Sidebar() {
 
       {/* ── Mobile: bottom floating pill ── */}
       <nav
-        className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-[var(--border-mid)] bg-[rgba(21,16,14,0.88)] px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl md:hidden"
+        className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-[var(--border-mid)] bg-[rgb(var(--surface-rgb)/0.88)] px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl md:hidden"
         aria-label="Primary navigation"
       >
         {[...navItems, { name: "Admin", href: "/admin", icon: FaCog }].map((item) => {
@@ -120,7 +120,7 @@ export default function Sidebar() {
               aria-label={item.name}
               aria-current={active ? "page" : undefined}
               className="relative flex h-10 w-11 items-center justify-center rounded-full transition-colors"
-              style={{ color: active ? "#0C0908" : "var(--text-3)" }}
+              style={{ color: active ? "var(--background)" : "var(--text-3)" }}
             >
               {active && (
                 <motion.span
