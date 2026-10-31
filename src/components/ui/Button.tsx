@@ -20,13 +20,13 @@ export interface ButtonProps extends HTMLMotionProps<'button'> {
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-[var(--text-1)] text-[var(--background)] border border-transparent shadow-[0_0_40px_-12px_rgba(255,248,240,0.45)] hover:opacity-90',
+    'bg-[var(--text-1)] text-[var(--background)] border border-transparent shadow-[0_0_40px_-12px_rgb(var(--cream-rgb)/0.45)] hover:opacity-90',
   secondary:
     'bg-white/[0.03] text-[var(--text-1)] border border-[var(--border-mid)] hover:bg-white/[0.06] hover:border-[var(--border-strong-visible)]',
   ghost:
     'bg-transparent text-[var(--text-2)] border border-transparent hover:bg-white/[0.05] hover:text-[var(--text-1)]',
   accent:
-    'bg-[var(--accent)] text-[var(--background)] border border-transparent shadow-[0_0_40px_-10px_rgba(224,168,120,0.6)] hover:bg-[var(--accent-3)]',
+    'bg-[var(--accent)] text-[var(--background)] border border-transparent shadow-[0_0_40px_-10px_rgb(var(--accent-3-rgb)/0.6)] hover:bg-[var(--accent-3)]',
 };
 
 const sizes: Record<Size, string> = {

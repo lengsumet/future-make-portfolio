@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FiEye, FiEyeOff, FiArrowLeft, FiAlertCircle } from "react-icons/fi";
@@ -9,16 +8,19 @@ import Spotlight from "@/components/fx/Spotlight";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const reduce = useReducedMotion();
-  const [password, setPassword] = useState("");
+  const [passwordState, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [shakeKey, setShakeKey] = useState(0);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Read the field itself, not just state: a browser-autofilled password is
+    // on screen before React has seen an input event, so state can still be "".
+    const field = new FormData(e.currentTarget).get("password");
+    const password = typeof field === "string" && field ? field : passwordState;
     if (!password.trim()) {
       setError("Please enter your password");
       return;
@@ -54,7 +56,9 @@ export default function AdminLoginPage() {
         return;
       }
 
-      router.push("/admin");
+      // Full navigation, not router.push: the client router may still hold the
+      // proxy's earlier "/admin → /admin/login" redirect from before sign-in.
+      window.location.assign("/admin");
     } catch {
       setError("Cannot connect to server. Please try again.");
       setShakeKey((k) => k + 1);
@@ -84,7 +88,7 @@ export default function AdminLoginPage() {
 
         <SpotlightCard className="p-8 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.9)]">
           <div className="flex flex-col items-center text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--accent-fg)] to-[var(--accent-2)] text-sm font-bold text-[var(--background)] shadow-[0_0_40px_-8px_rgba(224,168,120,0.6)]">
+            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[var(--accent-fg)] to-[var(--accent-2)] text-sm font-bold text-[var(--background)] shadow-[0_0_40px_-8px_rgb(var(--accent-3-rgb)/0.6)]">
               SB
             </span>
             <p className="eyebrow mt-6">Back office</p>
@@ -102,8 +106,9 @@ export default function AdminLoginPage() {
               <div className="relative">
                 <input
                   id="password"
+                  name="password"
                   type={showPw ? "text" : "password"}
-                  value={password}
+                  value={passwordState}
                   onChange={(e) => { setPassword(e.target.value); if (error) setError(""); }}
                   autoComplete="current-password"
                   aria-invalid={error ? true : undefined}
@@ -145,12 +150,12 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-full! bg-[var(--text-1)] py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_40px_-12px_rgba(255,248,240,0.5)] transition-[opacity,transform] hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-full! bg-[var(--text-1)] py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_40px_-12px_rgb(var(--cream-rgb)/0.5)] transition-[opacity,transform] hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <motion.span
-                    className="inline-block h-3.5 w-3.5 rounded-full border-2 border-[rgba(12,9,8,0.25)] border-t-[var(--background)]"
+                    className="inline-block h-3.5 w-3.5 rounded-full border-2 border-[rgb(var(--bg-rgb)/0.25)] border-t-[var(--background)]"
                     animate={reduce ? undefined : { rotate: 360 }}
                     transition={{ duration: 0.7, repeat: Infinity, ease: "linear" }}
                     aria-hidden="true"

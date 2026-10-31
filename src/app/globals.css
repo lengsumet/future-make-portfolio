@@ -74,22 +74,30 @@
   /* Surfaces — espresso ladder */
   /* Near-black with a warm cast: the ground Aceternity and React Bits use,
      so spotlights and glows read, while the caramel accent keeps it ours. */
+  /* RGB channels, for the colours used at an alpha: rgb(var(--accent-rgb) / 0.3).
+     A theme swaps these and every tint, glow and hairline follows. */
+  --bg-rgb:       12 9 8;
+  --surface-rgb:  21 16 14;
+  --cream-rgb:    255 248 240;
+  --accent-rgb:   192 133 82;
+  --accent-3-rgb: 224 168 120;
+
   --background: #0C0908;
   --surface:    #15100E;
   --surface-2:  #1D1613;
   --surface-3:  #271D19;
 
   /* Borders — cream-alpha hairlines */
-  --border:        rgba(255, 248, 240, 0.08);
-  --border-mid:    rgba(255, 248, 240, 0.14);
+  --border:        rgb(var(--cream-rgb) / 0.08);
+  --border-mid:    rgb(var(--cream-rgb) / 0.14);
   /* the outline of a control, not a divider — WCAG 1.4.11 wants 3:1 */
-  --border-strong-visible: rgba(255, 248, 240, 0.42);
+  --border-strong-visible: rgb(var(--cream-rgb) / 0.42);
 
   /* Text — cream base, alpha ladder */
   --text-1: #FFF8F0;
-  --text-2: rgba(255, 248, 240, 0.72);
-  --text-3: rgba(255, 248, 240, 0.50);
-  --text-4: rgba(255, 248, 240, 0.35); /* faintest readable — 3:1, large or incidental text only */
+  --text-2: rgb(var(--cream-rgb) / 0.72);
+  --text-3: rgb(var(--cream-rgb) / 0.50);
+  --text-4: rgb(var(--cream-rgb) / 0.35); /* faintest readable — 3:1, large or incidental text only */
 
   /* Accent — caramel family */
   --accent:        #C08552;
@@ -97,9 +105,9 @@
   --accent-3:      #E0A878;
   --accent-soft:   #E0A878;
   --accent-fg:     #F2C9A0;
-  --accent-glow:   rgba(192, 133, 82, 0.30);
-  --accent-bg:     rgba(192, 133, 82, 0.10);
-  --accent-border: rgba(192, 133, 82, 0.28);
+  --accent-glow:   rgb(var(--accent-rgb) / 0.30);
+  --accent-bg:     rgb(var(--accent-rgb) / 0.10);
+  --accent-border: rgb(var(--accent-rgb) / 0.28);
 
   /* Gradient stops — caramel → clay */
   --grad-1: #E0A878;
@@ -112,6 +120,102 @@
 
   --font-heading: var(--font-prompt);
   --font-body:    var(--font-prompt);
+}
+
+/* ── Naga form ──────────────────────────────────────
+   Unlocked from the About portrait (src/lib/site-theme.ts). Gold and flame
+   from the Naga armour, on a black with a red cast. Only colours change;
+   every derived tint above follows through the RGB channels. */
+:root[data-theme="naga"] {
+  --bg-rgb:       10 6 5;
+  --surface-rgb:  22 12 8;
+  --cream-rgb:    255 244 224;
+  --accent-rgb:   242 169 59;
+  --accent-3-rgb: 255 210 122;
+
+  --background: #0A0605;
+  --surface:    #160C08;
+  --surface-2:  #1F110B;
+  --surface-3:  #2A170E;
+
+  --text-1: #FFF4E0;
+
+  --accent:      #F2A93B;
+  --accent-2:    #E2561F;
+  --accent-3:    #FFD27A;
+  --accent-soft: #FFD27A;
+  --accent-fg:   #FFE3A3;
+  --accent-glow: rgb(255 150 40 / 0.40);
+
+  --grad-1: #FFE08A;
+  --grad-2: #F2A93B;
+  --grad-3: #E2561F;
+}
+
+/* Naga form on the About portrait: a line of fire runs round the card's edge
+   and a glow flares out behind it on entry, then settles. Colours are the
+   flame in the portrait itself, not theme tokens: they only show in that form. */
+@property --rim-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.naga-rim {
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  border-radius: 25px;
+  padding: 1.5px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--rim-angle),
+    transparent 0 18%, #E2561F 30%, #FFD27A 40%, #FFF6DC 43%, transparent 50% 68%,
+    #E2561F 80%, #FFD27A 90%, #FFF6DC 93%, transparent 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.naga-rim[data-on="true"] {
+  opacity: 1;
+  animation: rim-spin 4s linear infinite;
+}
+@keyframes rim-spin {
+  to { --rim-angle: 360deg; }
+}
+.naga-halo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 24px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  box-shadow: 0 0 40px 4px rgb(242 150 40 / 0.45), 0 0 110px 20px rgb(226 86 31 / 0.22);
+}
+.naga-halo[data-on="true"] {
+  opacity: 1;
+  animation: halo-flare 1s ease-out;
+}
+@keyframes halo-flare {
+  0%   { box-shadow: 0 0 0 0 rgb(255 210 122 / 0); }
+  25%  { box-shadow: 0 0 70px 18px rgb(255 190 80 / 0.75), 0 0 160px 50px rgb(226 86 31 / 0.4); }
+  100% { box-shadow: 0 0 40px 4px rgb(242 150 40 / 0.45), 0 0 110px 20px rgb(226 86 31 / 0.22); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .naga-rim[data-on="true"], .naga-halo[data-on="true"] { animation: none; }
+}
+
+/* Set for one switch only, so the swap eases instead of snapping without
+   leaving a transition on every element the rest of the time. */
+:root.theme-switching,
+:root.theme-switching *:not(.reveal),
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition: background-color 0.8s ease, border-color 0.8s ease, color 0.8s ease,
+    box-shadow 0.8s ease, fill 0.8s ease, stroke 0.8s ease !important;
 }
 
 body {
@@ -134,7 +238,7 @@ h1, h2, h3 {
   background-clip: text;
 }
 .text-gradient-subtle {
-  background: linear-gradient(135deg, #FFF8F0 40%, rgba(192, 133, 82, 0.85));
+  background: linear-gradient(135deg, var(--text-1) 40%, rgb(var(--accent-rgb)/0.85));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -142,26 +246,26 @@ h1, h2, h3 {
 
 /* ── Glass card ──────────────────────────────────── */
 .glass {
-  background: rgba(255, 248, 240, 0.04);
+  background: rgb(var(--cream-rgb)/0.04);
   border: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 .glass:hover {
-  background: rgba(255, 248, 240, 0.06);
+  background: rgb(var(--cream-rgb)/0.06);
   border-color: var(--border-mid);
 }
 
 /* ── Glow ────────────────────────────────────────── */
 .glow-accent {
-  box-shadow: 0 0 24px var(--accent-glow), 0 0 60px rgba(192, 133, 82, 0.12);
+  box-shadow: 0 0 24px var(--accent-glow), 0 0 60px rgb(var(--accent-rgb)/0.12);
 }
 
 /* ── Scrollbar ───────────────────────────────────── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--background); }
-::-webkit-scrollbar-thumb { background: rgba(255, 248, 240, 0.10); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255, 248, 240, 0.18); }
+::-webkit-scrollbar-thumb { background: rgb(var(--cream-rgb)/0.10); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--cream-rgb)/0.18); }
 
 /* ── Selection ───────────────────────────────────── */
 ::selection { background: var(--accent-bg); color: var(--accent-soft); }
@@ -185,7 +289,7 @@ h1, h2, h3 {
 }
 .card-luxury:hover {
   border-color: var(--accent-border);
-  box-shadow: 0 0 30px rgba(192, 133, 82, 0.10), 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 30px rgb(var(--accent-rgb)/0.10), 0 20px 40px rgba(0, 0, 0, 0.4);
   transform: translateY(-2px);
 }
 
@@ -198,8 +302,8 @@ h1, h2, h3 {
   transition: all 0.3s ease;
 }
 .product-card:hover {
-  border-color: rgba(192, 133, 82, 0.4);
-  box-shadow: 0 0 40px rgba(192, 133, 82, 0.14), 0 25px 50px rgba(0, 0, 0, 0.5);
+  border-color: rgb(var(--accent-rgb)/0.4);
+  box-shadow: 0 0 40px rgb(var(--accent-rgb)/0.14), 0 25px 50px rgba(0, 0, 0, 0.5);
   transform: translateY(-4px) scale(1.01);
 }
 
@@ -207,7 +311,7 @@ h1, h2, h3 {
 .badge-new      { background: rgba(122, 139, 60, 0.18);  color: #BFD06A; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:9999px; }
 .badge-sale     { background: rgba(163, 59, 38, 0.20);   color: #E89479; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:9999px; }
 .badge-hot      { background: rgba(232, 184, 104, 0.18); color: #E8B868; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:9999px; }
-.badge-featured { background: rgba(192, 133, 82, 0.18);  color: #F2C9A0; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:9999px; }
+.badge-featured { background: rgb(var(--accent-rgb)/0.18);  color: var(--accent-fg); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:2px 8px; border-radius:9999px; }
 
 /* ── Skeleton ────────────────────────────────────── */
 .skeleton-luxury {
@@ -223,7 +327,7 @@ h1, h2, h3 {
 
 /* ── Stat borders (warmed) ───────────────────────── */
 .stat-emerald { border-left: 3px solid #BFD06A; }
-.stat-violet  { border-left: 3px solid #8C5A3C; }
+.stat-violet  { border-left: 3px solid var(--accent-2); }
 .stat-gold    { border-left: 3px solid #E8B868; }
 .stat-rose    { border-left: 3px solid #E89479; }
 .stat-sky     { border-left: 3px solid #D2A683; }
@@ -346,7 +450,7 @@ h1, h2, h3 {
   .filter-chip:hover {
     --chip-fg: rgba(255, 255, 255, 0.85);
     --chip-bg: rgba(255, 255, 255, 0.08);
-    --chip-border: rgba(192, 133, 82, 0.35);
+    --chip-border: rgb(var(--accent-rgb)/0.35);
   }
   .filter-chip[data-active="true"]:hover { opacity: 0.88; }
 }
@@ -415,7 +519,7 @@ body {
   font-weight: 400;
   letter-spacing: -0.01em;
   padding-right: 0.06em;
-  background: linear-gradient(100deg, #F2C9A0 0%, #E0A878 40%, #C08552 100%);
+  background: linear-gradient(100deg, var(--accent-fg) 0%, var(--accent-3) 40%, var(--accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -423,7 +527,7 @@ body {
 
 /* Silver-to-cream headline fill, as on Aceternity's spotlight hero. */
 .text-silver {
-  background: linear-gradient(180deg, #FFF8F0 20%, rgba(255, 248, 240, 0.55) 100%);
+  background: linear-gradient(180deg, var(--text-1) 20%, rgb(var(--cream-rgb)/0.55) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -431,7 +535,7 @@ body {
 
 /* Shiny text: a highlight sweeping across (React Bits). */
 .shiny {
-  background: linear-gradient(110deg, var(--text-3) 35%, #FFF8F0 50%, var(--text-3) 65%);
+  background: linear-gradient(110deg, var(--text-3) 35%, var(--text-1) 50%, var(--text-3) 65%);
   background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -445,7 +549,7 @@ body {
 
 /* Dot grid fading out from the centre (Aceternity backgrounds). */
 .dot-grid {
-  background-image: radial-gradient(rgba(255, 248, 240, 0.12) 1px, transparent 1px);
+  background-image: radial-gradient(rgb(var(--cream-rgb)/0.12) 1px, transparent 1px);
   background-size: 22px 22px;
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
   mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
@@ -459,8 +563,8 @@ body {
 }
 .border-spin {
   background:
-    linear-gradient(var(--btn-bg, #0C0908), var(--btn-bg, #0C0908)) padding-box,
-    conic-gradient(from var(--spin), transparent 0 60%, #E0A878 75%, #FFF8F0 82%, transparent 95%) border-box;
+    linear-gradient(var(--btn-bg, var(--background)), var(--btn-bg, var(--background))) padding-box,
+    conic-gradient(from var(--spin), transparent 0 60%, var(--accent-3) 75%, var(--text-1) 82%, transparent 95%) border-box;
   border: 1px solid transparent;
   animation: spin-border 3.5s linear infinite;
 }
@@ -468,8 +572,53 @@ body {
   to { --spin: 360deg; }
 }
 
+/* Spotlight reveal: a second image shows only inside a circle at --rx/--ry.
+   --rr is registered so the radius can transition (grow on enter, flood on click). */
+@property --rr {
+  syntax: "<length>";
+  initial-value: 0px;
+  inherits: true;
+}
+.reveal {
+  --rr: 0px;
+  transition: --rr 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal[data-hover="true"] { --rr: 85px; }
+.reveal[data-revealed="true"] { --rr: 900px; transition-duration: 0.9s; }
+.reveal-layer {
+  -webkit-mask-image: radial-gradient(circle var(--rr) at var(--rx, 50%) var(--ry, 40%), #000 55%, transparent 100%);
+  mask-image: radial-gradient(circle var(--rr) at var(--rx, 50%) var(--ry, 40%), #000 55%, transparent 100%);
+}
+.reveal-lens {
+  position: absolute;
+  left: var(--rx, 50%);
+  top: var(--ry, 40%);
+  width: calc(var(--rr) * 1.7);
+  height: calc(var(--rr) * 1.7);
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 207, 122, 0.55);
+  box-shadow: 0 0 22px 2px rgba(255, 190, 90, 0.45), inset 0 0 22px rgba(255, 190, 90, 0.35);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.reveal-lens::after {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: 9999px;
+  border: 1px dashed rgba(255, 207, 122, 0.35);
+  animation: lens-spin 9s linear infinite;
+}
+.reveal[data-hover="true"]:not([data-revealed="true"]) .reveal-lens { opacity: 1; }
+@keyframes lens-spin {
+  to { transform: rotate(360deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .shiny, .border-spin { animation: none; }
+  .shiny, .border-spin, .reveal-lens::after { animation: none; }
+  .reveal { transition: none; }
 }
 
 /* Indices, captions, metadata. */

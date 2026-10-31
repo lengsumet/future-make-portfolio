@@ -166,6 +166,19 @@ export default function ChatWidget() {
   const cursor = useRef<string | null>(null);
   const checkedLink = useRef(false);
 
+  // Any link to #chat (the "Start a conversation" CTA, or /about#chat from
+  // elsewhere) opens the panel, then drops the hash so it can fire again.
+  useEffect(() => {
+    const openFromHash = () => {
+      if (window.location.hash !== "#chat") return;
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      setOpen(true);
+    };
+    openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    return () => window.removeEventListener("hashchange", openFromHash);
+  }, []);
+
   // Arriving from an emailed link (#chat-link=…) swaps this browser onto that chat.
   useEffect(() => {
     setLang(readLang());
@@ -395,7 +408,7 @@ export default function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.97 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-[calc(100%+0.75rem)] right-0 flex h-[min(600px,calc(100vh-9rem))] w-[min(390px,calc(100vw-2rem))] origin-bottom-right flex-col overflow-hidden rounded-[24px] border border-[var(--border-mid)] bg-[rgba(21,16,14,0.94)] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl"
+            className="absolute bottom-[calc(100%+0.75rem)] right-0 flex h-[min(600px,calc(100vh-9rem))] w-[min(390px,calc(100vw-2rem))] origin-bottom-right flex-col overflow-hidden rounded-[24px] border border-[var(--border-mid)] bg-[rgb(var(--surface-rgb)/0.94)] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl"
           >
             <span className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent-3)] to-transparent" aria-hidden="true" />
 
@@ -670,7 +683,7 @@ export default function ChatWidget() {
         aria-expanded={open}
         whileHover={reduce ? undefined : { scale: 1.06 }}
         whileTap={reduce ? undefined : { scale: 0.95 }}
-        className="relative flex h-14 w-14 items-center justify-center rounded-full border border-[var(--border-mid)] bg-gradient-to-br from-[var(--accent-fg)] to-[var(--accent-2)] text-[var(--background)] shadow-[0_10px_40px_-8px_rgba(224,168,120,0.7)]"
+        className="relative flex h-14 w-14 items-center justify-center rounded-full border border-[var(--border-mid)] bg-gradient-to-br from-[var(--accent-fg)] to-[var(--accent-2)] text-[var(--background)] shadow-[0_10px_40px_-8px_rgb(var(--accent-3-rgb)/0.7)]"
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.span

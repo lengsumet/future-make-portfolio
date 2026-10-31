@@ -12,8 +12,8 @@ export default function Spotlight({ className = "" }: { className?: string }) {
   const cone = (side: "left" | "right") => ({
     background:
       side === "left"
-        ? "radial-gradient(68% 68% at 55% 31%, rgba(224,168,120,0.16) 0, rgba(192,133,82,0.05) 50%, transparent 80%)"
-        : "radial-gradient(68% 68% at 45% 31%, rgba(255,248,240,0.10) 0, rgba(224,168,120,0.04) 50%, transparent 80%)",
+        ? "radial-gradient(68% 68% at 55% 31%, rgb(var(--accent-3-rgb)/0.16) 0, rgb(var(--accent-rgb)/0.05) 50%, transparent 80%)"
+        : "radial-gradient(68% 68% at 45% 31%, rgb(var(--cream-rgb)/0.10) 0, rgb(var(--accent-3-rgb)/0.04) 50%, transparent 80%)",
   });
   return (
     <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden="true">

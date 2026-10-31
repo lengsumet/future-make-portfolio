@@ -98,7 +98,7 @@ export default function WorkIndex({ items }: { items: WorkItem[] }) {
                           href={item.liveUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="relative z-10 ml-auto inline-flex items-center gap-1.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 font-mono text-2xs transition-colors hover:bg-[rgba(192,133,82,0.2)]"
+                          className="relative z-10 ml-auto inline-flex items-center gap-1.5 rounded-full border border-[var(--accent-border)] bg-[var(--accent-bg)] px-2.5 py-0.5 font-mono text-2xs transition-colors hover:bg-[rgb(var(--accent-rgb)/0.2)]"
                           style={{ color: "var(--accent-3)" }}
                           aria-label={`Open the live ${item.name} demo`}
                         >

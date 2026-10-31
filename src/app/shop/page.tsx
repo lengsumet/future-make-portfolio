@@ -110,7 +110,7 @@ export default function ShopPage() {
                     href={storeUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="group inline-flex items-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgba(255,248,240,0.6)] transition-transform hover:-translate-y-0.5"
+                    className="group inline-flex items-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgb(var(--cream-rgb)/0.6)] transition-transform hover:-translate-y-0.5"
                   >
                     Open Store
                     <FaArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
@@ -161,7 +161,7 @@ export default function ShopPage() {
                     {active && (
                       <motion.span
                         layoutId="shop-filter-chip"
-                        className="absolute inset-0 rounded-full bg-[var(--text-1)] shadow-[0_0_30px_-8px_rgba(255,248,240,0.55)]"
+                        className="absolute inset-0 rounded-full bg-[var(--text-1)] shadow-[0_0_30px_-8px_rgb(var(--cream-rgb)/0.55)]"
                         transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 32 }}
                         aria-hidden="true"
                       />
@@ -231,7 +231,7 @@ export default function ShopPage() {
             <Magnetic>
               <a
                 href="mailto:sumet.buarod@gmail.com"
-                className="border-spin group inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-medium text-[var(--text-1)] shadow-[0_0_40px_-10px_rgba(224,168,120,0.6)] [--btn-bg:var(--surface)]"
+                className="border-spin group inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-medium text-[var(--text-1)] shadow-[0_0_40px_-10px_rgb(var(--accent-3-rgb)/0.6)] [--btn-bg:var(--surface)]"
                 onClick={() => track("cta_click", "contact_custom")}
               >
                 Get in Touch

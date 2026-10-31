@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import CatFigure, { type Pose } from "./cat/CatFigure";
 
 /**
- * A cat that lives along the bottom of the home page.
+ * A cat that lives along the bottom of every page (mounted in ClientShell).
  *
  * On its own it wanders, sits, grooms, yawns, stretches and — once the mouse
  * has been still for a while — curls up and sleeps. A cursor nearby makes it

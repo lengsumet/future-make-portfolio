@@ -25,7 +25,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 const primaryPill =
-  "group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3.5 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgba(255,248,240,0.6)] transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-50";
+  "group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3.5 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgb(var(--cream-rgb)/0.6)] transition-transform hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-50";
 const ghostPill =
   "inline-flex w-full items-center justify-center gap-2 rounded-full border border-[var(--border-mid)] px-6 py-3.5 text-sm font-medium text-[var(--text-2)] transition-colors hover:border-[var(--accent-border)] hover:bg-white/[0.04] hover:text-[var(--text-1)]";
 const field =

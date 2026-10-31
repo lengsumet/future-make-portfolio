@@ -34,13 +34,13 @@ export default function Error({
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(55% 45% at 30% 0%, rgba(224,168,120,0.16), transparent 70%), radial-gradient(45% 40% at 72% 0%, rgba(255,248,240,0.08), transparent 70%)",
+            "radial-gradient(55% 45% at 30% 0%, rgb(var(--accent-3-rgb)/0.16), transparent 70%), radial-gradient(45% 40% at 72% 0%, rgb(var(--cream-rgb)/0.08), transparent 70%)",
         }}
         aria-hidden="true"
       />
 
       <span
-        className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent-3)] shadow-[0_0_40px_-8px_rgba(224,168,120,0.55)]"
+        className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--accent-border)] bg-[var(--accent-bg)] text-[var(--accent-3)] shadow-[0_0_40px_-8px_rgb(var(--accent-3-rgb)/0.55)]"
         aria-hidden="true"
       >
         <FaExclamationTriangle size={20} />
@@ -67,7 +67,7 @@ export default function Error({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgba(255,248,240,0.6)] transition-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2.5 rounded-full bg-[var(--text-1)] px-6 py-3 text-sm font-medium text-[var(--background)] shadow-[0_0_50px_-12px_rgb(var(--cream-rgb)/0.6)] transition-transform hover:-translate-y-0.5"
         >
           <FaRedo size={12} aria-hidden="true" />
           <span>

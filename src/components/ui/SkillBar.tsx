@@ -24,7 +24,7 @@ export function LevelBar({ level, delay = 0, className = "" }: { level: number; 
   return (
     <div aria-hidden="true" className={`relative h-1 w-full rounded-full bg-white/[0.06] ${className}`}>
       <motion.div
-        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[var(--accent-2)] via-[var(--accent)] to-[var(--accent-3)] shadow-[0_0_10px_rgba(224,168,120,0.45)]"
+        className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[var(--accent-2)] via-[var(--accent)] to-[var(--accent-3)] shadow-[0_0_10px_rgb(var(--accent-3-rgb)/0.45)]"
         style={{ width: `${width}%`, originX: 0 }}
         initial={reduce ? false : { scaleX: 0 }}
         whileInView={{ scaleX: 1 }}

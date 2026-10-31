@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import PageWrapper from "./PageWrapper";
 import ChatWidget from "@/components/chat/ChatWidget";
+import CatWidget from "@/components/animations/CatWidget";
 
 export default function ClientShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -21,6 +22,8 @@ export default function ClientShell({ children }: { children: React.ReactNode })
         <PageWrapper>{children}</PageWrapper>
         <Footer />
       </main>
+      {/* Lives in the shell, not a page, so it keeps its walk across navigation */}
+      <CatWidget />
       <ChatWidget />
     </div>
   );
