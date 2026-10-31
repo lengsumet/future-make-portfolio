@@ -4,7 +4,6 @@ import RequestPath from "@/components/home/RequestPath";
 import WorkIndex, { type WorkItem } from "@/components/home/WorkIndex";
 import ProofGrid from "@/components/home/ProofGrid";
 import ContactBand from "@/components/home/ContactBand";
-import CatWidget from "@/components/animations/CatWidget";
 import { siteConfig } from "@/config/siteConfig";
 import { yearsSinceFirstRole } from "@/lib/experience";
 import aboutData from "../../public/data/about.json";
@@ -68,7 +67,6 @@ export default function Home() {
       <WorkIndex items={work} />
       <ProofGrid />
       <ContactBand />
-      <CatWidget />
     </div>
   );
 }
